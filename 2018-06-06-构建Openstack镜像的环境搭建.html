@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Linux,Openstack," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="环境介绍 宿主机操作系统：Windows7旗舰版 软件：VMware WorkStation12 Pro 虚拟机操作系统：CentOS7.1 虚拟机配置：2核4G 虚拟机IP：192.168.128.129 网卡模式：NAT 镜像：CentOS-7-x86_64-Minimal-1503-01.iso 镜像下载链接：http://archive.kernel.org/centos-vault/ V">
+<meta name="keywords" content="Linux,Openstack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="构建Openstack镜像的环境搭建">
+<meta property="og:url" content="http://koenli.github.io/2018-06-06-构建Openstack镜像的环境搭建.html">
+<meta property="og:site_name" content="Koenli&#39;s Blog">
+<meta property="og:description" content="环境介绍 宿主机操作系统：Windows7旗舰版 软件：VMware WorkStation12 Pro 虚拟机操作系统：CentOS7.1 虚拟机配置：2核4G 虚拟机IP：192.168.128.129 网卡模式：NAT 镜像：CentOS-7-x86_64-Minimal-1503-01.iso 镜像下载链接：http://archive.kernel.org/centos-vault/ V">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_1.png">
+<meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_2.png">
+<meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_3.png">
+<meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_4.png">
+<meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_5.png">
+<meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_6.png">
+<meta property="og:updated_time" content="2018-06-06T06:41:36.240Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="构建Openstack镜像的环境搭建">
+<meta name="twitter:description" content="环境介绍 宿主机操作系统：Windows7旗舰版 软件：VMware WorkStation12 Pro 虚拟机操作系统：CentOS7.1 虚拟机配置：2核4G 虚拟机IP：192.168.128.129 网卡模式：NAT 镜像：CentOS-7-x86_64-Minimal-1503-01.iso 镜像下载链接：http://archive.kernel.org/centos-vault/ V">
+<meta name="twitter:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://koenli.github.io/2018-06-06-构建Openstack镜像的环境搭建.html"/>
+
+
+
+
+
+  <title>构建Openstack镜像的环境搭建 | Koenli's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Koenli's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://koenli.github.io/2018-06-06-构建Openstack镜像的环境搭建.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Koenli">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Koenli's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">构建Openstack镜像的环境搭建</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-06T14:35:14+08:00">
+                2018-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux营地/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux营地</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h1><hr>
+<p>宿主机操作系统：Windows7旗舰版</p>
+<p>软件：VMware WorkStation12 Pro</p>
+<p>虚拟机操作系统：CentOS7.1</p>
+<p>虚拟机配置：2核4G</p>
+<p>虚拟机IP：192.168.128.129</p>
+<p>网卡模式：NAT</p>
+<p>镜像：CentOS-7-x86_64-Minimal-1503-01.iso</p>
+<p>镜像下载链接：<a href="http://archive.kernel.org/centos-vault/" target="_blank" rel="noopener">http://archive.kernel.org/centos-vault/</a></p>
+<h1 id="VMware虚拟机操作系统安装"><a href="#VMware虚拟机操作系统安装" class="headerlink" title="VMware虚拟机操作系统安装"></a>VMware虚拟机操作系统安装</h1><hr>
+<p>此步请参考之前的文章<a href="http://www.koenli.com/2015-08-27-%E5%A6%82%E4%BD%95%E5%9C%A8VMware%E4%B8%8B%E5%AE%89%E8%A3%85RedHat6-X%E8%99%9A%E6%8B%9F%E6%9C%BA.html" target="_blank" rel="noopener">如何在VMware下安装RedHat6.X虚拟机</a></p>
+<h1 id="安装epel源"><a href="#安装epel源" class="headerlink" title="安装epel源"></a>安装epel源</h1><hr>
+<p>到<a href="https://fedoraproject.org/wiki/EPEL/zh-cn" target="_blank" rel="noopener">https://fedoraproject.org/wiki/EPEL/zh-cn</a>下载对应操作系统版本的epel-release包的最新版本，然后上传到虚拟机并安装</p>
+<p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_1.png" alt=""></p>
+<pre><code># rpm -ivh epel-release-latest-7.noarch.rpm
+</code></pre><h1 id="安装KVM"><a href="#安装KVM" class="headerlink" title="安装KVM"></a>安装KVM</h1><hr>
+<pre><code># yum install libcanberra-gtk2 qemu-kvm.x86_64 qemu-kvm-tools.x86_64 libvirt.x86_64 libvirt-cim.x86_64 libvirt-client.x86_64 libvirt-java.noarch libvirt-python.x86_64 dbus-devel virt-clone virt-manager libvirt libvirt-python -y
+# yum groupinstall &quot;Virtualization Host&quot; -y
+# yum install qemu-system* -y 
+# systemctl restart libvirtd
+</code></pre><h1 id="修改网卡配置文件"><a href="#修改网卡配置文件" class="headerlink" title="修改网卡配置文件"></a>修改网卡配置文件</h1><hr>
+<p>修改网卡配置文件，重启网络服务，将虚拟机网卡桥接到br网桥上，此示例中虚拟机网卡名为eno16777736，对应的网卡配置文件如下：</p>
+<pre><code># cat ifcfg-eno16777736 
+BOOTPROTO=static
+NAME=eno16777736
+DEVICE=eno16777736
+ONBOOT=yes
+BRIDGE=br
+
+# cat ifcfg-br 
+TYPE=Bridge
+BOOTPROTO=static
+IPADDR=192.168.128.129
+NETMASK=255.255.255.0
+GATEWAY=192.168.128.2
+DNS1=192.168.128.2
+NAME=br
+DEVICE=br
+ONBOOT=yes
+
+DEVICE、NAME、IPADDR、NETMASK、GATEWAY参数请根据实际情况进行相应修改
+
+# iptables -F
+# setenforce 0
+# systemctl stop NetworkManager
+# systemctl restart network
+</code></pre><h1 id="创建工作目录"><a href="#创建工作目录" class="headerlink" title="创建工作目录"></a>创建工作目录</h1><hr>
+<pre><code># mkdir /tvm/
+# cd /tvm/
+</code></pre><h1 id="上传虚拟机镜像"><a href="#上传虚拟机镜像" class="headerlink" title="上传虚拟机镜像"></a>上传虚拟机镜像</h1><hr>
+<p>通过winscp或Xftp等支持ssh的远程文件传输工具上传虚拟机镜像（raw镜像或qcow2镜像）到/tvm下，若镜像是qcow2格式的，先转换成raw格式的。</p>
+<pre><code># qemu-img convert -f qcow2 CentOS7.1_XM_170819.qcow2 -O raw CentOS7.1_XM_170819.raw
+</code></pre><p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_2.png" alt=""></p>
+<h1 id="编辑XML文件并启动虚拟机"><a href="#编辑XML文件并启动虚拟机" class="headerlink" title="编辑XML文件并启动虚拟机"></a>编辑XML文件并启动虚拟机</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"># cat templates.xml</span><br><span class="line">&lt;domain type=&apos;kvm&apos;&gt;</span><br><span class="line">        &lt;name&gt;koenli&lt;/name&gt;</span><br><span class="line">        &lt;memory&gt;1048576&lt;/memory&gt;</span><br><span class="line">        &lt;vcpu&gt;1&lt;/vcpu&gt;</span><br><span class="line">        &lt;cpu mode=&apos;host-model&apos;&gt;&lt;model fallback=&apos;allow&apos;/&gt;&lt;topology sockets=&apos;1&apos; threads=&apos;1&apos; cores=&apos;4&apos; /&gt;&lt;/cpu&gt;</span><br><span class="line">        &lt;os&gt;&lt;type arch=&apos;x86_64&apos; machine=&apos;pc-i440fx-2.0&apos;&gt;hvm&lt;/type&gt;&lt;boot dev=&apos;cdrom&apos;/&gt;&lt;boot dev=&apos;hd&apos;/&gt;&lt;/os&gt;</span><br><span class="line">        &lt;features&gt;&lt;acpi/&gt;&lt;apic/&gt;&lt;pae/&gt;&lt;/features&gt;</span><br><span class="line">        &lt;on_poweroff&gt;destroy&lt;/on_poweroff&gt;</span><br><span class="line">        &lt;on_reboot&gt;restart&lt;/on_reboot&gt;</span><br><span class="line">        &lt;on_crash&gt;destroy&lt;/on_crash&gt;</span><br><span class="line"></span><br><span class="line">        &lt;devices&gt;</span><br><span class="line">        	&lt;emulator&gt;/usr/bin/qemu-system-x86_64&lt;/emulator&gt;</span><br><span class="line">                &lt;disk type=&apos;file&apos;&gt;&lt;driver name=&apos;qemu&apos; type=&apos;raw&apos; cache=&apos;none&apos;/&gt;&lt;source file=&apos;/tvm/rhel7.1.raw&apos;/&gt;&lt;target dev=&apos;vda&apos; bus=&apos;virtio&apos;/&gt;&lt;serial&gt;bc-system&lt;/serial&gt;&lt;/disk&gt;</span><br><span class="line"></span><br><span class="line">            &lt;disk type=&apos;file&apos; device=&apos;cdrom&apos;&gt;</span><br><span class="line">            	&lt;target dev=&apos;hdc&apos; bus=&apos;ide&apos;/&gt;</span><br><span class="line">           	&lt;source file=&quot;&quot; /&gt;</span><br><span class="line">               	&lt;readonly/&gt;</span><br><span class="line">            &lt;/disk&gt;</span><br><span class="line"></span><br><span class="line">            &lt;graphics type=&apos;vnc&apos; port=&apos;22000&apos; passwd=&apos;123456&apos; autoport=&apos;no&apos; keymap=&apos;en-us&apos; listen=&apos;0.0.0.0&apos;/&gt;</span><br><span class="line">            &lt;input type=&apos;tablet&apos; bus=&apos;usb&apos;/&gt;</span><br><span class="line">            &lt;interface type=&apos;bridge&apos;&gt;&lt;source bridge=&apos;br&apos;/&gt;&lt;mac address=&apos;D0:0D:7C:DC:AA:4C&apos;/&gt;&lt;model type=&apos;virtio&apos;/&gt;&lt;/interface&gt;</span><br><span class="line">            &lt;interface type=&apos;bridge&apos;&gt;&lt;source bridge=&apos;br&apos;/&gt;&lt;mac address=&apos;D0:0D:7C:DC:AA:4D&apos;/&gt;&lt;model type=&apos;virtio&apos;/&gt;&lt;/interface&gt;</span><br><span class="line">        &lt;/devices&gt;</span><br><span class="line"></span><br><span class="line">        &lt;clock offset=&quot;localtime&quot; /&gt;</span><br><span class="line">&lt;/domain&gt;</span><br></pre></td></tr></table></figure>
+<p>将图中红色方框处改成虚拟机镜像所在绝对路径，若需要给虚拟机挂载ISO文件进行操作系统安装，则在箭头处指定ISO文件的绝对路径。</p>
+<p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_3.png" alt=""></p>
+<pre><code># cd /tvm/
+# virsh create templates.xml
+# virsh list
+</code></pre><h1 id="通过vnc连接到虚拟机"><a href="#通过vnc连接到虚拟机" class="headerlink" title="通过vnc连接到虚拟机"></a>通过vnc连接到虚拟机</h1><hr>
+<p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_4.png" alt=""></p>
+<p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_5.png" alt=""></p>
+<p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_6.png" alt=""></p>
+<p>密码：123456</p>
+<ul>
+<li>EOF</li>
+</ul>
+<p>本文作者：Koen</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/Openstack/" rel="tag"># Openstack</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018-06-06-CentOS6-X-CentOS7-X配置本地yum源教程.html" rel="next" title="CentOS6.X/CentOS7.X配置本地yum源教程">
+                <i class="fa fa-chevron-left"></i> CentOS6.X/CentOS7.X配置本地yum源教程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/avatar.jpg"
+                alt="Koenli" />
+            
+              <p class="site-author-name" itemprop="name">Koenli</p>
+              <p class="site-description motion-element" itemprop="description">想要出类拔萃，就要做别人不想做的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#环境介绍"><span class="nav-number">1.</span> <span class="nav-text">环境介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VMware虚拟机操作系统安装"><span class="nav-number">2.</span> <span class="nav-text">VMware虚拟机操作系统安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装epel源"><span class="nav-number">3.</span> <span class="nav-text">安装epel源</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装KVM"><span class="nav-number">4.</span> <span class="nav-text">安装KVM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#修改网卡配置文件"><span class="nav-number">5.</span> <span class="nav-text">修改网卡配置文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建工作目录"><span class="nav-number">6.</span> <span class="nav-text">创建工作目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#上传虚拟机镜像"><span class="nav-number">7.</span> <span class="nav-text">上传虚拟机镜像</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编辑XML文件并启动虚拟机"><span class="nav-number">8.</span> <span class="nav-text">编辑XML文件并启动虚拟机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通过vnc连接到虚拟机"><span class="nav-number">9.</span> <span class="nav-text">通过vnc连接到虚拟机</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Koenli</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
