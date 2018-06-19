@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="环境介绍 宿主机操作系统：Windows7旗舰版 软件：VMware WorkStation12 Pro 虚拟机操作系统：CentOS7.1 虚拟机配置：2核4G 虚拟机IP：192.168.128.129 网卡模式：NAT 镜像：CentOS-7-x86_64-Minimal-1503-01.iso 镜像下载链接：http://archive.kernel.org/centos-vault/ V">
+<meta name="description" content="虽然Openstack官方文档上有提供了各类操作系统的Openstack镜像，但我们往往需要根据实际情况进行一些自定义设置，因此本文主要介绍如何在自己的笔记本或台式机上通过VMware构建一个可以用于制作Openstack镜像的环境，以便可以快速的制作自定义的Openstack镜像。 环境介绍 宿主机操作系统：Windows7旗舰版 软件：VMware WorkStation12 Pro 虚拟机操">
 <meta name="keywords" content="Linux,Openstack">
 <meta property="og:type" content="article">
 <meta property="og:title" content="构建Openstack镜像的环境搭建">
 <meta property="og:url" content="http://koenli.github.io/2018-06-06-构建Openstack镜像的环境搭建.html">
 <meta property="og:site_name" content="Koenli&#39;s Blog">
-<meta property="og:description" content="环境介绍 宿主机操作系统：Windows7旗舰版 软件：VMware WorkStation12 Pro 虚拟机操作系统：CentOS7.1 虚拟机配置：2核4G 虚拟机IP：192.168.128.129 网卡模式：NAT 镜像：CentOS-7-x86_64-Minimal-1503-01.iso 镜像下载链接：http://archive.kernel.org/centos-vault/ V">
+<meta property="og:description" content="虽然Openstack官方文档上有提供了各类操作系统的Openstack镜像，但我们往往需要根据实际情况进行一些自定义设置，因此本文主要介绍如何在自己的笔记本或台式机上通过VMware构建一个可以用于制作Openstack镜像的环境，以便可以快速的制作自定义的Openstack镜像。 环境介绍 宿主机操作系统：Windows7旗舰版 软件：VMware WorkStation12 Pro 虚拟机操">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_1.png">
 <meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_2.png">
@@ -93,10 +93,10 @@
 <meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_4.png">
 <meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_5.png">
 <meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_6.png">
-<meta property="og:updated_time" content="2018-06-06T06:41:36.240Z">
+<meta property="og:updated_time" content="2018-06-19T06:10:27.673Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="构建Openstack镜像的环境搭建">
-<meta name="twitter:description" content="环境介绍 宿主机操作系统：Windows7旗舰版 软件：VMware WorkStation12 Pro 虚拟机操作系统：CentOS7.1 虚拟机配置：2核4G 虚拟机IP：192.168.128.129 网卡模式：NAT 镜像：CentOS-7-x86_64-Minimal-1503-01.iso 镜像下载链接：http://archive.kernel.org/centos-vault/ V">
+<meta name="twitter:description" content="虽然Openstack官方文档上有提供了各类操作系统的Openstack镜像，但我们往往需要根据实际情况进行一些自定义设置，因此本文主要介绍如何在自己的笔记本或台式机上通过VMware构建一个可以用于制作Openstack镜像的环境，以便可以快速的制作自定义的Openstack镜像。 环境介绍 宿主机操作系统：Windows7旗舰版 软件：VMware WorkStation12 Pro 虚拟机操">
 <meta name="twitter:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_1.png">
 
 
@@ -336,8 +336,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux营地/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux营地</span>
+                  <a href="/categories/云计算/" itemprop="url" rel="index">
+                    <span itemprop="name">云计算</span>
                   </a>
                 </span>
 
@@ -373,7 +373,8 @@
       
 
       
-        <h1 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h1><hr>
+        <p>虽然<a href="https://docs.openstack.org/image-guide/obtain-images.html" target="_blank" rel="noopener">Openstack官方文档</a>上有提供了各类操作系统的Openstack镜像，但我们往往需要根据实际情况进行一些自定义设置，因此本文主要介绍如何在自己的笔记本或台式机上通过VMware构建一个可以用于制作Openstack镜像的环境，以便可以快速的制作自定义的Openstack镜像。</p>
+<h1 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h1><hr>
 <p>宿主机操作系统：Windows7旗舰版</p>
 <p>软件：VMware WorkStation12 Pro</p>
 <p>虚拟机操作系统：CentOS7.1</p>
@@ -484,6 +485,10 @@ DEVICE、NAME、IPADDR、NETMASK、GATEWAY参数请根据实际情况进行相�
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018-06-19-如何制作Openstack-Linux镜像.html" rel="prev" title="如何制作Openstack Linux镜像">
+                如何制作Openstack Linux镜像 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -563,7 +568,7 @@ DEVICE、NAME、IPADDR、NETMASK、GATEWAY参数请根据实际情况进行相�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -574,7 +579,7 @@ DEVICE、NAME、IPADDR、NETMASK、GATEWAY参数请根据实际情况进行相�
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
