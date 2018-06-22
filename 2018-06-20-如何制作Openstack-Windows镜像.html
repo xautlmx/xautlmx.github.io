@@ -130,7 +130,8 @@
 <meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E5%A6%82%E4%BD%95%E5%88%B6%E4%BD%9COpenstack%20Windows%E9%95%9C%E5%83%8F_40.png">
 <meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E5%A6%82%E4%BD%95%E5%88%B6%E4%BD%9COpenstack%20Windows%E9%95%9C%E5%83%8F_41.png">
 <meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E5%A6%82%E4%BD%95%E5%88%B6%E4%BD%9COpenstack%20Windows%E9%95%9C%E5%83%8F_42.png">
-<meta property="og:updated_time" content="2018-06-21T08:01:42.715Z">
+<meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E5%A6%82%E4%BD%95%E5%88%B6%E4%BD%9COpenstack%20Windows%E9%95%9C%E5%83%8F_43.png">
+<meta property="og:updated_time" content="2018-06-22T03:39:02.259Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何制作Openstack Windows镜像">
 <meta name="twitter:description" content="在上一篇文章如何制作Openstack Linux镜像中我们以CentOS7.1为例，介绍了手动制作Openstack Linux镜像的详细步骤，本文我们将继续以制作Windows Server 2008 R2镜像为例，介绍手动制作Openstack Windows镜像的详细步骤。 手动制作Openstack Windows镜像 下载镜像访问官网镜像下载地址，进入后点击“操作系统”，选择Windo">
@@ -513,8 +514,8 @@
 <ul>
 <li>配置镜像administrator用户默认密码</li>
 </ul>
-<p>用记事本打开C:\Program Files\Bingosoft\Ec2Config\Scripts\SysPrepInit.cmd，将<br>ScramblePassword.exe -u Administrator这行改为net user administrator xxxxxx （xxxxxx为你要设置的密码），然后保存退出</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">原文件内容如下：</span><br><span class="line">@echo off</span><br><span class="line">ScramblePassword.exe -u Administrator</span><br><span class="line">net user Administrator /ACTIVE:YES /LOGONPASSWORDCHG:NO /EXPIRES:NEVER /PASSWORDREQ:YES</span><br><span class="line">sc config Ec2Config start= auto</span><br><span class="line"></span><br><span class="line">修改后的内容如下：</span><br><span class="line">@echo off</span><br><span class="line">net user administrator 123456</span><br><span class="line">net user Administrator /ACTIVE:YES /LOGONPASSWORDCHG:NO /EXPIRES:NEVER /PASSWORDREQ:YES</span><br><span class="line">sc config Ec2Config start= auto</span><br></pre></td></tr></table></figure>
+<p>用记事本打开C:\Program Files\Bingosoft\Ec2Config\Scripts\SysPrepInit.cmd，将<br>ScramblePassword.exe -u Administrator这行改为net user administrator xxxxxx （xxxxxx为你要设置的密码），将sc config Ec2Config start= auto这行改为sc config Ec2Config start= disabled，然后保存退出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">原文件内容如下：</span><br><span class="line">@echo off</span><br><span class="line">ScramblePassword.exe -u Administrator</span><br><span class="line">net user Administrator /ACTIVE:YES /LOGONPASSWORDCHG:NO /EXPIRES:NEVER /PASSWORDREQ:YES</span><br><span class="line">sc config Ec2Config start= auto</span><br><span class="line"></span><br><span class="line">修改后的内容如下：</span><br><span class="line">@echo off</span><br><span class="line">net user administrator 123456</span><br><span class="line">net user Administrator /ACTIVE:YES /LOGONPASSWORDCHG:NO /EXPIRES:NEVER /PASSWORDREQ:YES</span><br><span class="line">sc config Ec2Config start= disabled</span><br></pre></td></tr></table></figure>
 <ul>
 <li>清理系统日志</li>
 </ul>
@@ -535,6 +536,8 @@
 <p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/%E5%A6%82%E4%BD%95%E5%88%B6%E4%BD%9COpenstack%20Windows%E9%95%9C%E5%83%8F_41.png" alt=""></p>
 <p>点击“是”</p>
 <p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/%E5%A6%82%E4%BD%95%E5%88%B6%E4%BD%9COpenstack%20Windows%E9%95%9C%E5%83%8F_42.png" alt=""></p>
+<p>点击“是”</p>
+<p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/%E5%A6%82%E4%BD%95%E5%88%B6%E4%BD%9COpenstack%20Windows%E9%95%9C%E5%83%8F_43.png" alt=""></p>
 <p>以上为几个常用的配置，其他的配置可以根据情况进行进行设置。</p>
 <h2 id="转换镜像格式"><a href="#转换镜像格式" class="headerlink" title="转换镜像格式"></a>转换镜像格式</h2><p>将raw格式镜像文件转换成qcow2格式镜像文件，压缩空间便于传输。</p>
 <pre><code># qemu-img convert -f raw Windows2008_R2.raw -O qcow2 Windows2008_R2.qcow2
