@@ -87,16 +87,16 @@
 <meta property="og:site_name" content="Koenli&#39;s Blog">
 <meta property="og:description" content="Linux下大概有同步阻塞、同步非阻塞、异步阻塞和异步非阻塞四种I/O模型。 同步与异步 在学校食堂排队等候打饭，必须等到队列前面没人了才会轮到自己，这场景就是同步。如果换成去餐馆，不需要排队直接点菜，菜好了之后服务员直接给我送上来，这种场景就是异步。异步与同步之间的区别就是消息是如何通知的，在上面场景中，排队打饭需要自己去关注是不是轮到我们了，而餐馆点菜是由服务员通知我们菜好了。 所以说在同步的">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_1.gif">
-<meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_2.gif">
-<meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_3.gif">
-<meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_4.gif">
-<meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_5.gif">
-<meta property="og:updated_time" content="2016-04-10T05:46:27.828Z">
+<meta property="og:image" content="http://img.koenli.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_1.gif">
+<meta property="og:image" content="http://img.koenli.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_2.gif">
+<meta property="og:image" content="http://img.koenli.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_3.gif">
+<meta property="og:image" content="http://img.koenli.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_4.gif">
+<meta property="og:image" content="http://img.koenli.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_5.gif">
+<meta property="og:updated_time" content="2018-10-15T09:51:47.759Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux下常用I&#x2F;O模型">
 <meta name="twitter:description" content="Linux下大概有同步阻塞、同步非阻塞、异步阻塞和异步非阻塞四种I/O模型。 同步与异步 在学校食堂排队等候打饭，必须等到队列前面没人了才会轮到自己，这场景就是同步。如果换成去餐馆，不需要排队直接点菜，菜好了之后服务员直接给我送上来，这种场景就是异步。异步与同步之间的区别就是消息是如何通知的，在上面场景中，排队打饭需要自己去关注是不是轮到我们了，而餐馆点菜是由服务员通知我们菜好了。 所以说在同步的">
-<meta name="twitter:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_1.gif">
+<meta name="twitter:image" content="http://img.koenli.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_1.gif">
 
 
 
@@ -381,24 +381,24 @@
 <h1 id="I-O模型"><a href="#I-O模型" class="headerlink" title="I/O模型"></a>I/O模型</h1><hr>
 <p>Linux异步I/O是Linux内核中提供的一个相当新的增强。是2.6版本内核的一个标准特性，异步非阻塞I/O背后的基本思想是允许进程发起很多I/O操作，而不用阻塞或等待任何操作完成。稍后或在接收到I/O操作完成的通知时，进程就可以检索I/O操作的结果。</p>
 <p>本文将试图介绍最常用的一些模型来解释它们与异步I/O之间的区别。下图给出了同步和异步模型，以及阻塞和非阻塞的模型。</p>
-<p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_1.gif" alt=""></p>
+<p><img src="http://img.koenli.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_1.gif" alt=""></p>
 <p>每个I/O模型都有自己的使用模式，它们对于特定的应用程序都有自己的优点。</p>
 <h1 id="同步阻塞I-O"><a href="#同步阻塞I-O" class="headerlink" title="同步阻塞I/O"></a>同步阻塞I/O</h1><hr>
 <p>最常用的一个模型是同步阻塞I/O模型。在这个模型中，用户空间的应用程序执行了一个系统调用，这会导致应用程序阻塞。这意味着应用程序会一直阻塞，直到系统调用完成为止（数据传输完成或发生错误）。调用应用程序处于一种不再消费CPU而只是简单等待响应的状态，因此从处理的角度来看，这是非常有效的。</p>
 <p>下图给出了传统的阻塞I/O模型，这也是目前应用程序中最为常用的一种模型。其行为非常容易理解，其用法对于典型的应用程序来说都非常有效。在调用read系统调用时，应用程序会阻塞并对内核进行上下文切换。然后会触发读操作，当响应返回时（从我们正在从中读取的设备中返回），数据就被移动到用户空间的缓冲区中。然后应用程序就会解除阻塞（read调用返回）。</p>
-<p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_2.gif" alt=""></p>
+<p><img src="http://img.koenli.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_2.gif" alt=""></p>
 <p>从应用程序的角度来说，read调用会延续很长时间。实际上，在内核执行读操作和其他工作时，应用程序的确会被阻塞。</p>
 <h1 id="同步非阻塞I-O"><a href="#同步非阻塞I-O" class="headerlink" title="同步非阻塞I/O"></a>同步非阻塞I/O</h1><hr>
 <p>同步阻塞I/O的一种效率稍低的变种就是同步非阻塞I/O。在这种模型中，设备以非阻塞的形式打开的。这意味着I/O操作不会立即完成，read操作可能会返回一个错误代码，说明这个命令不能立即满足（EAGAIN或EWOULDBLOCK）,如下图所示：</p>
-<p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_3.gif" alt=""></p>
+<p><img src="http://img.koenli.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_3.gif" alt=""></p>
 <p>非阻塞的实现是I/O命令可能并不会立即满足，需要应用程序调用许多次来等待操作完成。这可能效率不高，因为在很多情况下，当内核执行这个命令时，应用程序必须要进行忙绿等待，直到数据可用位置，或者试图执行其他工作。正如上图所示的一样，这个方法可以引入I/O操作的延时，因为数据在内核中变为可用到用户调用read返回数据之间存在一定的间隔，这会导致整体数据吞吐量的降低。</p>
 <h1 id="异步阻塞I-O"><a href="#异步阻塞I-O" class="headerlink" title="异步阻塞I/O"></a>异步阻塞I/O</h1><hr>
 <p>另外一个阻塞解决方案是带有阻塞通知的非阻塞I/O。在这种模型中，配置的是非阻塞I/O，然后使用阻塞select系统调用来确定一个I/O描述符何时有操作。使select调用非常有趣的是它可以用来为多个描述符提供通知，而不仅仅为一个描述符提供通知。对于每个提示符来说，我们可以请求这个描述符可以写数据、有读数据可用以及是否发生错误的通知。</p>
-<p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_4.gif" alt=""></p>
+<p><img src="http://img.koenli.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_4.gif" alt=""></p>
 <p>select调用的主要问题是它的效率不是非常高。尽管这是异步通知使用的一种方便模型，但是对于高性能的I/O操作来说不建议使用。</p>
 <h1 id="异步非阻塞I-O"><a href="#异步非阻塞I-O" class="headerlink" title="异步非阻塞I/O"></a>异步非阻塞I/O</h1><hr>
 <p>最后，异步非阻塞I/O模型是一种处理与I/O重叠进行的模型。读请求会立即返回，说明read请求已经成功发起了。在后台完成读操作时，应用程序然后会执行其他处理操作。当read的响应到达时，就会产生一个信号或执行一个基于线程的回调函数来完成这次I/O处理过程</p>
-<p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_5.gif" alt=""></p>
+<p><img src="http://img.koenli.com/Linux%E4%B8%8B%E5%B8%B8%E7%94%A8IO%E6%A8%A1%E5%9E%8B_5.gif" alt=""></p>
 <p>在一个进程中为了执行多个I/O请求而对计算操作和I/O处理进行重叠处理的能力利用了处理速度与I/O速度之间的差异。当一个或多个I/O请求挂起时，CPU可以执行其他任务，或者更为常见的是在发起其他I/O的同时对已经完成的I/O进行操作。</p>
 <ul>
 <li>EOF</li>

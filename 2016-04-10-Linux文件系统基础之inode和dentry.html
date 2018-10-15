@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="Koenli&#39;s Blog">
 <meta property="og:description" content="inode和dentry在VFS和实体的文件系统（ext2、ext3等）中都是比较重要的概念。首先看一下虚拟文件系统的标准定义： 虚拟机文件系统（英语：Virtual File System，缩写为VFS），又称虚拟文件切换系统（Virtual Filesystem Switch），是操作系统的文件系统虚拟机层，在其下是实体的文件系统。虚拟文件系统的主要功能，在于让上层的软件，能够用单一的方式来跟">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E4%B9%8Binode%E5%92%8Cdentry_1.jpg">
-<meta property="og:updated_time" content="2016-04-10T05:46:06.263Z">
+<meta property="og:image" content="http://img.koenli.com/Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E4%B9%8Binode%E5%92%8Cdentry_1.jpg">
+<meta property="og:updated_time" content="2018-10-15T09:51:47.762Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux文件系统基础之inode和dentry">
 <meta name="twitter:description" content="inode和dentry在VFS和实体的文件系统（ext2、ext3等）中都是比较重要的概念。首先看一下虚拟文件系统的标准定义： 虚拟机文件系统（英语：Virtual File System，缩写为VFS），又称虚拟文件切换系统（Virtual Filesystem Switch），是操作系统的文件系统虚拟机层，在其下是实体的文件系统。虚拟文件系统的主要功能，在于让上层的软件，能够用单一的方式来跟">
-<meta name="twitter:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E4%B9%8Binode%E5%92%8Cdentry_1.jpg">
+<meta name="twitter:image" content="http://img.koenli.com/Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E4%B9%8Binode%E5%92%8Cdentry_1.jpg">
 
 
 
@@ -371,7 +371,7 @@
         <p>inode和dentry在VFS和实体的文件系统（ext2、ext3等）中都是比较重要的概念。首先看一下虚拟文件系统的标准定义：</p>
 <p><strong>虚拟机文件系统</strong>（英语：Virtual File System，缩写为VFS），又称虚拟文件切换系统（Virtual Filesystem Switch），是操作系统的文件系统虚拟机层，在其下是实体的文件系统。虚拟文件系统的主要功能，在于让上层的软件，能够用单一的方式来跟底层不同的文件系统沟通。在操作系统与之下的各种文件系统之间，虚拟文件系统提供了标准的操作接口，让操作系统能够很快的支持新的文件系统。</p>
 <p>VFS在Linux系统中的结构为：</p>
-<p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E4%B9%8Binode%E5%92%8Cdentry_1.jpg" alt=""></p>
+<p><img src="http://img.koenli.com/Linux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E4%B9%8Binode%E5%92%8Cdentry_1.jpg" alt=""></p>
 <p>一般是这样来描述inode的：inode是内核文件对象的元数据。inode中不包括文件的数据和文件名字信息。inode中只包含数据块的位置信息，数据结构相对稳定，其中没有数据和文件名等变长数据，可以固定其大小，进而可以实现将整个文件系统中的inode按照一定的组织方式来集中存储在硬盘起始的一个，文件系统加载时，可以方便查找。</p>
 <p>inode仅仅只是保存了文件对象的属性信息，包括：权限、属组、数据块的位置、时间戳等信息。但是并没有包含文件名，文件在文件系统的目录树中所处的位置信息。那么内核又是怎么管理文件系统的目录树的呢？</p>
 <p>目录项在内核中起到了连接不同的文件对象inode的作用，进而起到了维护文件系统目录树的作用。dentry是一个纯粹的内存结构，由文件系统在提供文件访问的过程中在内存中直接建立。dentry中包含了文件名，文件的inode号等信息。</p>

@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="Koenli&#39;s Blog">
 <meta property="og:description" content="关于Ceph的介绍本文不再赘述，可以查看官方文档进行了解 Sage Weil读博士的时候开发了这套牛逼的分布式存储系统，最初是奔着高性能分布式文件系统去的，结果云计算风口一来，Ceph重心转向了分布式块存储（Block Storage）和分布式对象存储（Object Storage），现在分布式文件系统CephFS还停在beta阶段。Ceph现在是云计算、虚拟机部署的最火开源存储解决方案，据说有2">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E5%9C%A8CentOS7.1%E4%B8%8A%E5%AE%89%E8%A3%85%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9FCeph_1.png">
-<meta property="og:updated_time" content="2016-09-08T08:20:26.976Z">
+<meta property="og:image" content="http://img.koenli.com/%E5%9C%A8CentOS7.1%E4%B8%8A%E5%AE%89%E8%A3%85%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9FCeph_1.png">
+<meta property="og:updated_time" content="2018-10-15T09:51:47.791Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在CentOS7.1上安装分布式存储系统Ceph">
 <meta name="twitter:description" content="关于Ceph的介绍本文不再赘述，可以查看官方文档进行了解 Sage Weil读博士的时候开发了这套牛逼的分布式存储系统，最初是奔着高性能分布式文件系统去的，结果云计算风口一来，Ceph重心转向了分布式块存储（Block Storage）和分布式对象存储（Object Storage），现在分布式文件系统CephFS还停在beta阶段。Ceph现在是云计算、虚拟机部署的最火开源存储解决方案，据说有2">
-<meta name="twitter:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/%E5%9C%A8CentOS7.1%E4%B8%8A%E5%AE%89%E8%A3%85%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9FCeph_1.png">
+<meta name="twitter:image" content="http://img.koenli.com/%E5%9C%A8CentOS7.1%E4%B8%8A%E5%AE%89%E8%A3%85%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9FCeph_1.png">
 
 
 
@@ -371,7 +371,7 @@
         <p>关于Ceph的介绍本文不再赘述，可以查看<a href="http://docs.ceph.org.cn/start/intro/" target="_blank" rel="noopener">官方文档</a>进行了解</p>
 <p>Sage Weil读博士的时候开发了这套牛逼的分布式存储系统，最初是奔着高性能分布式文件系统去的，结果云计算风口一来，Ceph重心转向了分布式块存储（Block Storage）和分布式对象存储（Object Storage），现在分布式文件系统CephFS还停在beta阶段。Ceph现在是云计算、虚拟机部署的最火开源存储解决方案，据说有20%的OpenStack部署存储用的都是Ceph的Block Storage。</p>
 <p>Ceph 提供3种存储方式：对象存储，块存储和文件系统，下图展示了Ceph存储集群的架构：</p>
-<p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/%E5%9C%A8CentOS7.1%E4%B8%8A%E5%AE%89%E8%A3%85%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9FCeph_1.png" alt=""></p>
+<p><img src="http://img.koenli.com/%E5%9C%A8CentOS7.1%E4%B8%8A%E5%AE%89%E8%A3%85%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9FCeph_1.png" alt=""></p>
 <h1 id="硬件环境准备"><a href="#硬件环境准备" class="headerlink" title="硬件环境准备"></a>硬件环境准备</h1><hr>
 <p>由于条件限制，本文所有实验机器全是虚拟机，共准备了3台虚拟机，其中1台做监控节点（ceph-mon），2台做存储节点（ceph-osd1，ceph-osd2）。</p>
 <p>Ceph要求必须是奇数个监控节点，而且最少3个（自己玩玩的话，1个也是可以的），ceph-adm是可选的，可以把ceph-adm放在monitor上，只不过把ceph-adm单独拿出来架构上看更清晰一些。当然也可以把mon放在 osd上，生产环境下是不推荐这样做的。</p>

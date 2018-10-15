@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="Koenli&#39;s Blog">
 <meta property="og:description" content="MariaDB作为Mysql的一个分支，在开源项目中已经广泛使用，例如大热的openstack，所以，为了保证服务的高可用性，同时提高系统的负载能力，集群部署是必不可少的。 MariaDB Galera Cluster 介绍 MariaDB集群是MariaDB同步多主机集群。它仅支持XtraDB/ InnoDB存储引擎（虽然有对MyISAM实验支持 - 看wsrep_replicate_myisa">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/MariaDB%20Galera%20Cluster%20%E9%83%A8%E7%BD%B2_1.png">
-<meta property="og:updated_time" content="2016-09-07T10:50:03.821Z">
+<meta property="og:image" content="http://img.koenli.com/MariaDB%20Galera%20Cluster%20%E9%83%A8%E7%BD%B2_1.png">
+<meta property="og:updated_time" content="2018-10-15T09:51:47.765Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MariaDB Galera Cluster 部署">
 <meta name="twitter:description" content="MariaDB作为Mysql的一个分支，在开源项目中已经广泛使用，例如大热的openstack，所以，为了保证服务的高可用性，同时提高系统的负载能力，集群部署是必不可少的。 MariaDB Galera Cluster 介绍 MariaDB集群是MariaDB同步多主机集群。它仅支持XtraDB/ InnoDB存储引擎（虽然有对MyISAM实验支持 - 看wsrep_replicate_myisa">
-<meta name="twitter:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/MariaDB%20Galera%20Cluster%20%E9%83%A8%E7%BD%B2_1.png">
+<meta name="twitter:image" content="http://img.koenli.com/MariaDB%20Galera%20Cluster%20%E9%83%A8%E7%BD%B2_1.png">
 
 
 
@@ -397,7 +397,7 @@
 </blockquote>
 <p>Galera集群的复制功能基于Galeralibrary实现,为了让MySQL与Galera library通讯，特别针对MySQL开发了wsrep API。</p>
 <p>Galera插件保证集群同步数据，保持数据的一致性，靠的就是可认证的复制，工作原理如下图：</p>
-<p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/MariaDB%20Galera%20Cluster%20%E9%83%A8%E7%BD%B2_1.png" alt=""></p>
+<p><img src="http://img.koenli.com/MariaDB%20Galera%20Cluster%20%E9%83%A8%E7%BD%B2_1.png" alt=""></p>
 <p>当客户端发出一个commit的指令，在事务被提交之前，所有对数据库的更改都会被<code>write-set</code>收集起来,并且将<code>write-set</code>纪录的内容发送给其他节点。</p>
 <p><code>write-set</code>将在每个节点进行认证测试，测试结果决定着节点是否应用<code>write-set</code>更改数据。</p>
 <p>如果认证测试失败，节点将丢弃<code>write-set</code>；如果认证测试成功，则事务提交。</p>

@@ -87,13 +87,13 @@
 <meta property="og:site_name" content="Koenli&#39;s Blog">
 <meta property="og:description" content="数据库按照一定规则保存程序数据，程序再发起查询取回所需的数据。Web程序最常用基于关系模型的数据库，这种数据库也称为SQL数据库，因为它们使用结构化查询语句。不过最近几年文档数据库和键值对数据库成了流行的替代选择，这两种数据库合称NoSQL数据库。 SQL数据库 关系型数据库把数据存储在表中，表模拟程序中不同的实体。例如，订单管理程序的数据库中可能有表customers、products和orde">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/Flask%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93_1.png">
-<meta property="og:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/Flask%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93_2.png">
-<meta property="og:updated_time" content="2016-05-13T04:12:24.541Z">
+<meta property="og:image" content="http://img.koenli.com/Flask%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93_1.png">
+<meta property="og:image" content="http://img.koenli.com/Flask%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93_2.png">
+<meta property="og:updated_time" content="2018-10-15T09:51:47.737Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Flask——数据库">
 <meta name="twitter:description" content="数据库按照一定规则保存程序数据，程序再发起查询取回所需的数据。Web程序最常用基于关系模型的数据库，这种数据库也称为SQL数据库，因为它们使用结构化查询语句。不过最近几年文档数据库和键值对数据库成了流行的替代选择，这两种数据库合称NoSQL数据库。 SQL数据库 关系型数据库把数据存储在表中，表模拟程序中不同的实体。例如，订单管理程序的数据库中可能有表customers、products和orde">
-<meta name="twitter:image" content="http://7xl6fl.com1.z0.glb.clouddn.com/Flask%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93_1.png">
+<meta name="twitter:image" content="http://img.koenli.com/Flask%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93_1.png">
 
 
 
@@ -385,7 +385,7 @@
 <p>关系型数据库把数据存储在表中，表模拟程序中不同的实体。例如，订单管理程序的数据库中可能有表customers、products和orders。</p>
 <p>表的列数是固定的，行数是可变的。列定义表所表示的实体的数据属性。例如，customers表中可能有name、address、phone表列。表中的行定义各列对应的真实数据。</p>
 <p>表中有个特殊的列，称为<strong>主键</strong>，其值为表中各行的唯一标识符。表中还可以有称为<strong>外键</strong>的列，引用同一个表或不同表中某行的主键。行之间的这种联系称为<strong>关系</strong>，这是关系型数据库模型的基础。图1展示了一个简单数据库的关系图。这个数据库中有两个表，分别存储用户和用户角色。连接两个表的线代表两个表之间的关系。</p>
-<p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/Flask%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93_1.png" alt=""></p>
+<p><img src="http://img.koenli.com/Flask%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93_1.png" alt=""></p>
 <p>图1 关系型数据库示例</p>
 <p>在这个数据库关系图中，roles表存储所有可用的用户角色，每个角色都使用一个唯一的id值（即表的主键）进行标识。users表包含用户列表，每个用户也有唯一的id值。除了id主键之外，roles表中还有name列，users表中还有username列和password列。users表中的role_id列是外键，引用角色的id，通过这种方式为每个指定角色。</p>
 <p>从这个例子可以看出，关系型数据库存储数据很高效，而且避免了重复。将这个数据库中的用户角色重命名也很简单，因为角色名只出现在一个地方。一旦在roles表中修改完角色名，所有通过role_id引用这个角色的用户都能立即看到更新。</p>
@@ -393,7 +393,7 @@
 <h1 id="NoSQL数据库"><a href="#NoSQL数据库" class="headerlink" title="NoSQL数据库"></a>NoSQL数据库</h1><hr>
 <p>所有不遵循上节所述的关系模型的数据库统称为NoSQL数据库。NoSQL数据库一般使用<strong>集合</strong>代替表，使用<strong>文档</strong>代替记录。NoSQL数据库采用的设计方式使联结变得困难，所以大多数数据库根本不支持这种操作。对于结构如图1所示的关系型数据库，若要列出各用户及其角色，就需要在程序中执行联结操作，即先读取每个用户的role_id，再在roles表中搜索对应的记录。</p>
 <p>NoSQL数据库更适合设计成如图2所示的结构。这是执行<strong>反规范化</strong>操作得到的结果，它减少了表的数量，却增加了数据重复量。</p>
-<p><img src="http://7xl6fl.com1.z0.glb.clouddn.com/Flask%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93_2.png" alt=""></p>
+<p><img src="http://img.koenli.com/Flask%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93_2.png" alt=""></p>
 <p>图2 NoSQL数据库示例</p>
 <p>这种结构的数据库要把角色名存储在每个用户中。如此一来，将角色重命名的操作就变得很耗时，可能需要更新大量文档。</p>
 <p>使用NoSQL数据库当然也有好处。数据重复可以提升查询速度。列出用户及其角色的操作很简答，因为无需联结。</p>
