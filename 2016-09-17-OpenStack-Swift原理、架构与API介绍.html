@@ -87,16 +87,16 @@
 <meta property="og:site_name" content="Koenli&#39;s Blog">
 <meta property="og:description" content="背景与概览 Swift最初是由Rackspace公司开发的高可用分布式对象存储服务，并于2010年贡献给OpenStack开源社区作为其最初的核心子项目之一，为其Nova子项目提供虚机镜像存储服务。Swift构筑在比较便宜的标准硬件存储基础设施之上，无需采用RAID（磁盘冗余阵列），通过在软件层面引入一致性散列技术和数据冗余性，牺牲一定程度的数据一致性来达到高可用性和可伸缩性，支持多租户模式、容器">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_1.png">
-<meta property="og:image" content="http://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_2.png">
-<meta property="og:image" content="http://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_3.png">
-<meta property="og:image" content="http://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_4.png">
-<meta property="og:image" content="http://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_5.png">
-<meta property="og:updated_time" content="2018-10-15T09:51:47.771Z">
+<meta property="og:image" content="https://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_1.png">
+<meta property="og:image" content="https://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_2.png">
+<meta property="og:image" content="https://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_3.png">
+<meta property="og:image" content="https://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_4.png">
+<meta property="og:image" content="https://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_5.png">
+<meta property="og:updated_time" content="2018-10-27T17:21:37.822Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OpenStack Swift原理、架构与API介绍">
 <meta name="twitter:description" content="背景与概览 Swift最初是由Rackspace公司开发的高可用分布式对象存储服务，并于2010年贡献给OpenStack开源社区作为其最初的核心子项目之一，为其Nova子项目提供虚机镜像存储服务。Swift构筑在比较便宜的标准硬件存储基础设施之上，无需采用RAID（磁盘冗余阵列），通过在软件层面引入一致性散列技术和数据冗余性，牺牲一定程度的数据一致性来达到高可用性和可伸缩性，支持多租户模式、容器">
-<meta name="twitter:image" content="http://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_1.png">
+<meta name="twitter:image" content="https://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_1.png">
 
 
 
@@ -380,7 +380,7 @@
 <p>一致性散列（Consistent Hashing)</p>
 </blockquote>
 <p>面对海量级别的对象，需要存放在成千上万台服务器和硬盘设备上，首先要解决寻址问题，即如何将对象分布到这些设备地址上。Swift是基于一致性散列技术，通过计算可将对象均匀分布到虚拟空间的虚拟节点上，在增加或删除节点时可大大减少需移动的数据量；虚拟空间大小通常采用2的n次幂，便于进行高效的移位操作；然后通过独特的数据结构Ring（环）再将虚拟节点映射到实际的物理存储设备上，完成寻址过程。</p>
-<p><img src="http://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_1.png" alt=""></p>
+<p><img src="https://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_1.png" alt=""></p>
 <p>如上图所示，以逆时针方向递增的散列空间有4个字节长共32位，整数范围是[0~2^32-1]；将散列结果右移m位，可产生2^(32-m)个虚拟节点，例如m=29时可产生8个虚拟节点。在实际部署的时候需要经过仔细计算得到合适的虚拟节点数，以达到存储空间和工作负载之间的平衡。</p>
 <blockquote>
 <p>数据一致性模型（Consistency Model）</p>
@@ -392,7 +392,7 @@
 <li>弱一致性：R+W&lt;=N，如果读写操作的副本集合不产生交集，就可能会读到脏数据；适合对一致性要求比较低的场景。</li>
 </ol>
 <p>Swift针对的是读写都比较频繁的场景，所以采用了比较折中的策略，即写操作需要满足至少一半以上成功W&gt;N/2，再保证读操作与写操作的副本集合至少产生一个交集，即R+W&gt;N。Swift默认配置是N=3，W=2&gt;N/2，R=1或2，即每个对象会存在3个副本，这些副本会尽量被存储在不同区域的节点上；W=2表示至少需要更新2个副本才算写成功；当R=1时意味着某一个读操作成功便立刻返回，此种情况下可能会读取到旧版本（弱一致性模型）；当R=2时，需要通过在读操作请求头中增加x-newest=true参数来同时读取2个副本的元数据信息，然后比较时间戳来确定哪个是最新版本（强一致性模型）；如果数据出现了不一致，后台服务进程会在一定时间窗口内通过检测和复制协议来完成数据同步，从而保证达到最终一致性。如下图所示：</p>
-<p><img src="http://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_2.png" alt=""></p>
+<p><img src="https://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_2.png" alt=""></p>
 <blockquote>
 <p>环的数据结构</p>
 </blockquote>
@@ -403,17 +403,17 @@
 <li>计算分区号的位移(part_shift整数，即一致性散列图中的m)</li>
 </ul>
 <p>以查找一个对象的计算过程为例：</p>
-<p><img src="http://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_3.png" alt=""></p>
+<p><img src="https://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_3.png" alt=""></p>
 <p>使用对象的层次结构account/container/object作为键，使用MD5散列算法得到一个散列值，对该散列值的前4个字节进行右移操作得到分区索引号，移动位数由上面的part_shift设置指定；按照分区索引号在分区到设备映射表（replica2part2dev_id）里查找该对象所在分区的对应的所有设备编号，这些设备会被尽量选择部署在不同区域（Zone）内，区域只是个抽象概念，它可以是某台机器，某个机架，甚至某个建筑内的机群，以提供最高级别的冗余性，建议至少部署5个区域；权重参数是个相对值，可以来根据磁盘的大小来调节，权重越大表示可分配的空间越多，可部署更多的分区。</p>
 <p>Swift为账户，容器和对象分别定义了的环，查找账户和容器的是同样的过程。</p>
 <blockquote>
 <p>数据模型</p>
 </blockquote>
 <p>Swift采用层次数据模型，共设三层逻辑结构：Account/Container/Object（即账户/容器/对象)，每层节点数均没有限制，可以任意扩展。这里的账户和个人账户不是一个概念，可理解为租户，用来做顶层的隔离机制，可以被多个个人账户所共同使用；容器代表封装一组对象，类似文件夹或目录；叶子节点代表对象，由元数据和内容两部分组成，如下图所示：</p>
-<p><img src="http://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_4.png" alt=""></p>
+<p><img src="https://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_4.png" alt=""></p>
 <h1 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h1><hr>
 <p>Swift采用完全对称、面向资源的分布式系统架构设计，所有组件都可扩展，避免因单点失效而扩散并影响整个系统运转；通信方式采用非阻塞式I/O模式，提高了系统吞吐和响应能力。</p>
-<p><img src="http://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_5.png" alt=""></p>
+<p><img src="https://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_5.png" alt=""></p>
 <p>Swift 组件包括：</p>
 <ul>
 <li>代理服务（Proxy Server）：对外提供对象服务API，会根据环的信息来查找服务地址并转发用户请求至相应的账户、容器或者对象服务；由于采用无状态的REST请求协议，可以进行横向扩展来均衡负载。</li>

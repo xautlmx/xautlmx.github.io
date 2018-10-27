@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="系统,Linux," />
+  <meta name="keywords" content="Linux,系统," />
 
 
 
@@ -80,25 +80,25 @@
 
 
 <meta name="description" content="实验环境介绍 系统环境：CentOS6.5 ISO镜像：CentOS-6.5-x86_64-bin-DVD1.iso 镜像下载链接：http://archive.kernel.org/centos-vault/ 详细配置步骤 1、根据具体的系统版本下载对应版本的ISO文件，系统版本可通过cat /etc/redhat-release查看  2、将镜像上传到机器任意位置，若机器未设置IP，可通过U盘">
-<meta name="keywords" content="系统,Linux">
+<meta name="keywords" content="Linux,系统">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CentOS6.X&#x2F;CentOS7.X配置本地yum源教程">
 <meta property="og:url" content="http://koenli.github.io/2018-06-06-CentOS6-X-CentOS7-X配置本地yum源教程.html">
 <meta property="og:site_name" content="Koenli&#39;s Blog">
 <meta property="og:description" content="实验环境介绍 系统环境：CentOS6.5 ISO镜像：CentOS-6.5-x86_64-bin-DVD1.iso 镜像下载链接：http://archive.kernel.org/centos-vault/ 详细配置步骤 1、根据具体的系统版本下载对应版本的ISO文件，系统版本可通过cat /etc/redhat-release查看  2、将镜像上传到机器任意位置，若机器未设置IP，可通过U盘">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_1.png">
-<meta property="og:image" content="http://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_2.png">
-<meta property="og:image" content="http://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_3.png">
-<meta property="og:image" content="http://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_4.png">
-<meta property="og:image" content="http://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_5.png">
-<meta property="og:image" content="http://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_6.png">
-<meta property="og:image" content="http://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_7.png">
-<meta property="og:updated_time" content="2018-10-15T09:49:43.084Z">
+<meta property="og:image" content="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_1.png">
+<meta property="og:image" content="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_2.png">
+<meta property="og:image" content="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_3.png">
+<meta property="og:image" content="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_4.png">
+<meta property="og:image" content="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_5.png">
+<meta property="og:image" content="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_6.png">
+<meta property="og:image" content="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_7.png">
+<meta property="og:updated_time" content="2018-10-27T17:21:37.790Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS6.X&#x2F;CentOS7.X配置本地yum源教程">
 <meta name="twitter:description" content="实验环境介绍 系统环境：CentOS6.5 ISO镜像：CentOS-6.5-x86_64-bin-DVD1.iso 镜像下载链接：http://archive.kernel.org/centos-vault/ 详细配置步骤 1、根据具体的系统版本下载对应版本的ISO文件，系统版本可通过cat /etc/redhat-release查看  2、将镜像上传到机器任意位置，若机器未设置IP，可通过U盘">
-<meta name="twitter:image" content="http://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_1.png">
+<meta name="twitter:image" content="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_1.png">
 
 
 
@@ -380,26 +380,26 @@
 <p>镜像下载链接：<a href="http://archive.kernel.org/centos-vault/" target="_blank" rel="noopener">http://archive.kernel.org/centos-vault/</a></p>
 <h1 id="详细配置步骤"><a href="#详细配置步骤" class="headerlink" title="详细配置步骤"></a>详细配置步骤</h1><hr>
 <p>1、根据具体的系统版本下载对应版本的ISO文件，系统版本可通过cat /etc/redhat-release查看</p>
-<p><img src="http://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_1.png" alt=""></p>
+<p><img src="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_1.png" alt=""></p>
 <p>2、将镜像上传到机器任意位置，若机器未设置IP，可通过U盘等外置设备将ISO文件拷贝到机器中，若机器已设置IP，可通过winscp或Xftp等支持SSH的SCP文件传输软件将ISO文件上传到机器中。示例中我将ISO文件（CentOS-6.5-x86_64-bin-DVD1.iso）上传到/usr/local目录下</p>
-<p><img src="http://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_2.png" alt=""></p>
+<p><img src="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_2.png" alt=""></p>
 <p>3、建立/mnt/cdrom和/mnt/&lt;OS_Version&gt;两个目录，<strong>其中&lt;OS_Version&gt;替换为操作系统版本</strong></p>
 <pre><code># mkdir /mnt/cdrom
 # mkdir /mnt/CentOS6.5
-</code></pre><p><img src="http://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_3.png" alt=""></p>
+</code></pre><p><img src="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_3.png" alt=""></p>
 <p>4、将ISO文件挂载到/mnt/cdrom目录下，并将镜像中的所有文件拷贝到/mnt/&lt;OS_Version&gt;目录中</p>
 <pre><code># mount -o loop /usr/local/CentOS-6.5-x86_64-bin-DVD1.iso /mnt/cdrom/
 # ls /mnt/cdrom/
 # cp -r /mnt/cdrom/* /mnt/CentOS6.5/
 # umount /mnt/cdrom/
 # rm /mnt/cdrom/
-</code></pre><p><img src="http://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_4.png" alt=""></p>
+</code></pre><p><img src="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_4.png" alt=""></p>
 <p>5、进入到/etc/yum.repos.d/，备份系统原有的repo文件</p>
 <pre><code># cd /etc/yum.repos.d/
 # ls
 # mkdir backup
 # mv * backup/
-</code></pre><p><img src="http://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_5.png" alt=""></p>
+</code></pre><p><img src="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_5.png" alt=""></p>
 <p>6、在/etc/yum.repos.d/新建repo文件（注：文件名一定要以.repo结尾，其他部分可自义定，例如a.repo,b.repo，此示例中为CentOS6.5.repo）</p>
 <pre><code># cat CentOS6.5.repo
 [CentOS6.5]
@@ -413,9 +413,9 @@ name参数可自定义
 baseurl是服务器设置中最重要的部分，只有设置正确，才能从上面获取软件。它的格式是baseurl=url://server1/path/to/repository/
 其中url支持的协议有 http:// ftp:// file://三种，此示例中为file://，路径为/mnt/CentOS6.5（第4步中已将ISO中的所有文件拷贝到此目录下）
 gpgchkeck= 有1和0两个选择，分别代表是否是否进行gpg校验，此处设置为0，不进行gpg校验
-</code></pre><p><img src="http://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_6.png" alt=""></p>
+</code></pre><p><img src="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_6.png" alt=""></p>
 <p>7、执行yum clean all清楚yum缓存，然后执行yum list，如果能如下图正常列出可用的软件包，说明本地yum源配置成功了。</p>
-<p><img src="http://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_7.png" alt=""></p>
+<p><img src="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_7.png" alt=""></p>
 <ul>
 <li>EOF</li>
 </ul>
@@ -437,9 +437,9 @@ gpgchkeck= 有1和0两个选择，分别代表是否是否进行gpg校验，此�
       
         <div class="post-tags">
           
-            <a href="/tags/系统/" rel="tag"># 系统</a>
-          
             <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/系统/" rel="tag"># 系统</a>
           
         </div>
       

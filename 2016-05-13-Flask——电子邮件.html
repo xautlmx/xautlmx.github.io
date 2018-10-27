@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="Koenli&#39;s Blog">
 <meta property="og:description" content="很多类型的应用程序需要在特定事件发生时提醒用户，而常用的通信方法是电子邮件。虽然Python标准库中的smtplib包可用在Flask程序中发送电子邮件，但包装了smtplib的Flask-Mail扩展能更好地和Flask集成。 使用Flask-Mail提供电子邮件支持 使用pip安装Flask-Mail： (env) [root@server1 myproject]# pip install f">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.koenli.com/Flask%E2%80%94%E2%80%94%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6_1.png">
-<meta property="og:updated_time" content="2018-10-15T09:51:47.748Z">
+<meta property="og:image" content="https://img.koenli.com/Flask%E2%80%94%E2%80%94%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6_1.png">
+<meta property="og:updated_time" content="2018-10-27T17:21:37.805Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Flask——电子邮件">
 <meta name="twitter:description" content="很多类型的应用程序需要在特定事件发生时提醒用户，而常用的通信方法是电子邮件。虽然Python标准库中的smtplib包可用在Flask程序中发送电子邮件，但包装了smtplib的Flask-Mail扩展能更好地和Flask集成。 使用Flask-Mail提供电子邮件支持 使用pip安装Flask-Mail： (env) [root@server1 myproject]# pip install f">
-<meta name="twitter:image" content="http://img.koenli.com/Flask%E2%80%94%E2%80%94%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6_1.png">
+<meta name="twitter:image" content="https://img.koenli.com/Flask%E2%80%94%E2%80%94%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6_1.png">
 
 
 
@@ -432,7 +432,7 @@ mail = Mail(app)
 <p>在开发过程中，如果连接到外部SMTP服务器，则可能更方便。下面这个例子展示了如何配置程序，以便使用QQ邮箱账户发送电子邮件。</p>
 <p>run.py：配置Flask-Mail使用QQ邮箱</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">from flask import Flask</span><br><span class="line">from flask.ext.mail import Mail</span><br><span class="line">from flask.ext.script import Manager</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line">app.config[&apos;MAIL_SERVER&apos;] = &apos;smtp.qq.com&apos;</span><br><span class="line">app.config[&apos;MAIL_PORT&apos;] = 465 </span><br><span class="line">app.config[&apos;MAIL_USE_SSL&apos;] = True</span><br><span class="line">app.config[&apos;MAIL_USERNAME&apos;] = os.environ.get(&apos;MAIL_USERNAME&apos;)</span><br><span class="line">app.config[&apos;MAIL_PASSWORD&apos;] = os.environ.get(&apos;MAIL_PASSWORD&apos;)</span><br><span class="line"></span><br><span class="line">mail = Mail(app)</span><br><span class="line">manager = Manager(app)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    manager.run()</span><br></pre></td></tr></table></figure>
-<p><img src="http://img.koenli.com/Flask%E2%80%94%E2%80%94%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6_1.png" alt=""></p>
+<p><img src="https://img.koenli.com/Flask%E2%80%94%E2%80%94%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6_1.png" alt=""></p>
 <p><strong>注意：</strong>千万不要把账户密令直接写入脚本，特别是当你计划开源自己的作品时。为了保护账户信息，你需要让脚本从环境中导入敏感信息。</p>
 <p>保护电子邮件服务器用户名和密码的两个环境变量要在环境中定义。如果你在Linux或Mac OS X中使用bash，那么可以按照下面的方式设定这两个变量：</p>
 <pre><code>(env) [root@server1 myproject]# export MAIL_USERNAME=&lt;qq-mail username&gt;
