@@ -93,7 +93,7 @@
 <meta property="og:image" content="http://img.koenli.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_4.png">
 <meta property="og:image" content="http://img.koenli.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_5.png">
 <meta property="og:image" content="http://img.koenli.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_6.png">
-<meta property="og:updated_time" content="2018-10-15T09:51:47.810Z">
+<meta property="og:updated_time" content="2018-10-27T16:05:59.346Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="构建Openstack镜像的环境搭建">
 <meta name="twitter:description" content="虽然Openstack官方文档上有提供了各类操作系统的Openstack镜像，但我们往往需要根据实际情况进行一些自定义设置，因此本文主要介绍如何在自己的笔记本或台式机上通过VMware构建一个可以用于制作Openstack镜像的环境，以便可以快速的制作自定义的Openstack镜像。 环境介绍 宿主机操作系统：Windows7旗舰版 软件：VMware WorkStation12 Pro 虚拟机操">
@@ -385,7 +385,15 @@
 <p>镜像下载链接：<a href="http://archive.kernel.org/centos-vault/" target="_blank" rel="noopener">http://archive.kernel.org/centos-vault/</a></p>
 <h1 id="VMware虚拟机操作系统安装"><a href="#VMware虚拟机操作系统安装" class="headerlink" title="VMware虚拟机操作系统安装"></a>VMware虚拟机操作系统安装</h1><hr>
 <p>此步请参考之前的文章<a href="http://www.koenli.com/2015-08-27-%E5%A6%82%E4%BD%95%E5%9C%A8VMware%E4%B8%8B%E5%AE%89%E8%A3%85RedHat6-X%E8%99%9A%E6%8B%9F%E6%9C%BA.html" target="_blank" rel="noopener">如何在VMware下安装RedHat6.X虚拟机</a></p>
-<h1 id="安装epel源"><a href="#安装epel源" class="headerlink" title="安装epel源"></a>安装epel源</h1><hr>
+<p><strong>注：</strong>记得在VMware里将虚拟机处理器中的“虚拟化Intel VT-x/EPT 或 AMD-V/RVI(V)”选项勾选</p>
+<h1 id="初始化配置"><a href="#初始化配置" class="headerlink" title="初始化配置"></a>初始化配置</h1><hr>
+<pre><code># iptables -F
+# systemctl stop firewalld
+# systemctl disable firewalld
+# setenforce 0
+# sed -i &apos;s/SELINUX=enforcing/SELINUX=disabled/g&apos; /etc/selinux/config
+# reboot
+</code></pre><h1 id="安装epel源"><a href="#安装epel源" class="headerlink" title="安装epel源"></a>安装epel源</h1><hr>
 <p>到<a href="https://fedoraproject.org/wiki/EPEL/zh-cn" target="_blank" rel="noopener">https://fedoraproject.org/wiki/EPEL/zh-cn</a>下载对应操作系统版本的epel-release包的最新版本，然后上传到虚拟机并安装</p>
 <p><img src="http://img.koenli.com/%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_1.png" alt=""></p>
 <pre><code># rpm -ivh epel-release-latest-7.noarch.rpm
@@ -416,8 +424,6 @@ ONBOOT=yes
 
 DEVICE、NAME、IPADDR、NETMASK、GATEWAY参数请根据实际情况进行相应修改
 
-# iptables -F
-# setenforce 0
 # systemctl stop NetworkManager
 # systemctl restart network
 </code></pre><h1 id="创建工作目录"><a href="#创建工作目录" class="headerlink" title="创建工作目录"></a>创建工作目录</h1><hr>
@@ -568,7 +574,7 @@ DEVICE、NAME、IPADDR、NETMASK、GATEWAY参数请根据实际情况进行相�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -590,7 +596,7 @@ DEVICE、NAME、IPADDR、NETMASK、GATEWAY参数请根据实际情况进行相�
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -623,7 +629,7 @@ DEVICE、NAME、IPADDR、NETMASK、GATEWAY参数请根据实际情况进行相�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#环境介绍"><span class="nav-number">1.</span> <span class="nav-text">环境介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VMware虚拟机操作系统安装"><span class="nav-number">2.</span> <span class="nav-text">VMware虚拟机操作系统安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装epel源"><span class="nav-number">3.</span> <span class="nav-text">安装epel源</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装KVM"><span class="nav-number">4.</span> <span class="nav-text">安装KVM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#修改网卡配置文件"><span class="nav-number">5.</span> <span class="nav-text">修改网卡配置文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建工作目录"><span class="nav-number">6.</span> <span class="nav-text">创建工作目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#上传虚拟机镜像"><span class="nav-number">7.</span> <span class="nav-text">上传虚拟机镜像</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编辑XML文件并启动虚拟机"><span class="nav-number">8.</span> <span class="nav-text">编辑XML文件并启动虚拟机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通过vnc连接到虚拟机"><span class="nav-number">9.</span> <span class="nav-text">通过vnc连接到虚拟机</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#环境介绍"><span class="nav-number">1.</span> <span class="nav-text">环境介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VMware虚拟机操作系统安装"><span class="nav-number">2.</span> <span class="nav-text">VMware虚拟机操作系统安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#初始化配置"><span class="nav-number">3.</span> <span class="nav-text">初始化配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装epel源"><span class="nav-number">4.</span> <span class="nav-text">安装epel源</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装KVM"><span class="nav-number">5.</span> <span class="nav-text">安装KVM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#修改网卡配置文件"><span class="nav-number">6.</span> <span class="nav-text">修改网卡配置文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建工作目录"><span class="nav-number">7.</span> <span class="nav-text">创建工作目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#上传虚拟机镜像"><span class="nav-number">8.</span> <span class="nav-text">上传虚拟机镜像</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编辑XML文件并启动虚拟机"><span class="nav-number">9.</span> <span class="nav-text">编辑XML文件并启动虚拟机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通过vnc连接到虚拟机"><span class="nav-number">10.</span> <span class="nav-text">通过vnc连接到虚拟机</span></a></li></ol></div>
             
 
           </div>

@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[CENTOS/RHEL7系统中设置SYSTEMD SERVICE的ULIMIT资源限制]]></title>
+    <url>%2F2018-10-27-CENTOS-RHEL7%E7%B3%BB%E7%BB%9F%E4%B8%AD%E8%AE%BE%E7%BD%AESYSTEMD-SERVICE%E7%9A%84ULIMIT%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6.html</url>
+    <content type="text"><![CDATA[在bash中，有个ulimit命令，提供了对shell及该shell启动的进程的可用资源控制。主要包括打开文件描述符数量、用户的最大进程数量、coredump文件的大小等。 在centos 5/6 等版本中，资源限制的配置可以在 /etc/security/limits.conf 设置，针对root/user等各个用户或者*代表所有用户来设置。 当然，/etc/security/limits.d/ 中也可以配置，系统是先加载limits.conf然后按照英文字母顺序加载limits.d目录下的配置文件，后加载配置覆盖之前的配置。 一个配置示例如下： 123456* soft nofile 100000* hard nofile 100000* soft nproc 100000* hard nproc 100000* soft core 100000* hard core 100000 不过，在CentOS 7 / RHEL 7的系统中，使用Systemd替代了之前的SysV，因此 /etc/security/limits.conf 文件的配置作用域缩小了一些。limits.conf这里的配置，只适用于通过PAM认证登录用户的资源限制，它对systemd的service的资源限制不生效。登录用户的限制，与上面讲的一样，通过 /etc/security/limits.conf 和 limits.d 来配置即可。对于systemd service的资源限制，如何配置呢？ 全局的配置，放在文件 /etc/systemd/system.conf 和 /etc/systemd/user.conf。 同时，也会加载两个对应的目录中的所有.conf文件 /etc/systemd/system.conf.d/.conf 和 /etc/systemd/user.conf.d/.conf 其中，system.conf 是系统实例使用的，user.conf用户实例使用的。一般的sevice，使用system.conf中的配置即可，在[Service]模块下添加如下内容。systemd.conf.d/*.conf中配置会覆盖system.conf。 123DefaultLimitCORE=infinityDefaultLimitNOFILE=100000DefaultLimitNPROC=100000 注：修改了system.conf后，需要重启系统才会生效。 针对单个Service，也可以设置，以nginx为例。 编辑 /usr/lib/systemd/system/nginx.service 文件，或者 /usr/lib/systemd/system/nginx.service.d/my-limit.conf 文件，在[Service]模块下添加如下内容： 123LimitCORE=infinityLimitNOFILE=100000LimitNPROC=100000 然后运行如下命令，才能生效。 12systemctl daemon-reloadsystemctl restart nginx.service 查看一个进程的limit设置：cat /proc/YOUR-PID/limits 例如我的一个nginx service的配置效果： 123456789101112131415161718# cat /proc/$(cat /var/run/nginx.pid)/limitsLimit Soft Limit Hard Limit UnitsMax cpu time unlimited unlimited secondsMax file size unlimited unlimited bytesMax data size unlimited unlimited bytesMax stack size 8388608 unlimited bytesMax core file size unlimited unlimited bytesMax resident set unlimited unlimited bytesMax processes 100000 100000 processesMax open files 100000 100000 filesMax locked memory 65536 65536 bytesMax address space unlimited unlimited bytesMax file locks unlimited unlimited locksMax pending signals 1030606 1030606 signalsMax msgqueue size 819200 819200 bytesMax nice priority 0 0Max realtime priority 0 0Max realtime timeout unlimited unlimited us 另外，CentOS7自带的/etc/security/limits.d/20-nproc.conf文件里面默认设置了非root用户的最大进程数为4096，因此若只在limits.conf中做设置并没有效果，会被limit.d目录中的配置所覆盖。 EOF 转载链接：http://smilejay.com/2016/06/centos-7-systemd-conf-limits/]]></content>
+      <categories>
+        <category>Linux营地</category>
+      </categories>
+      <tags>
+        <tag>系统</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[CentOS7安装ss]]></title>
+    <url>%2F2018-10-27-CentOS7%E5%AE%89%E8%A3%85ss.html</url>
+    <content type="text"><![CDATA[安装Shadowsocks 123yum install python-setuptoolseasy_install pippip install shadowsocks 创建Shadowsocks配置文件 配置文件有两种用户模式，分别是单用户和多用户 1vim /etc/shadowsocks.json 单用户 123456789&#123; &quot;server&quot;:&quot;my-server&quot;, &quot;server_port&quot;:9001, &quot;local_port&quot;:8888, &quot;password&quot;:&quot;password0&quot;, &quot;timeout&quot;:600, &quot;method&quot;:&quot;aes-256-cfb&quot;, &quot;auth&quot;: true&#125; 字段说明： server：主机名或服务器IP（IPv4/IPv6） server_port：服务器端口号 local_port：本地端口号 password：用于加密传输的密码 timeout：连接超时时间（以秒为单位） method：加密算法，“bf-cfb”，“aes-256-cfb”，“des-cfb”，“rc4”等，建议使用“aes-256-cfb” auth：一次性认证，设置为true以启用一次性认证功能 多用户 1234567891011121314&#123; &quot;server&quot;:&quot;my-ssserver&quot;, &quot;local_address&quot;:&quot;127.0.0.1&quot;, &quot;local_port&quot;:8888, &quot;port_password&quot;:&#123; &quot;9001&quot;:&quot;password1&quot;, &quot;9002&quot;:&quot;password2&quot;, &quot;9003&quot;:&quot;password3&quot;, &quot;9004&quot;:&quot;password4&quot; &#125;, &quot;timeout&quot;:600, &quot;method&quot;:&quot;aes-256-cfb&quot;, &quot;fast_open&quot;: false&#125; 字段说明： server：主机名或服务器IP（IPv4/IPv6） local_port：本地端口号 port_password：格式为“服务器端口”:”用于加密传输的密码”，一行对应一个端口及其密码 timeout：连接超时时间（以秒为单位） method：加密算法，“bf-cfb”，“aes-256-cfb”，“des-cfb”，“rc4”等，建议使用“aes-256-cfb” auth：一次性认证，设置为true以启用一次性认证功能 fast_open：true 或 false。如果你的服务器 Linux 内核在3.7+，可以开启 fast_open 以降低延迟 配置Shadowsocks启动文件 12345678910111213141516171819cat &gt; /usr/lib/systemd/system/ss.service &lt;&lt; EOF[Unit]Description=Shadowsocks ServerAfter=network.target[Service]PermissionsStartOnly=trueExecStartPre=/bin/mkdir -p /run/shadowsocksExecStartPre=/bin/chown nobody:nobody /run/shadowsocksExecStart=/usr/bin/ssserver -c /etc/shadowsocks.jsonRestart=on-abortUser=nobodyGroup=nobodyUMask=0027LimitNOFILE=51200[Install]WantedBy=multi-user.targetEOF 启动Shadowsocks服务并设置开机自启 12systemctl start sssystemctl enable ss 设置Firewall防火墙 设置允许连接Shadowsocks的服务器端口，协议为TCP/UDP 123firewall-cmd --zone=public --add-port=9001/tcp --permanentfirewall-cmd --zone=public --add-port=9001/udp --permanentfirewall-cmd --reload 配置Shadowsocks客户端 客户端下载地址：https://github.com/shadowsocks 配置参考下图： 若下载最新版的Shadowsocks客户端打开报如下错误，可升级.NET Framework版本解决或下载低版本的客户端即可，例如2.5.8版本 EOF 转载链接：https://blog.csdn.net/Finishx/article/details/79039362]]></content>
+      <categories>
+        <category>Linux营地</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>代理</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[如何制作Openstack Windows镜像]]></title>
     <url>%2F2018-06-20-%E5%A6%82%E4%BD%95%E5%88%B6%E4%BD%9COpenstack-Windows%E9%95%9C%E5%83%8F.html</url>
     <content type="text"><![CDATA[在上一篇文章如何制作Openstack Linux镜像中我们以CentOS7.1为例，介绍了手动制作Openstack Linux镜像的详细步骤，本文我们将继续以制作Windows Server 2008 R2镜像为例，介绍手动制作Openstack Windows镜像的详细步骤。 手动制作Openstack Windows镜像 下载镜像访问官网镜像下载地址，进入后点击“操作系统”，选择Windows Server 2008 R2，选择需要的相应的语言和版本进行下载并上传到/tvm下。 下载virtio驱动访问virtio官方下载地址，下载virtio驱动 创建虚拟机首先创建一个raw格式镜像文件，用于虚拟机的根磁盘，大小30G就够了。（镜像文件大小可根据实际情况自行调整，此处以30G为例） # cd /tvm/ # qemu-img create -f raw Windows2008_R2.raw 30G 修改/tvm/templates.xml，将图中红色方框处改成虚拟机镜像文件所在绝对路径，并指定相应ISO文件绝对路径，同时新增一个cdrom设备，将virtio驱动的iso镜像挂载到虚拟机中。 启动虚拟机 # cd /tvm/ # virsh create templates.xml 启动完成后，使用vnc client连接到虚拟机控制台。 安装OS进入虚拟机控制台可以看到虚拟机正在加载文件，加载完成后选择语言，点击“下一步”，点击“现在安装” 待安装程序启动后，选择要安装的操作系统，此处选择安装的是“Windows Server 2008 R2 Enterprise （完全安装）”，然后点击“下一步” 勾选“我接受许可条款(A)”，点击“下一步” 选择“自定义(高级)(C)” 此时会看到提示说“未找到任何驱动器”。因为KVM下windows虚拟机默认disk使用的是Qemu IDE硬盘，默认网卡是100M网卡，为了使KVM主机在相同的配置下有更好的效率，我们在xml文件中设置了bus=’virtio’，使硬盘工作在SCSI模式，但因缺少virtio驱动，识别不到硬盘，所以我们需要用刚挂载的virtio驱动的ISO文件安装相应的virtio驱动。 点击“加载驱动程序(L)” 点击“浏览” 选择virtio所在驱动器的viostor/2k8R2/amd64目录，点击“确定”。（2k8R2代表Windows Server 2008 R2，若安装的为其他操作系统版本，记得自行更换到对应的目录） 在找到相应的SCSI驱动后，点击“下一步” 进行磁盘分区，此处将所有空间划分到C盘，然后点击“下一步”，等待操作系统安装完成 配置OS注：系统安装完成后首次登陆要求修改administrator密码 安装网卡驱动 打开“服务器管理器”，点击“诊断”，点击“设备管理器”，看到以太网控制器处显示有一个黄色感叹号，右单击，选择”更新驱动程序软件(O)…” 选择”浏览计算机以查找驱动程序软件(R)” 点击“浏览” 选择virtio所在的驱动器，点击“确定” 点击“下一步” 勾选“始终信任来自”Red Hat,Inc.”的软件(A)”，点击“安装” 点击“关闭”，完成网卡驱动安装。若有多张网卡，需重复上述步骤安装网卡驱动。 开启远程桌面服务 启动任务管理器，打开“服务”，找到“Remote Desktop Services”，点击“启动”。 右单击“Remote Desktop Services”服务，选择“属性”，将启动类型改成“自动”，并点击“确定” 点击“开始”菜单，对“计算机”右单击，选择“属性”，点击“远程设置”，选择“允许运行任意版本远程桌面的计算机连接(较不安全)(L)”，点击“确定” 关闭防火墙 点击“开始”菜单，打开“控制面板”，点击“系统和安全” 点击“Windows防火墙” 点击“打开或关闭Windows防火墙” 勾选“家庭或工作(专用)网络位置设置”和“公用网络位置设置”的“关闭Windows防火墙(不推荐)”选项，点击“确定” 关闭自动更新 点击“开始”菜单，打开“控制面板”，点击“系统和安全” 点击“Windows Update” 点击“更改设置” 选择“从不检查更新(不推荐)”，点击“确定” 安装Ec2Config Ec2Config下载链接：https://share.weiyun.com/5HDPp6h 密码：i7d3cj 下载完成后通过远程桌面将Ec2Config安装包上传到虚拟机中，并以管理员身份运行 注：若出现“当前系统没有安装Microsoft .NET Framework 3.5，要转到它的下载页面吗？”的提示，点击“否(N)”，然后按照此教程安装.NET Framework 3.5 点击“下一步” 勾选”启动服务”，点击“下一步” 安装路径默认即可，点击“安装” 不勾选“运行Ec2Config服务配置(R)”，点击“完成” 删除Ec2Config安装包，并清空回收站 配置镜像administrator用户默认密码 用记事本打开C:\Program Files\Bingosoft\Ec2Config\Scripts\SysPrepInit.cmd，将ScramblePassword.exe -u Administrator这行改为net user administrator xxxxxx （xxxxxx为你要设置的密码），将sc config Ec2Config start= auto这行改为sc config Ec2Config start= disabled，然后保存退出 1234567891011原文件内容如下：@echo offScramblePassword.exe -u Administratornet user Administrator /ACTIVE:YES /LOGONPASSWORDCHG:NO /EXPIRES:NEVER /PASSWORDREQ:YESsc config Ec2Config start= auto修改后的内容如下：@echo offnet user administrator 123456net user Administrator /ACTIVE:YES /LOGONPASSWORDCHG:NO /EXPIRES:NEVER /PASSWORDREQ:YESsc config Ec2Config start= disabled 清理系统日志 打开“服务器管理器”，点击“诊断”，打开“事件查看器” 双击”Windows日志”，对“应用程序”右单击，点击“清除日志(C)…”,点击“清除(C)” 重复上述步骤清除“安全”、“Setup”、“系统”、“转发事件”中的日志 运行sysprep封装镜像 点击“开始”菜单，打开“Ec2ConfigService Settings” 确认“Set Password”的两个选项均未勾选，然后切换到“Bundle”选项卡 点击“Run Sysprep and Shutdown Now” 点击“是” 点击“是” 以上为几个常用的配置，其他的配置可以根据情况进行进行设置。 转换镜像格式将raw格式镜像文件转换成qcow2格式镜像文件，压缩空间便于传输。 # qemu-img convert -f raw Windows2008_R2.raw -O qcow2 Windows2008_R2.qcow2 上传镜像 Openstack Wndows镜像制作完成后，需要将最终生成的qcow2镜像文件上传到Openstack控制节点，并通过glance命令将镜像上传到glance服务中才可以正常使用。命令如下： # glance image-create --name &quot;Windows2008_R2&quot; --file /tvm/Windows2008_R2.qcow2 --disk-format qcow2 --container-format bare --is-public True --progress EOF 本文作者：Koen]]></content>
@@ -27,7 +51,7 @@
   <entry>
     <title><![CDATA[构建Openstack镜像的环境搭建]]></title>
     <url>%2F2018-06-06-%E6%9E%84%E5%BB%BAOpenstack%E9%95%9C%E5%83%8F%E7%9A%84%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA.html</url>
-    <content type="text"><![CDATA[虽然Openstack官方文档上有提供了各类操作系统的Openstack镜像，但我们往往需要根据实际情况进行一些自定义设置，因此本文主要介绍如何在自己的笔记本或台式机上通过VMware构建一个可以用于制作Openstack镜像的环境，以便可以快速的制作自定义的Openstack镜像。 环境介绍 宿主机操作系统：Windows7旗舰版 软件：VMware WorkStation12 Pro 虚拟机操作系统：CentOS7.1 虚拟机配置：2核4G 虚拟机IP：192.168.128.129 网卡模式：NAT 镜像：CentOS-7-x86_64-Minimal-1503-01.iso 镜像下载链接：http://archive.kernel.org/centos-vault/ VMware虚拟机操作系统安装 此步请参考之前的文章如何在VMware下安装RedHat6.X虚拟机 安装epel源 到https://fedoraproject.org/wiki/EPEL/zh-cn下载对应操作系统版本的epel-release包的最新版本，然后上传到虚拟机并安装 # rpm -ivh epel-release-latest-7.noarch.rpm 安装KVM # yum install libcanberra-gtk2 qemu-kvm.x86_64 qemu-kvm-tools.x86_64 libvirt.x86_64 libvirt-cim.x86_64 libvirt-client.x86_64 libvirt-java.noarch libvirt-python.x86_64 dbus-devel virt-clone virt-manager libvirt libvirt-python -y # yum groupinstall &quot;Virtualization Host&quot; -y # yum install qemu-system* -y # systemctl restart libvirtd 修改网卡配置文件 修改网卡配置文件，重启网络服务，将虚拟机网卡桥接到br网桥上，此示例中虚拟机网卡名为eno16777736，对应的网卡配置文件如下： # cat ifcfg-eno16777736 BOOTPROTO=static NAME=eno16777736 DEVICE=eno16777736 ONBOOT=yes BRIDGE=br # cat ifcfg-br TYPE=Bridge BOOTPROTO=static IPADDR=192.168.128.129 NETMASK=255.255.255.0 GATEWAY=192.168.128.2 DNS1=192.168.128.2 NAME=br DEVICE=br ONBOOT=yes DEVICE、NAME、IPADDR、NETMASK、GATEWAY参数请根据实际情况进行相应修改 # iptables -F # setenforce 0 # systemctl stop NetworkManager # systemctl restart network 创建工作目录 # mkdir /tvm/ # cd /tvm/ 上传虚拟机镜像 通过winscp或Xftp等支持ssh的远程文件传输工具上传虚拟机镜像（raw镜像或qcow2镜像）到/tvm下，若镜像是qcow2格式的，先转换成raw格式的。 # qemu-img convert -f qcow2 CentOS7.1_XM_170819.qcow2 -O raw CentOS7.1_XM_170819.raw 编辑XML文件并启动虚拟机 123456789101112131415161718192021222324252627282930# cat templates.xml&lt;domain type=&apos;kvm&apos;&gt; &lt;name&gt;koenli&lt;/name&gt; &lt;memory&gt;1048576&lt;/memory&gt; &lt;vcpu&gt;1&lt;/vcpu&gt; &lt;cpu mode=&apos;host-model&apos;&gt;&lt;model fallback=&apos;allow&apos;/&gt;&lt;topology sockets=&apos;1&apos; threads=&apos;1&apos; cores=&apos;4&apos; /&gt;&lt;/cpu&gt; &lt;os&gt;&lt;type arch=&apos;x86_64&apos; machine=&apos;pc-i440fx-2.0&apos;&gt;hvm&lt;/type&gt;&lt;boot dev=&apos;cdrom&apos;/&gt;&lt;boot dev=&apos;hd&apos;/&gt;&lt;/os&gt; &lt;features&gt;&lt;acpi/&gt;&lt;apic/&gt;&lt;pae/&gt;&lt;/features&gt; &lt;on_poweroff&gt;destroy&lt;/on_poweroff&gt; &lt;on_reboot&gt;restart&lt;/on_reboot&gt; &lt;on_crash&gt;destroy&lt;/on_crash&gt; &lt;devices&gt; &lt;emulator&gt;/usr/bin/qemu-system-x86_64&lt;/emulator&gt; &lt;disk type=&apos;file&apos;&gt;&lt;driver name=&apos;qemu&apos; type=&apos;raw&apos; cache=&apos;none&apos;/&gt;&lt;source file=&apos;/tvm/rhel7.1.raw&apos;/&gt;&lt;target dev=&apos;vda&apos; bus=&apos;virtio&apos;/&gt;&lt;serial&gt;bc-system&lt;/serial&gt;&lt;/disk&gt; &lt;disk type=&apos;file&apos; device=&apos;cdrom&apos;&gt; &lt;target dev=&apos;hdc&apos; bus=&apos;ide&apos;/&gt; &lt;source file=&quot;&quot; /&gt; &lt;readonly/&gt; &lt;/disk&gt; &lt;graphics type=&apos;vnc&apos; port=&apos;22000&apos; passwd=&apos;123456&apos; autoport=&apos;no&apos; keymap=&apos;en-us&apos; listen=&apos;0.0.0.0&apos;/&gt; &lt;input type=&apos;tablet&apos; bus=&apos;usb&apos;/&gt; &lt;interface type=&apos;bridge&apos;&gt;&lt;source bridge=&apos;br&apos;/&gt;&lt;mac address=&apos;D0:0D:7C:DC:AA:4C&apos;/&gt;&lt;model type=&apos;virtio&apos;/&gt;&lt;/interface&gt; &lt;interface type=&apos;bridge&apos;&gt;&lt;source bridge=&apos;br&apos;/&gt;&lt;mac address=&apos;D0:0D:7C:DC:AA:4D&apos;/&gt;&lt;model type=&apos;virtio&apos;/&gt;&lt;/interface&gt; &lt;/devices&gt; &lt;clock offset=&quot;localtime&quot; /&gt;&lt;/domain&gt; 将图中红色方框处改成虚拟机镜像所在绝对路径，若需要给虚拟机挂载ISO文件进行操作系统安装，则在箭头处指定ISO文件的绝对路径。 # cd /tvm/ # virsh create templates.xml # virsh list 通过vnc连接到虚拟机 密码：123456 EOF 本文作者：Koen]]></content>
+    <content type="text"><![CDATA[虽然Openstack官方文档上有提供了各类操作系统的Openstack镜像，但我们往往需要根据实际情况进行一些自定义设置，因此本文主要介绍如何在自己的笔记本或台式机上通过VMware构建一个可以用于制作Openstack镜像的环境，以便可以快速的制作自定义的Openstack镜像。 环境介绍 宿主机操作系统：Windows7旗舰版 软件：VMware WorkStation12 Pro 虚拟机操作系统：CentOS7.1 虚拟机配置：2核4G 虚拟机IP：192.168.128.129 网卡模式：NAT 镜像：CentOS-7-x86_64-Minimal-1503-01.iso 镜像下载链接：http://archive.kernel.org/centos-vault/ VMware虚拟机操作系统安装 此步请参考之前的文章如何在VMware下安装RedHat6.X虚拟机 注：记得在VMware里将虚拟机处理器中的“虚拟化Intel VT-x/EPT 或 AMD-V/RVI(V)”选项勾选 初始化配置 # iptables -F # systemctl stop firewalld # systemctl disable firewalld # setenforce 0 # sed -i &apos;s/SELINUX=enforcing/SELINUX=disabled/g&apos; /etc/selinux/config # reboot 安装epel源 到https://fedoraproject.org/wiki/EPEL/zh-cn下载对应操作系统版本的epel-release包的最新版本，然后上传到虚拟机并安装 # rpm -ivh epel-release-latest-7.noarch.rpm 安装KVM # yum install libcanberra-gtk2 qemu-kvm.x86_64 qemu-kvm-tools.x86_64 libvirt.x86_64 libvirt-cim.x86_64 libvirt-client.x86_64 libvirt-java.noarch libvirt-python.x86_64 dbus-devel virt-clone virt-manager libvirt libvirt-python -y # yum groupinstall &quot;Virtualization Host&quot; -y # yum install qemu-system* -y # systemctl restart libvirtd 修改网卡配置文件 修改网卡配置文件，重启网络服务，将虚拟机网卡桥接到br网桥上，此示例中虚拟机网卡名为eno16777736，对应的网卡配置文件如下： # cat ifcfg-eno16777736 BOOTPROTO=static NAME=eno16777736 DEVICE=eno16777736 ONBOOT=yes BRIDGE=br # cat ifcfg-br TYPE=Bridge BOOTPROTO=static IPADDR=192.168.128.129 NETMASK=255.255.255.0 GATEWAY=192.168.128.2 DNS1=192.168.128.2 NAME=br DEVICE=br ONBOOT=yes DEVICE、NAME、IPADDR、NETMASK、GATEWAY参数请根据实际情况进行相应修改 # systemctl stop NetworkManager # systemctl restart network 创建工作目录 # mkdir /tvm/ # cd /tvm/ 上传虚拟机镜像 通过winscp或Xftp等支持ssh的远程文件传输工具上传虚拟机镜像（raw镜像或qcow2镜像）到/tvm下，若镜像是qcow2格式的，先转换成raw格式的。 # qemu-img convert -f qcow2 CentOS7.1_XM_170819.qcow2 -O raw CentOS7.1_XM_170819.raw 编辑XML文件并启动虚拟机 123456789101112131415161718192021222324252627282930# cat templates.xml&lt;domain type=&apos;kvm&apos;&gt; &lt;name&gt;koenli&lt;/name&gt; &lt;memory&gt;1048576&lt;/memory&gt; &lt;vcpu&gt;1&lt;/vcpu&gt; &lt;cpu mode=&apos;host-model&apos;&gt;&lt;model fallback=&apos;allow&apos;/&gt;&lt;topology sockets=&apos;1&apos; threads=&apos;1&apos; cores=&apos;4&apos; /&gt;&lt;/cpu&gt; &lt;os&gt;&lt;type arch=&apos;x86_64&apos; machine=&apos;pc-i440fx-2.0&apos;&gt;hvm&lt;/type&gt;&lt;boot dev=&apos;cdrom&apos;/&gt;&lt;boot dev=&apos;hd&apos;/&gt;&lt;/os&gt; &lt;features&gt;&lt;acpi/&gt;&lt;apic/&gt;&lt;pae/&gt;&lt;/features&gt; &lt;on_poweroff&gt;destroy&lt;/on_poweroff&gt; &lt;on_reboot&gt;restart&lt;/on_reboot&gt; &lt;on_crash&gt;destroy&lt;/on_crash&gt; &lt;devices&gt; &lt;emulator&gt;/usr/bin/qemu-system-x86_64&lt;/emulator&gt; &lt;disk type=&apos;file&apos;&gt;&lt;driver name=&apos;qemu&apos; type=&apos;raw&apos; cache=&apos;none&apos;/&gt;&lt;source file=&apos;/tvm/rhel7.1.raw&apos;/&gt;&lt;target dev=&apos;vda&apos; bus=&apos;virtio&apos;/&gt;&lt;serial&gt;bc-system&lt;/serial&gt;&lt;/disk&gt; &lt;disk type=&apos;file&apos; device=&apos;cdrom&apos;&gt; &lt;target dev=&apos;hdc&apos; bus=&apos;ide&apos;/&gt; &lt;source file=&quot;&quot; /&gt; &lt;readonly/&gt; &lt;/disk&gt; &lt;graphics type=&apos;vnc&apos; port=&apos;22000&apos; passwd=&apos;123456&apos; autoport=&apos;no&apos; keymap=&apos;en-us&apos; listen=&apos;0.0.0.0&apos;/&gt; &lt;input type=&apos;tablet&apos; bus=&apos;usb&apos;/&gt; &lt;interface type=&apos;bridge&apos;&gt;&lt;source bridge=&apos;br&apos;/&gt;&lt;mac address=&apos;D0:0D:7C:DC:AA:4C&apos;/&gt;&lt;model type=&apos;virtio&apos;/&gt;&lt;/interface&gt; &lt;interface type=&apos;bridge&apos;&gt;&lt;source bridge=&apos;br&apos;/&gt;&lt;mac address=&apos;D0:0D:7C:DC:AA:4D&apos;/&gt;&lt;model type=&apos;virtio&apos;/&gt;&lt;/interface&gt; &lt;/devices&gt; &lt;clock offset=&quot;localtime&quot; /&gt;&lt;/domain&gt; 将图中红色方框处改成虚拟机镜像所在绝对路径，若需要给虚拟机挂载ISO文件进行操作系统安装，则在箭头处指定ISO文件的绝对路径。 # cd /tvm/ # virsh create templates.xml # virsh list 通过vnc连接到虚拟机 密码：123456 EOF 本文作者：Koen]]></content>
       <categories>
         <category>云计算</category>
       </categories>
@@ -44,8 +68,8 @@
         <category>Linux营地</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>系统</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -220,8 +244,8 @@
         <category>Linux营地</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>系统</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -232,8 +256,8 @@
         <category>Linux营地</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>系统</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -267,8 +291,8 @@
         <category>Linux营地</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>系统</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -279,8 +303,8 @@
         <category>Linux营地</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>系统</tag>
+        <tag>Linux</tag>
         <tag>监控</tag>
       </tags>
   </entry>
@@ -292,8 +316,8 @@
         <category>Linux营地</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>系统</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -304,8 +328,8 @@
         <category>Linux营地</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>系统</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -316,8 +340,8 @@
         <category>Linux营地</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>系统</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -340,8 +364,8 @@
         <category>Linux营地</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>系统</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
