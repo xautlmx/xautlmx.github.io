@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="系统,Linux," />
 
 
 
@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="想要出类拔萃，就要做别人不想做的事">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Koenli&#39;s Blog">
-<meta property="og:url" content="http://koenli.github.io/tags/语言/index.html">
+<meta name="description" content="作为邮件服务器的机器需要具备访问互联网权限 验证互联网访问权限 12echo &amp;apos;nameserver 114.114.114.114&amp;apos; &amp;gt;&amp;gt; /etc/resolv.confping www.baidu.com 若无法访问互联网请先开通相关策略继续下面的操作 基础配置 123456iptables -Fsystemctl stop firewalldsystemct">
+<meta name="keywords" content="系统,Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS&#x2F;RedHat下Postfix邮件服务器搭建">
+<meta property="og:url" content="http://koenli.github.io/2018-11-09-CentOS-RedHat下Postfix邮件服务器搭建.html">
 <meta property="og:site_name" content="Koenli&#39;s Blog">
-<meta property="og:description" content="想要出类拔萃，就要做别人不想做的事">
+<meta property="og:description" content="作为邮件服务器的机器需要具备访问互联网权限 验证互联网访问权限 12echo &amp;apos;nameserver 114.114.114.114&amp;apos; &amp;gt;&amp;gt; /etc/resolv.confping www.baidu.com 若无法访问互联网请先开通相关策略继续下面的操作 基础配置 123456iptables -Fsystemctl stop firewalldsystemct">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-09T05:42:52.422Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Koenli&#39;s Blog">
-<meta name="twitter:description" content="想要出类拔萃，就要做别人不想做的事">
+<meta name="twitter:title" content="CentOS&#x2F;RedHat下Postfix邮件服务器搭建">
+<meta name="twitter:description" content="作为邮件服务器的机器需要具备访问互联网权限 验证互联网访问权限 12echo &amp;apos;nameserver 114.114.114.114&amp;apos; &amp;gt;&amp;gt; /etc/resolv.confping www.baidu.com 若无法访问互联网请先开通相关策略继续下面的操作 基础配置 123456iptables -Fsystemctl stop firewalldsystemct">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://koenli.github.io/tags/语言/"/>
+  <link rel="canonical" href="http://koenli.github.io/2018-11-09-CentOS-RedHat下Postfix邮件服务器搭建.html"/>
 
 
 
 
 
-  <title>标签: 语言 | Koenli's Blog</title>
+  <title>CentOS/RedHat下Postfix邮件服务器搭建 | Koenli's Blog</title>
   
 
 
@@ -143,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -261,170 +263,197 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block tag">
-
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>语言<small>标签</small>
-        </h1>
-      </div>
-
-      
-        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://koenli.github.io/2018-11-09-CentOS-RedHat下Postfix邮件服务器搭建.html">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Koenli">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Koenli's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2016-05-14-Python操作MySQL数据库.html" itemprop="url">
-              
-                <span itemprop="name">Python操作MySQL数据库</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">CentOS/RedHat下Postfix邮件服务器搭建</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-05-14T16:18:30+08:00"
-              content="2016-05-14" >
-          05-14
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-09T13:41:27+08:00">
+                2018-11-09
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux营地/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux营地</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2016-05-13-Flask——电子邮件.html" itemprop="url">
-              
-                <span itemprop="name">Flask——电子邮件</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-05-13T19:47:22+08:00"
-              content="2016-05-13" >
-          05-13
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2016-05-13-Flask——数据库.html" itemprop="url">
-              
-                <span itemprop="name">Flask——数据库</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-05-13T12:10:24+08:00"
-              content="2016-05-13" >
-          05-13
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2016-05-07-如何使用Python生成一个日期列表.html" itemprop="url">
-              
-                <span itemprop="name">如何使用Python生成一个日期列表</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-05-07T16:50:56+08:00"
-              content="2016-05-07" >
-          05-07
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2016-05-05-Flask——Web表单.html" itemprop="url">
-              
-                <span itemprop="name">Flask——Web表单</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-05-05T11:14:32+08:00"
-              content="2016-05-05" >
-          05-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+        <p><strong>作为邮件服务器的机器需要具备访问互联网权限</strong></p>
+<h1 id="验证互联网访问权限"><a href="#验证互联网访问权限" class="headerlink" title="验证互联网访问权限"></a>验证互联网访问权限</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &apos;nameserver 114.114.114.114&apos; &gt;&gt; /etc/resolv.conf</span><br><span class="line">ping www.baidu.com</span><br></pre></td></tr></table></figure>
+<p>若无法访问互联网请先开通相关策略继续下面的操作</p>
+<h1 id="基础配置"><a href="#基础配置" class="headerlink" title="基础配置"></a>基础配置</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">iptables -F</span><br><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl disable firewalld</span><br><span class="line">setenforce 0</span><br><span class="line">sed -i &apos;s/SELINUX=enforcing/SELINUX=disabled/g&apos; /etc/selinux/config</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<h1 id="设置主机名并添加本地host解析"><a href="#设置主机名并添加本地host解析" class="headerlink" title="设置主机名并添加本地host解析"></a>设置主机名并添加本地host解析</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">CentOS/RedHat6.x</span><br><span class="line">hostname &lt;postfix.example.com&gt;</span><br><span class="line">永久设置需改/etc/sysconfig/network中的HOSTNAME参数</span><br><span class="line"></span><br><span class="line">CentOS/RedHat7.x</span><br><span class="line">hostnamectl set-hostname &lt;postfix.example.com&gt;</span><br><span class="line"></span><br><span class="line">添加本地解析</span><br><span class="line">cat /etc/hosts</span><br><span class="line">x.x.x.x    &lt;postfix.example.com&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="安装postfix"><a href="#安装postfix" class="headerlink" title="安装postfix"></a>安装postfix</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install postfix -y</span><br></pre></td></tr></table></figure>
+<h1 id="配置postfix"><a href="#配置postfix" class="headerlink" title="配置postfix"></a>配置postfix</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cp -a /etc/postfix/main.cf /etc/postfix/main.cf.bak</span><br><span class="line">postconf -e myhostname=postfix.example.com</span><br><span class="line">postconf -e inet_interfaces=all</span><br><span class="line">postconf -e inet_protocols=ipv4</span><br><span class="line">postconf -e mydestination=$myhostname,localhost.$mydomain,localhost</span><br><span class="line">postconf -e unknown_local_recipient_reject_code=550</span><br><span class="line">postconf -e mynetworks_style=subnet</span><br><span class="line">postconf -e mynetworks=172.18.0.0/16,127.0.0.0/8</span><br></pre></td></tr></table></figure>
+<p><strong>配置参数说明：</strong></p>
+<p><strong>myhostname：</strong>主机名</p>
+<p><strong>inet_interfaces：</strong>监听的网卡接口</p>
+<p><strong>inet_protocols：</strong>设置postfix只使用IPv4</p>
+<p><strong>mydestination：</strong>可接受邮件地址域名</p>
+<p><strong>unknown_local_recipient_reject_code：</strong>当客户端试图寄信给不存在的本地网域用户时,postfix用于拒绝客户端的smtp 响应码</p>
+<p><strong>mynetworks_style：</strong>设置局域网网络类型，默认为subnet，subnet 代表是子网络，当设定为subnet时，postfix将会自行根据 ifconfig 上登记的 IP 和 网络屏蔽作运算，自动求出子网络的范围；如果设定成 class，则是不理会屏蔽，自动信任同一个 class 等级的计算机，如果该服务器使用拨接上网，这样设定将使得同一家 ISP 的拨接用户，都可以利用本服务器转信，这是非常危险的（除非你是 ISP 公司）；设定host 则仅该单机可以寄信。</p>
+<p><strong>mynetworks：</strong>需要收发的客户端的地址，根据实际环境修改</p>
+<h1 id="启动postfix"><a href="#启动postfix" class="headerlink" title="启动postfix"></a>启动postfix</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CentOS/RedHat6.x</span><br><span class="line">service postfix status</span><br><span class="line">chkconfig postfix on</span><br><span class="line"></span><br><span class="line">CentOS/RedHat7.x</span><br><span class="line">systemctl restart postfix</span><br><span class="line">systemctl enable postfix</span><br></pre></td></tr></table></figure>
+<h1 id="测试发送邮件"><a href="#测试发送邮件" class="headerlink" title="测试发送邮件"></a>测试发送邮件</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">yum install telnet -y</span><br><span class="line">telnet localhost 25 </span><br><span class="line">Trying 127.0.0.1...</span><br><span class="line">Connected to localhost.</span><br><span class="line">Escape character is &apos;^]&apos;.</span><br><span class="line">220 postfix.example.com ESMTP Postfix</span><br><span class="line">mail from: test@postfix.com    //发件人邮箱</span><br><span class="line">250 2.1.0 Ok</span><br><span class="line">rcpt to: 379148058@qq.com    //收件人邮箱</span><br><span class="line">250 2.1.5 Ok</span><br><span class="line">data    //邮件内容</span><br><span class="line">354 End data with &lt;CR&gt;&lt;LF&gt;.&lt;CR&gt;&lt;LF&gt;</span><br><span class="line">test mail</span><br><span class="line">.    //以“.”结束</span><br><span class="line">250 2.0.0 Ok: queued as 6D75940F10</span><br><span class="line">quit    //退出</span><br><span class="line">221 2.0.0 Bye</span><br><span class="line">Connection closed by foreign host.</span><br></pre></td></tr></table></figure>
+<p>登录收件人邮箱查看是否正常接收到测试邮件，若在收件箱中未找到，看下是否在垃圾箱中。若同样未有，则可在邮件服务器上运行mailq查看邮件发送进度和相关报错。</p>
+<ul>
+<li>EOF</li>
+</ul>
+<p>本文作者：Koen</p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/系统/" rel="tag"># 系统</a>
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018-10-27-CENTOS-RHEL7系统中设置SYSTEMD-SERVICE的ULIMIT资源限制.html" rel="next" title="CENTOS/RHEL7系统中设置SYSTEMD SERVICE的ULIMIT资源限制">
+                <i class="fa fa-chevron-left"></i> CENTOS/RHEL7系统中设置SYSTEMD SERVICE的ULIMIT资源限制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/tags/语言/page/2/">2</a><a class="page-number" href="/tags/语言/page/3/">3</a><a class="extend next" rel="next" href="/tags/语言/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -432,6 +461,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -452,8 +485,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -517,6 +559,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#验证互联网访问权限"><span class="nav-number">1.</span> <span class="nav-text">验证互联网访问权限</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基础配置"><span class="nav-number">2.</span> <span class="nav-text">基础配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设置主机名并添加本地host解析"><span class="nav-number">3.</span> <span class="nav-text">设置主机名并添加本地host解析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装postfix"><span class="nav-number">4.</span> <span class="nav-text">安装postfix</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置postfix"><span class="nav-number">5.</span> <span class="nav-text">配置postfix</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动postfix"><span class="nav-number">6.</span> <span class="nav-text">启动postfix</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#测试发送邮件"><span class="nav-number">7.</span> <span class="nav-text">测试发送邮件</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -657,6 +715,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

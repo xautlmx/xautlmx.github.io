@@ -131,7 +131,7 @@
 <meta property="og:image" content="https://img.koenli.com/%E5%A6%82%E4%BD%95%E5%88%B6%E4%BD%9COpenstack%20Windows%E9%95%9C%E5%83%8F_41.png">
 <meta property="og:image" content="https://img.koenli.com/%E5%A6%82%E4%BD%95%E5%88%B6%E4%BD%9COpenstack%20Windows%E9%95%9C%E5%83%8F_42.png">
 <meta property="og:image" content="https://img.koenli.com/%E5%A6%82%E4%BD%95%E5%88%B6%E4%BD%9COpenstack%20Windows%E9%95%9C%E5%83%8F_43.png">
-<meta property="og:updated_time" content="2018-10-27T17:21:37.772Z">
+<meta property="og:updated_time" content="2018-11-09T05:46:05.183Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何制作Openstack Windows镜像">
 <meta name="twitter:description" content="在上一篇文章如何制作Openstack Linux镜像中我们以CentOS7.1为例，介绍了手动制作Openstack Linux镜像的详细步骤，本文我们将继续以制作Windows Server 2008 R2镜像为例，介绍手动制作Openstack Windows镜像的详细步骤。 手动制作Openstack Windows镜像 下载镜像访问官网镜像下载地址，进入后点击“操作系统”，选择Windo">
@@ -417,14 +417,12 @@
 <h2 id="下载virtio驱动"><a href="#下载virtio驱动" class="headerlink" title="下载virtio驱动"></a>下载virtio驱动</h2><p>访问<a href="https://docs.fedoraproject.org/quick-docs/en-US/creating-windows-virtual-machines-using-virtio-drivers.html#Direct_download" target="_blank" rel="noopener">virtio官方下载地址</a>，下载virtio驱动</p>
 <p><img src="https://img.koenli.com/%E5%A6%82%E4%BD%95%E5%88%B6%E4%BD%9COpenstack%20Windows%E9%95%9C%E5%83%8F_1.png" alt=""></p>
 <h2 id="创建虚拟机"><a href="#创建虚拟机" class="headerlink" title="创建虚拟机"></a>创建虚拟机</h2><p>首先创建一个raw格式镜像文件，用于虚拟机的根磁盘，大小30G就够了。（镜像文件大小可根据实际情况自行调整，此处以30G为例）</p>
-<pre><code># cd /tvm/
-# qemu-img create -f raw Windows2008_R2.raw 30G
-</code></pre><p>修改/tvm/templates.xml，将图中红色方框处改成虚拟机镜像文件所在绝对路径，并指定相应ISO文件绝对路径，同时新增一个cdrom设备，将virtio驱动的iso镜像挂载到虚拟机中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /tvm/</span><br><span class="line">qemu-img create -f raw Windows2008_R2.raw 30G</span><br></pre></td></tr></table></figure>
+<p>修改/tvm/templates.xml，将图中红色方框处改成虚拟机镜像文件所在绝对路径，并指定相应ISO文件绝对路径，同时新增一个cdrom设备，将virtio驱动的iso镜像挂载到虚拟机中。</p>
 <p><img src="https://img.koenli.com/%E5%A6%82%E4%BD%95%E5%88%B6%E4%BD%9COpenstack%20Windows%E9%95%9C%E5%83%8F_2.png" alt=""></p>
 <p>启动虚拟机</p>
-<pre><code># cd /tvm/
-# virsh create templates.xml
-</code></pre><p>启动完成后，使用vnc client连接到虚拟机控制台。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /tvm/</span><br><span class="line">virsh create templates.xml</span><br></pre></td></tr></table></figure>
+<p>启动完成后，使用vnc client连接到虚拟机控制台。</p>
 <h2 id="安装OS"><a href="#安装OS" class="headerlink" title="安装OS"></a>安装OS</h2><p>进入虚拟机控制台可以看到虚拟机正在加载文件，加载完成后选择语言，点击“下一步”，点击“现在安装”</p>
 <p><img src="https://img.koenli.com/%E5%A6%82%E4%BD%95%E5%88%B6%E4%BD%9COpenstack%20Windows%E9%95%9C%E5%83%8F_3.png" alt=""></p>
 <p>待安装程序启动后，选择要安装的操作系统，此处选择安装的是“Windows Server 2008 R2 Enterprise （完全安装）”，然后点击“下一步”</p>
@@ -540,11 +538,11 @@
 <p><img src="https://img.koenli.com/%E5%A6%82%E4%BD%95%E5%88%B6%E4%BD%9COpenstack%20Windows%E9%95%9C%E5%83%8F_43.png" alt=""></p>
 <p>以上为几个常用的配置，其他的配置可以根据情况进行进行设置。</p>
 <h2 id="转换镜像格式"><a href="#转换镜像格式" class="headerlink" title="转换镜像格式"></a>转换镜像格式</h2><p>将raw格式镜像文件转换成qcow2格式镜像文件，压缩空间便于传输。</p>
-<pre><code># qemu-img convert -f raw Windows2008_R2.raw -O qcow2 Windows2008_R2.qcow2
-</code></pre><h1 id="上传镜像"><a href="#上传镜像" class="headerlink" title="上传镜像"></a>上传镜像</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qemu-img convert -f raw Windows2008_R2.raw -O qcow2 Windows2008_R2.qcow2</span><br></pre></td></tr></table></figure>
+<h1 id="上传镜像"><a href="#上传镜像" class="headerlink" title="上传镜像"></a>上传镜像</h1><hr>
 <p>Openstack Wndows镜像制作完成后，需要将最终生成的qcow2镜像文件上传到Openstack控制节点，并通过glance命令将镜像上传到glance服务中才可以正常使用。命令如下：</p>
-<pre><code># glance image-create --name &quot;Windows2008_R2&quot; --file /tvm/Windows2008_R2.qcow2 --disk-format qcow2 --container-format bare  --is-public True --progress
-</code></pre><ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">glance image-create --name &quot;Windows2008_R2&quot; --file /tvm/Windows2008_R2.qcow2 --disk-format qcow2 --container-format bare  --is-public True --progress</span><br></pre></td></tr></table></figure>
+<ul>
 <li>EOF</li>
 </ul>
 <p>本文作者：Koen</p>
@@ -673,7 +671,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
