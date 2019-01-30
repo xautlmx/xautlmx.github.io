@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="很多类型的应用程序需要在特定事件发生时提醒用户，而常用的通信方法是电子邮件。虽然Python标准库中的smtplib包可用在Flask程序中发送电子邮件，但包装了smtplib的Flask-Mail扩展能更好地和Flask集成。 使用Flask-Mail提供电子邮件支持 使用pip安装Flask-Mail： (env) [root@server1 myproject]# pip install f">
+<meta name="description" content="很多类型的应用程序需要在特定事件发生时提醒用户，而常用的通信方法是电子邮件。虽然Python标准库中的smtplib包可用在Flask程序中发送电子邮件，但包装了smtplib的Flask-Mail扩展能更好地和Flask集成。 使用Flask-Mail提供电子邮件支持 使用pip安装Flask-Mail： 1(env) [root@server1 myproject]# pip install">
 <meta name="keywords" content="Python,语言,Flask">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Flask——电子邮件">
 <meta property="og:url" content="http://koenli.github.io/2016-05-13-Flask——电子邮件.html">
 <meta property="og:site_name" content="Koenli&#39;s Blog">
-<meta property="og:description" content="很多类型的应用程序需要在特定事件发生时提醒用户，而常用的通信方法是电子邮件。虽然Python标准库中的smtplib包可用在Flask程序中发送电子邮件，但包装了smtplib的Flask-Mail扩展能更好地和Flask集成。 使用Flask-Mail提供电子邮件支持 使用pip安装Flask-Mail： (env) [root@server1 myproject]# pip install f">
+<meta property="og:description" content="很多类型的应用程序需要在特定事件发生时提醒用户，而常用的通信方法是电子邮件。虽然Python标准库中的smtplib包可用在Flask程序中发送电子邮件，但包装了smtplib的Flask-Mail扩展能更好地和Flask集成。 使用Flask-Mail提供电子邮件支持 使用pip安装Flask-Mail： 1(env) [root@server1 myproject]# pip install">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://img.koenli.com/Flask%E2%80%94%E2%80%94%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6_1.png">
-<meta property="og:updated_time" content="2018-10-27T17:21:37.805Z">
+<meta property="og:updated_time" content="2019-01-30T16:05:48.437Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Flask——电子邮件">
-<meta name="twitter:description" content="很多类型的应用程序需要在特定事件发生时提醒用户，而常用的通信方法是电子邮件。虽然Python标准库中的smtplib包可用在Flask程序中发送电子邮件，但包装了smtplib的Flask-Mail扩展能更好地和Flask集成。 使用Flask-Mail提供电子邮件支持 使用pip安装Flask-Mail： (env) [root@server1 myproject]# pip install f">
+<meta name="twitter:description" content="很多类型的应用程序需要在特定事件发生时提醒用户，而常用的通信方法是电子邮件。虽然Python标准库中的smtplib包可用在Flask程序中发送电子邮件，但包装了smtplib的Flask-Mail扩展能更好地和Flask集成。 使用Flask-Mail提供电子邮件支持 使用pip安装Flask-Mail： 1(env) [root@server1 myproject]# pip install">
 <meta name="twitter:image" content="https://img.koenli.com/Flask%E2%80%94%E2%80%94%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6_1.png">
 
 
@@ -382,11 +382,10 @@
         <p>很多类型的应用程序需要在特定事件发生时提醒用户，而常用的通信方法是电子邮件。虽然Python标准库中的smtplib包可用在Flask程序中发送电子邮件，但包装了smtplib的Flask-Mail扩展能更好地和Flask集成。</p>
 <h1 id="使用Flask-Mail提供电子邮件支持"><a href="#使用Flask-Mail提供电子邮件支持" class="headerlink" title="使用Flask-Mail提供电子邮件支持"></a>使用Flask-Mail提供电子邮件支持</h1><hr>
 <p>使用pip安装Flask-Mail：</p>
-<pre><code>(env) [root@server1 myproject]# pip install flask-mail
-</code></pre><p>Flask-Mail的初始化方法如下：</p>
-<pre><code>from flask.ext.mail import Mail
-mail = Mail(app)
-</code></pre><p>Flask-Mail连接到简单邮件传输协议（Simple Mail Transfer Protocol，SMTP）服务器，并把邮件交给这个服务器发送。如果不进行配置，Flask-Mail会连接localhost上的端口25，无需验证即可发送电子邮件。下表列出了可用来设置SMTP服务器的配置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(env) [root@server1 myproject]# pip install flask-mail</span><br></pre></td></tr></table></figure>
+<p>Flask-Mail的初始化方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from flask.ext.mail import Mail</span><br><span class="line">mail = Mail(app)</span><br></pre></td></tr></table></figure>
+<p>Flask-Mail连接到简单邮件传输协议（Simple Mail Transfer Protocol，SMTP）服务器，并把邮件交给这个服务器发送。如果不进行配置，Flask-Mail会连接localhost上的端口25，无需验证即可发送电子邮件。下表列出了可用来设置SMTP服务器的配置。</p>
 <p>Flask-Mail SMTP服务器的配置</p>
 <table>
 <thead>
@@ -435,23 +434,14 @@ mail = Mail(app)
 <p><img src="https://img.koenli.com/Flask%E2%80%94%E2%80%94%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6_1.png" alt=""></p>
 <p><strong>注意：</strong>千万不要把账户密令直接写入脚本，特别是当你计划开源自己的作品时。为了保护账户信息，你需要让脚本从环境中导入敏感信息。</p>
 <p>保护电子邮件服务器用户名和密码的两个环境变量要在环境中定义。如果你在Linux或Mac OS X中使用bash，那么可以按照下面的方式设定这两个变量：</p>
-<pre><code>(env) [root@server1 myproject]# export MAIL_USERNAME=&lt;qq-mail username&gt;
-(env) [root@server1 myproject]# export MAIL_PASSWORD=&lt;qq-mail password&gt;
-</code></pre><p>微软Windows用户可按照下面的方式设定环境变量：</p>
-<pre><code>(env) $ set MAIL_USERNAME=&lt;qq-mail username&gt;
-(env) $ set MAIL_PASSWORD=&lt;qq-mail password&gt;
-</code></pre><h1 id="在Python-shell中发送电子邮件"><a href="#在Python-shell中发送电子邮件" class="headerlink" title="在Python shell中发送电子邮件"></a>在Python shell中发送电子邮件</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(env) [root@server1 myproject]# export MAIL_USERNAME=&lt;qq-mail username&gt;</span><br><span class="line">(env) [root@server1 myproject]# export MAIL_PASSWORD=&lt;qq-mail password&gt;</span><br></pre></td></tr></table></figure>
+<p>微软Windows用户可按照下面的方式设定环境变量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(env) $ set MAIL_USERNAME=&lt;qq-mail username&gt;</span><br><span class="line">(env) $ set MAIL_PASSWORD=&lt;qq-mail password&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="在Python-shell中发送电子邮件"><a href="#在Python-shell中发送电子邮件" class="headerlink" title="在Python shell中发送电子邮件"></a>在Python shell中发送电子邮件</h1><hr>
 <p>你可以打开一个shell会话，发送一封测试邮件，以检查配置是否正确：</p>
 <p><strong>注意：</strong>发送测试邮件前，请先在你的邮箱设置中打开POP3/SMTP服务，获取授权码，具体步骤请参考<a href="http://service.mail.qq.com/cgi-bin/help?subtype=1&amp;&amp;no=1001256&amp;&amp;id=28" target="_blank" rel="noopener">http://service.mail.qq.com/cgi-bin/help?subtype=1&amp;&amp;no=1001256&amp;&amp;id=28</a></p>
-<pre><code>(env) [root@server1 myproject]# python run.py shell
-&gt;&gt;&gt; from flask.ext.mail import Message
-&gt;&gt;&gt; from run import mail
-&gt;&gt;&gt; msg = Message(&apos;Hello Koen&apos;,sender=&apos;you@example.com&apos;,recipients=[&apos;you@example.com&apos;])
-&gt;&gt;&gt; msg.body = &apos;Hello Koen&apos;
-&gt;&gt;&gt; msg.html = &apos;&lt;h1&gt;Hello Koen!&lt;/h1&gt;&apos;
-&gt;&gt;&gt; with app.app_context():
-...     mail.send(msg)
-</code></pre><p><strong>注意：</strong>Flask-Mail中的send()函数使用current_app,因此要在激活的程序上下文中执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(env) [root@server1 myproject]# python run.py shell</span><br><span class="line">&gt;&gt;&gt; from flask.ext.mail import Message</span><br><span class="line">&gt;&gt;&gt; from run import mail</span><br><span class="line">&gt;&gt;&gt; msg = Message(&apos;Hello Koen&apos;,sender=&apos;you@example.com&apos;,recipients=[&apos;you@example.com&apos;])</span><br><span class="line">&gt;&gt;&gt; msg.body = &apos;Hello Koen&apos;</span><br><span class="line">&gt;&gt;&gt; msg.html = &apos;&lt;h1&gt;Hello Koen!&lt;/h1&gt;&apos;</span><br><span class="line">&gt;&gt;&gt; with app.app_context():</span><br><span class="line">...     mail.send(msg)</span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong>Flask-Mail中的send()函数使用current_app,因此要在激活的程序上下文中执行。</p>
 <h1 id="在程序中集成发送电子邮件功能"><a href="#在程序中集成发送电子邮件功能" class="headerlink" title="在程序中集成发送电子邮件功能"></a>在程序中集成发送电子邮件功能</h1><hr>
 <p>为了避免每次都手动编写电子邮件消息，我们最好把程序发送电子邮件的通用部分抽象出来，定义成一个函数。这么做还有个好处，即该函数可以使用Jinja2模板渲染邮件正文，灵活性极高。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from flask.ext.mail import Message</span><br><span class="line"></span><br><span class="line">app.config[&apos;FLASKY_MAIL_SUBJECT_PREFIX&apos;] = &apos;[Flasky]&apos;</span><br><span class="line">app.config[&apos;FLASKY_MAIL_SENDER&apos;] = &apos;Flasky Admin &lt;flasky@example.com&gt;&apos;</span><br><span class="line"></span><br><span class="line">def send_email(to, subject, template, **kwargs):</span><br><span class="line">    msg = Message(app.config[&apos;FLASKY_MAIL_SUBJECT_PREFIX&apos;] + &apos; &apos; + subject,</span><br><span class="line">                  sender=app.config[&apos;FLASKY_MAIL_SENDER&apos;], recipients=[to])</span><br><span class="line">    msg.body = render_template(template + &apos;.txt&apos;, **kwargs)</span><br><span class="line">    msg.html = render_template(template + &apos;.html&apos;, **kwargs)</span><br><span class="line">    mail.send(msg)</span><br></pre></td></tr></table></figure>
@@ -471,10 +461,10 @@ mail = Mail(app)
 <p>templates/mail/new_user.html</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">User &lt;b&gt;&#123;&#123; user.username &#125;&#125;&lt;/b&gt; has joined.</span><br></pre></td></tr></table></figure>
 <p>除了前面提到的环境变量MAIL_USERNAME和MAIL_PASSWORD之外，这个版本的程序还需要使用环境变量FLASKY_ADMIN。Linux和Mac OS X用户可使用下面的命令添加：</p>
-<pre><code>(env) [root@server1 myproject]# export FLASKY_ADMIN=&lt;your-email-address&gt;
-</code></pre><p>对微软Windows用户来说，等价的命令是：</p>
-<pre><code>(env) $ set FLASKY_ADMIN=&lt;your-email-address&gt;
-</code></pre><p>设置好这些环境变量后，我们就可以测试程序了。每次你在表单中填写新名字时，管理员都会收到一封电子邮件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(env) [root@server1 myproject]# export FLASKY_ADMIN=&lt;your-email-address&gt;</span><br></pre></td></tr></table></figure>
+<p>对微软Windows用户来说，等价的命令是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(env) $ set FLASKY_ADMIN=&lt;your-email-address&gt;</span><br></pre></td></tr></table></figure>
+<p>设置好这些环境变量后，我们就可以测试程序了。每次你在表单中填写新名字时，管理员都会收到一封电子邮件。</p>
 <h1 id="异步发送电子邮件"><a href="#异步发送电子邮件" class="headerlink" title="异步发送电子邮件"></a>异步发送电子邮件</h1><p>如果你发送了几封测试邮件，可能会注意到mail.send()函数在发送电子邮件时停滞了几秒钟，在这个过程中浏览器就像无响应一样。为了避免处理请求过程中不必要的延迟，我们可以把发送电子邮件的函数移到后台线程中。</p>
 <p>run.py：异步发送电子邮件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">from threading import Thread</span><br><span class="line"></span><br><span class="line">def send_async_email(app, msg):</span><br><span class="line">    with app.app_context():</span><br><span class="line">        mail.send(msg)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def send_email(to, subject, template, **kwargs):</span><br><span class="line">    msg = Message(app.config[&apos;FLASKY_MAIL_SUBJECT_PREFIX&apos;] + &apos; &apos; + subject,</span><br><span class="line">                  sender=app.config[&apos;FLASKY_MAIL_SENDER&apos;], recipients=[to])</span><br><span class="line">    msg.body = render_template(template + &apos;.txt&apos;, **kwargs)</span><br><span class="line">    msg.html = render_template(template + &apos;.html&apos;, **kwargs)</span><br><span class="line">    thr = Thread(target=send_async_email, args=[app, msg])</span><br><span class="line">    thr.start()</span><br><span class="line">    return thr</span><br></pre></td></tr></table></figure>
