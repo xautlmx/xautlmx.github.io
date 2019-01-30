@@ -94,7 +94,7 @@
 <meta property="og:image" content="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_5.png">
 <meta property="og:image" content="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_6.png">
 <meta property="og:image" content="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_7.png">
-<meta property="og:updated_time" content="2018-10-27T17:21:37.790Z">
+<meta property="og:updated_time" content="2019-01-30T14:57:28.420Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS6.X&#x2F;CentOS7.X配置本地yum源教程">
 <meta name="twitter:description" content="实验环境介绍 系统环境：CentOS6.5 ISO镜像：CentOS-6.5-x86_64-bin-DVD1.iso 镜像下载链接：http://archive.kernel.org/centos-vault/ 详细配置步骤 1、根据具体的系统版本下载对应版本的ISO文件，系统版本可通过cat /etc/redhat-release查看  2、将镜像上传到机器任意位置，若机器未设置IP，可通过U盘">
@@ -384,36 +384,17 @@
 <p>2、将镜像上传到机器任意位置，若机器未设置IP，可通过U盘等外置设备将ISO文件拷贝到机器中，若机器已设置IP，可通过winscp或Xftp等支持SSH的SCP文件传输软件将ISO文件上传到机器中。示例中我将ISO文件（CentOS-6.5-x86_64-bin-DVD1.iso）上传到/usr/local目录下</p>
 <p><img src="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_2.png" alt=""></p>
 <p>3、建立/mnt/cdrom和/mnt/&lt;OS_Version&gt;两个目录，<strong>其中&lt;OS_Version&gt;替换为操作系统版本</strong></p>
-<pre><code># mkdir /mnt/cdrom
-# mkdir /mnt/CentOS6.5
-</code></pre><p><img src="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_3.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir /mnt/cdrom</span><br><span class="line">mkdir /mnt/CentOS6.5</span><br></pre></td></tr></table></figure>
+<p><img src="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_3.png" alt=""></p>
 <p>4、将ISO文件挂载到/mnt/cdrom目录下，并将镜像中的所有文件拷贝到/mnt/&lt;OS_Version&gt;目录中</p>
-<pre><code># mount -o loop /usr/local/CentOS-6.5-x86_64-bin-DVD1.iso /mnt/cdrom/
-# ls /mnt/cdrom/
-# cp -r /mnt/cdrom/* /mnt/CentOS6.5/
-# umount /mnt/cdrom/
-# rm /mnt/cdrom/
-</code></pre><p><img src="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_4.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mount -o loop /usr/local/CentOS-6.5-x86_64-bin-DVD1.iso /mnt/cdrom/</span><br><span class="line">ls /mnt/cdrom/</span><br><span class="line">cp -r /mnt/cdrom/* /mnt/CentOS6.5/</span><br><span class="line">umount /mnt/cdrom/</span><br><span class="line">rm -r /mnt/cdrom/</span><br></pre></td></tr></table></figure>
+<p><img src="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_4.png" alt=""></p>
 <p>5、进入到/etc/yum.repos.d/，备份系统原有的repo文件</p>
-<pre><code># cd /etc/yum.repos.d/
-# ls
-# mkdir backup
-# mv * backup/
-</code></pre><p><img src="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_5.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/yum.repos.d/</span><br><span class="line">ls</span><br><span class="line">mkdir backup</span><br><span class="line">mv * backup/</span><br></pre></td></tr></table></figure>
+<p><img src="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_5.png" alt=""></p>
 <p>6、在/etc/yum.repos.d/新建repo文件（注：文件名一定要以.repo结尾，其他部分可自义定，例如a.repo,b.repo，此示例中为CentOS6.5.repo）</p>
-<pre><code># cat CentOS6.5.repo
-[CentOS6.5]
-name=CentOS6.5
-baseurl=file:///mnt/CentOS6.5
-gpgcheck=0
-
-注：
-[]中的内容可自定义
-name参数可自定义
-baseurl是服务器设置中最重要的部分，只有设置正确，才能从上面获取软件。它的格式是baseurl=url://server1/path/to/repository/
-其中url支持的协议有 http:// ftp:// file://三种，此示例中为file://，路径为/mnt/CentOS6.5（第4步中已将ISO中的所有文件拷贝到此目录下）
-gpgchkeck= 有1和0两个选择，分别代表是否是否进行gpg校验，此处设置为0，不进行gpg校验
-</code></pre><p><img src="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_6.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">cat &gt; /etc/yum.repos.d/CentOS6.5.repo &lt;&lt; EOF</span><br><span class="line">[CentOS6.5]</span><br><span class="line">name=CentOS6.5</span><br><span class="line">baseurl=file:///mnt/CentOS6.5</span><br><span class="line">gpgcheck=0</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">注：</span><br><span class="line">[]中的内容可自定义</span><br><span class="line">name参数可自定义</span><br><span class="line">baseurl是服务器设置中最重要的部分，只有设置正确，才能从上面获取软件。它的格式是baseurl=url://server1/path/to/repository/</span><br><span class="line">其中url支持的协议有 http:// ftp:// file://三种，此示例中为file://，路径为/mnt/CentOS6.5（第4步中已将ISO中的所有文件拷贝到此目录下）</span><br><span class="line">gpgchkeck= 有1和0两个选择，分别代表是否是否进行gpg校验，此处设置为0，不进行gpg校验</span><br></pre></td></tr></table></figure>
+<p><img src="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_6.png" alt=""></p>
 <p>7、执行yum clean all清楚yum缓存，然后执行yum list，如果能如下图正常列出可用的软件包，说明本地yum源配置成功了。</p>
 <p><img src="https://img.koenli.com/CentOS6.X/CentOS7.X%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0yum%E6%BA%90%E6%95%99%E7%A8%8B_7.png" alt=""></p>
 <ul>
@@ -620,7 +601,7 @@ gpgchkeck= 有1和0两个选择，分别代表是否是否进行gpg校验，此�
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
