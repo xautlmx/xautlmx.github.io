@@ -88,7 +88,7 @@
 <meta property="og:description" content="关于Ceph的介绍本文不再赘述，可以查看官方文档进行了解 Sage Weil读博士的时候开发了这套牛逼的分布式存储系统，最初是奔着高性能分布式文件系统去的，结果云计算风口一来，Ceph重心转向了分布式块存储（Block Storage）和分布式对象存储（Object Storage），现在分布式文件系统CephFS还停在beta阶段。Ceph现在是云计算、虚拟机部署的最火开源存储解决方案，据说有2">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://img.koenli.com/%E5%9C%A8CentOS7.1%E4%B8%8A%E5%AE%89%E8%A3%85%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9FCeph_1.png">
-<meta property="og:updated_time" content="2018-10-27T17:21:37.762Z">
+<meta property="og:updated_time" content="2019-01-30T15:18:21.557Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在CentOS7.1上安装分布式存储系统Ceph">
 <meta name="twitter:description" content="关于Ceph的介绍本文不再赘述，可以查看官方文档进行了解 Sage Weil读博士的时候开发了这套牛逼的分布式存储系统，最初是奔着高性能分布式文件系统去的，结果云计算风口一来，Ceph重心转向了分布式块存储（Block Storage）和分布式对象存储（Object Storage），现在分布式文件系统CephFS还停在beta阶段。Ceph现在是云计算、虚拟机部署的最火开源存储解决方案，据说有2">
@@ -383,145 +383,52 @@
 <h1 id="软件环境准备"><a href="#软件环境准备" class="headerlink" title="软件环境准备"></a>软件环境准备</h1><hr>
 <p>所有Ceph集群节点采用CentOS7.1版本（CentOS-7-x86_64-Minimal-1503-01），所有文件系统采用Ceph官方推荐的xfs。</p>
 <p>安装完CentOS后我们需要在每个节点上（包括ceph-adm）做一点基础配置，比如关闭SELINUX、关闭防火墙、同步时间等。</p>
-<pre><code>关闭 SELINUX
-# sed -i &apos;s/SELINUX=enforcing/SELINUX=disabled/g&apos; /etc/selinux/config
-# setenforce 0
-
-关闭iptables
-# systemctl stop firewalld
-# systemctl disable firewalld
-
-安装 EPEL 软件源：
-# rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm
-
-同步时间
-# yum -y ntp
-# ntpdate asia.pool.ntp.org
-
-修改/etc/hosts
-# cat /etc/hosts
-127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-192.168.128.131        ceph-mon
-192.168.128.132        ceph-osd1
-192.168.128.133        ceph-osd2
-</code></pre><p>在每台osd服务器上对4块硬盘进行分区，创建XFS文件系统，对1块用作journal的硬盘分4个区，每个区对应一块硬盘，不需要创建文件系统，留给Ceph自己处理。</p>
-<pre><code># parted -a optimal --script /dev/sdc -- mktable gpt
-# parted -a optimal --script /dev/sdc -- mkpart primary xfs 0% 100%
-# mkfs.xfs -f /dev/sdc1
-meta-data=/dev/sdc1              isize=256    agcount=4, agsize=1310592 blks
-     =                       sectsz=512   attr=2, projid32bit=1
-     =                       crc=0        finobt=0
-data     =                       bsize=4096   blocks=5242368, imaxpct=25
-     =                       sunit=0      swidth=0 blks
-naming   =version 2              bsize=4096   ascii-ci=0 ftype=0
-log      =internal log           bsize=4096   blocks=2560, version=2
-     =                       sectsz=512   sunit=0 blks, lazy-count=1
-realtime =none                   extsz=4096   blocks=0, rtextents=0
-</code></pre><p>在生产环境中，每台osd服务器上硬盘远不止4台，以上命令需要对多个硬盘进行处理，重复的操作太多，以后还会陆续增加服务器，写成脚本parted.sh方便操作，其中/dev/sdc|d|e|f分别是4块硬盘，/dev/sdb是用做journal的硬盘：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">关闭 SELINUX</span><br><span class="line">sed -i &apos;s/SELINUX=enforcing/SELINUX=disabled/g&apos; /etc/selinux/config</span><br><span class="line">setenforce 0</span><br><span class="line"></span><br><span class="line">关闭iptables</span><br><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl disable firewalld</span><br><span class="line"></span><br><span class="line">安装 EPEL 软件源：</span><br><span class="line">rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm</span><br><span class="line"></span><br><span class="line">同步时间</span><br><span class="line">yum -y ntp</span><br><span class="line">ntpdate asia.pool.ntp.org</span><br><span class="line"></span><br><span class="line">修改/etc/hosts</span><br><span class="line">cat /etc/hosts</span><br><span class="line">127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4</span><br><span class="line">::1         localhost localhost.localdomain localhost6 localhost6.localdomain6</span><br><span class="line">192.168.128.131		ceph-mon</span><br><span class="line">192.168.128.132		ceph-osd1</span><br><span class="line">192.168.128.133		ceph-osd2</span><br></pre></td></tr></table></figure>
+<p>在每台osd服务器上对4块硬盘进行分区，创建XFS文件系统，对1块用作journal的硬盘分4个区，每个区对应一块硬盘，不需要创建文件系统，留给Ceph自己处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">parted -a optimal --script /dev/sdc -- mktable gpt</span><br><span class="line">parted -a optimal --script /dev/sdc -- mkpart primary xfs 0% 100%</span><br><span class="line">mkfs.xfs -f /dev/sdc1</span><br><span class="line">meta-data=/dev/sdc1              isize=256    agcount=4, agsize=1310592 blks</span><br><span class="line">     =                       sectsz=512   attr=2, projid32bit=1</span><br><span class="line">     =                       crc=0        finobt=0</span><br><span class="line">data     =                       bsize=4096   blocks=5242368, imaxpct=25</span><br><span class="line">     =                       sunit=0      swidth=0 blks</span><br><span class="line">naming   =version 2              bsize=4096   ascii-ci=0 ftype=0</span><br><span class="line">log      =internal log           bsize=4096   blocks=2560, version=2</span><br><span class="line">     =                       sectsz=512   sunit=0 blks, lazy-count=1</span><br><span class="line">realtime =none                   extsz=4096   blocks=0, rtextents=0</span><br></pre></td></tr></table></figure>
+<p>在生产环境中，每台osd服务器上硬盘远不止4台，以上命令需要对多个硬盘进行处理，重复的操作太多，以后还会陆续增加服务器，写成脚本parted.sh方便操作，其中/dev/sdc|d|e|f分别是4块硬盘，/dev/sdb是用做journal的硬盘：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">set -e</span><br><span class="line">if [ ! -x &quot;/sbin/parted&quot; ]; then</span><br><span class="line">    echo &quot;This script requires /sbin/parted to run!&quot; &gt;&amp;2</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">DISKS=&quot;c d e f&quot;</span><br><span class="line">for i in $&#123;DISKS&#125;; do</span><br><span class="line">    echo &quot;Creating partitions on /dev/sd$&#123;i&#125; ...&quot;</span><br><span class="line">    parted -a optimal --script /dev/sd$&#123;i&#125; -- mktable gpt</span><br><span class="line">    parted -a optimal --script /dev/sd$&#123;i&#125; -- mkpart primary xfs 0% 100%</span><br><span class="line">    sleep 1</span><br><span class="line">    #echo &quot;Formatting /dev/sd$&#123;i&#125;1 ...&quot;</span><br><span class="line">    mkfs.xfs -f /dev/sd$&#123;i&#125;1 &amp;</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">JOURNALDISK=&quot;b&quot;</span><br><span class="line">for i in $&#123;JOURNALDISK&#125;; do</span><br><span class="line">    parted -s /dev/sd$&#123;i&#125; mklabel gpt</span><br><span class="line">    parted -s /dev/sd$&#123;i&#125; mkpart primary 0% 25%</span><br><span class="line">    parted -s /dev/sd$&#123;i&#125; mkpart primary 26% 50%</span><br><span class="line">    parted -s /dev/sd$&#123;i&#125; mkpart primary 51% 75%</span><br><span class="line">    parted -s /dev/sd$&#123;i&#125; mkpart primary 76% 100%</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <p>在ceph-mon上运行ssh-keygen生成ssh key文件，注意passphrase是空，把ssh key拷贝到每一个Ceph节点上：</p>
-<pre><code>[root@ceph-mon ~]# ssh-keygen -t rsa
-Generating public/private rsa key pair.
-Enter file in which to save the key (/root/.ssh/id_rsa): 
-Created directory &apos;/root/.ssh&apos;.
-Enter passphrase (empty for no passphrase): 
-Enter same passphrase again: 
-Your identification has been saved in /root/.ssh/id_rsa.
-Your public key has been saved in /root/.ssh/id_rsa.pub.
-The key fingerprint is:
-36:1d:33:20:38:15:4a:8f:50:c4:94:bc:43:ef:a2:a2 root@ceph-mon
-The key&apos;s randomart image is:
-+--[ RSA 2048]----+
-|  .*=++..        |
-|   oB+ . .       |
-|   .o+.   +      |
-|    o .  . +     |
-|     o  S .      |
-|    . .. .       |
-|   . .           |
-|. .              |
-|E.               |
-+-----------------+
-[root@ceph-mon ~]# ssh-copy-id  -i ~/.ssh/id_rsa.pub ceph-mon
-[root@ceph-mon ~]# ssh-copy-id  -i ~/.ssh/id_rsa.pub ceph-osd1
-[root@ceph-mon ~]# ssh-copy-id  -i ~/.ssh/id_rsa.pub ceph-osd2
-</code></pre><p>在ceph-mon上确保登陆到每台节点上都能无密码ssh登陆。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-mon ~]# ssh-keygen -t rsa</span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file in which to save the key (/root/.ssh/id_rsa): </span><br><span class="line">Created directory &apos;/root/.ssh&apos;.</span><br><span class="line">Enter passphrase (empty for no passphrase): </span><br><span class="line">Enter same passphrase again: </span><br><span class="line">Your identification has been saved in /root/.ssh/id_rsa.</span><br><span class="line">Your public key has been saved in /root/.ssh/id_rsa.pub.</span><br><span class="line">The key fingerprint is:</span><br><span class="line">36:1d:33:20:38:15:4a:8f:50:c4:94:bc:43:ef:a2:a2 root@ceph-mon</span><br><span class="line">The key&apos;s randomart image is:</span><br><span class="line">+--[ RSA 2048]----+</span><br><span class="line">|  .*=++..        |</span><br><span class="line">|   oB+ . .       |</span><br><span class="line">|   .o+.   +      |</span><br><span class="line">|    o .  . +     |</span><br><span class="line">|     o  S .      |</span><br><span class="line">|    . .. .       |</span><br><span class="line">|   . .           |</span><br><span class="line">|. .              |</span><br><span class="line">|E.               |</span><br><span class="line">+-----------------+</span><br><span class="line">[root@ceph-mon ~]# ssh-copy-id  -i ~/.ssh/id_rsa.pub ceph-mon</span><br><span class="line">[root@ceph-mon ~]# ssh-copy-id  -i ~/.ssh/id_rsa.pub ceph-osd1</span><br><span class="line">[root@ceph-mon ~]# ssh-copy-id  -i ~/.ssh/id_rsa.pub ceph-osd2</span><br></pre></td></tr></table></figure>
+<p>在ceph-mon上确保登陆到每台节点上都能无密码ssh登陆。</p>
 <h1 id="Ceph部署"><a href="#Ceph部署" class="headerlink" title="Ceph部署"></a>Ceph部署</h1><hr>
 <p>比起在每个Ceph节点上手动安装Ceph，用ceph-deploy工具统一安装要方便得多：</p>
-<pre><code># yum install ceph-deploy -y
-</code></pre><p>创建一个ceph工作目录，以后的操作都在这个目录下面进行：</p>
-<pre><code>[root@ceph-mon ~]# mkdir ~/ceph-cluster
-[root@ceph-mon ~]# cd ceph-cluster/
-</code></pre><p>初始化集群，告诉ceph-deploy哪些节点是监控节点，命令成功执行后会在ceph-cluster目录下生成ceph.conf,ceph.log,ceph.mon.keyring等相关文件：</p>
-<pre><code>[root@ceph-mon ceph-cluster]# ceph-deploy new ceph-mon
-</code></pre><p>在每个Ceph节点上都安装Ceph：</p>
-<pre><code>[root@ceph-mon ceph-cluster]# ceph-deploy install ceph-mon ceph-osd1 ceph-osd2
-</code></pre><p>此处可能出现类似如下错误：</p>
-<pre><code>[ceph-mon][ERROR ]   File &quot;/usr/lib64/python2.7/subprocess.py&quot;, line 1327, in _execute_child
-[ceph-mon][ERROR ]     raise child_exception
-[ceph-mon][ERROR ] OSError: [Errno 2] No such file or directory
-[ceph-mon][ERROR ] 
-[ceph-mon][ERROR ] 
-[ceph_deploy][ERROR ] RuntimeError: Failed to execute command: ceph --version
-</code></pre><p>解决方法是在报错的节点上执行下面的命令：</p>
-<pre><code>[root@ceph-mon ceph-cluster]# yum install *argparse* -y
-</code></pre><p>初始化监控节点：</p>
-<pre><code>[root@ceph-mon ceph-cluster]# ceph-deploy mon create-initial
-</code></pre><p>查看一下Ceph存储节点的硬盘情况：    </p>
-<pre><code>[root@ceph-mon ceph-cluster]# ceph-deploy disk list ceph-osd1
-[root@ceph-mon ceph-cluster]# ceph-deploy disk list ceph-osd2
-</code></pre><p>初始化Ceph硬盘，然后创建osd存储节点，存储节点:单个硬盘:对应的journal分区，一一对应：</p>
-<pre><code>创建ceph-osd1存储节点
-[root@ceph-mon ceph-cluster]# ceph-deploy disk zap ceph-osd1:sdc ceph-osd1:sdd ceph-osd1:sde ceph-osd1:sdf
-[root@ceph-mon ceph-cluster]# ceph-deploy osd create ceph-osd1:sdc:/dev/sdb1 ceph-osd1:sdd:/dev/sdb2 ceph-osd1:sde:/dev/sdb3 ceph-osd1:sdf:/dev/sdb4
-
-创建ceph-osd2存储节点
-[root@ceph-mon ceph-cluster]# ceph-deploy disk zap ceph-osd2:sdc ceph-osd2:sdd ceph-osd2:sde ceph-osd2:sdf
-[root@ceph-mon ceph-cluster]# ceph-deploy osd create ceph-osd2:sdc:/dev/sdb1 ceph-osd2:sdd:/dev/sdb2 ceph-osd2:sde:/dev/sdb3 ceph-osd2:sdf:/dev/sdb4
-</code></pre><p>最后，我们把生成的配置文件从ceph-adm同步部署到其他几个节点，使得每个节点的ceph配置一致：</p>
-<pre><code>[root@ceph-mon ceph-cluster]# ceph-deploy --overwrite-conf admin ceph-mon ceph-osd1 ceph-osd2
-</code></pre><blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install ceph-deploy -y</span><br></pre></td></tr></table></figure>
+<p>创建一个ceph工作目录，以后的操作都在这个目录下面进行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-mon ~]# mkdir ~/ceph-cluster</span><br><span class="line">[root@ceph-mon ~]# cd ceph-cluster/</span><br></pre></td></tr></table></figure>
+<p>初始化集群，告诉ceph-deploy哪些节点是监控节点，命令成功执行后会在ceph-cluster目录下生成ceph.conf,ceph.log,ceph.mon.keyring等相关文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-mon ceph-cluster]# ceph-deploy new ceph-mon</span><br></pre></td></tr></table></figure>
+<p>在每个Ceph节点上都安装Ceph：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-mon ceph-cluster]# ceph-deploy install ceph-mon ceph-osd1 ceph-osd2</span><br></pre></td></tr></table></figure>
+<p>此处可能出现类似如下错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[ceph-mon][ERROR ]   File &quot;/usr/lib64/python2.7/subprocess.py&quot;, line 1327, in _execute_child</span><br><span class="line">[ceph-mon][ERROR ]     raise child_exception</span><br><span class="line">[ceph-mon][ERROR ] OSError: [Errno 2] No such file or directory</span><br><span class="line">[ceph-mon][ERROR ] </span><br><span class="line">[ceph-mon][ERROR ] </span><br><span class="line">[ceph_deploy][ERROR ] RuntimeError: Failed to execute command: ceph --version</span><br></pre></td></tr></table></figure>
+<p>解决方法是在报错的节点上执行下面的命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-mon ceph-cluster]# yum install *argparse* -y</span><br></pre></td></tr></table></figure>
+<p>初始化监控节点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-mon ceph-cluster]# ceph-deploy mon create-initial</span><br></pre></td></tr></table></figure>
+<p>查看一下Ceph存储节点的硬盘情况：    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-mon ceph-cluster]# ceph-deploy disk list ceph-osd1</span><br><span class="line">[root@ceph-mon ceph-cluster]# ceph-deploy disk list ceph-osd2</span><br></pre></td></tr></table></figure>
+<p>初始化Ceph硬盘，然后创建osd存储节点，存储节点:单个硬盘:对应的journal分区，一一对应：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">创建ceph-osd1存储节点</span><br><span class="line">[root@ceph-mon ceph-cluster]# ceph-deploy disk zap ceph-osd1:sdc ceph-osd1:sdd ceph-osd1:sde ceph-osd1:sdf</span><br><span class="line">[root@ceph-mon ceph-cluster]# ceph-deploy osd create ceph-osd1:sdc:/dev/sdb1 ceph-osd1:sdd:/dev/sdb2 ceph-osd1:sde:/dev/sdb3 ceph-osd1:sdf:/dev/sdb4</span><br><span class="line"></span><br><span class="line">创建ceph-osd2存储节点</span><br><span class="line">[root@ceph-mon ceph-cluster]# ceph-deploy disk zap ceph-osd2:sdc ceph-osd2:sdd ceph-osd2:sde ceph-osd2:sdf</span><br><span class="line">[root@ceph-mon ceph-cluster]# ceph-deploy osd create ceph-osd2:sdc:/dev/sdb1 ceph-osd2:sdd:/dev/sdb2 ceph-osd2:sde:/dev/sdb3 ceph-osd2:sdf:/dev/sdb4</span><br></pre></td></tr></table></figure>
+<p>最后，我们把生成的配置文件从ceph-adm同步部署到其他几个节点，使得每个节点的ceph配置一致：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-mon ceph-cluster]# ceph-deploy --overwrite-conf admin ceph-mon ceph-osd1 ceph-osd2</span><br></pre></td></tr></table></figure>
+<blockquote>
 <p>测试</p>
 </blockquote>
 <p>看一下配置成功了没？</p>
-<pre><code>[root@ceph-mon ceph-cluster]# ceph health
-</code></pre><p>HEALTH_WARN 6 pgs degraded; 6 pgs stuck degraded; 64 pgs stuck unclean; 6 pgs stuck undersized; 6 pgs undersized; too few PGs per OSD (16 &lt; min 30)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-mon ceph-cluster]# ceph health</span><br><span class="line">HEALTH_WARN 6 pgs degraded; 6 pgs stuck degraded; 64 pgs stuck unclean; 6 pgs stuck undersized; 6 pgs undersized; too few PGs per OSD (16 &lt; min 30)</span><br></pre></td></tr></table></figure>
 <p>增加PG数目，<strong>根据Total PGs = (#OSDs * 100) / pool size公式来决定pg_num（pgp_num应该设成和pg_num一样）</strong>，所以8*100/2=400，Ceph官方推荐取最接近2的指数倍，所以选择512（若日是太大则选择256）。如果顺利的话，就应该可以看到HEALTH_OK了：</p>
-<pre><code>[root@ceph-mon ceph-cluster]# ceph osd pool set rbd size 2
-set pool 0 size to 2
-[root@ceph-mon ceph-cluster]# ceph osd pool set rbd min_size 2
-set pool 0 min_size to 2
-[root@ceph-mon ceph-cluster]# ceph osd pool set rbd pg_num 256
-set pool 0 pg_num to 256
-[root@ceph-mon ceph-cluster]# ceph osd pool set rbd pgp_num 256
-set pool 0 pgp_num to 256
-[root@ceph-mon ceph-cluster]# ceph health
-HEALTH_OK
-</code></pre><p>更详细一点：</p>
-<pre><code>[root@ceph-mon ceph-cluster]# ceph -s
-    cluster 38a7726b-6018-41f4-83c2-911b325116df
-     health HEALTH_OK
-     monmap e1: 1 mons at {ceph-mon=192.168.128.131:6789/0}
-            election epoch 2, quorum 0 ceph-mon
-     osdmap e46: 8 osds: 8 up, 8 in
-      pgmap v72: 256 pgs, 1 pools, 0 bytes data, 0 objects
-            276 MB used, 159 GB / 159 GB avail
-                 256 active+clean
-</code></pre><p>如果操作没有问题的话记得把上面操作写到ceph.conf文件里，并同步部署的各节点：</p>
-<pre><code>[root@ceph-mon ceph-cluster]# echo &quot;osd pool default size = 2&quot;  &gt;&gt; ~/ceph-cluster/ceph.conf
-[root@ceph-mon ceph-cluster]# echo &quot;osd pool default min size = 2&quot; &gt;&gt; ~/ceph-cluster/ceph.conf
-[root@ceph-mon ceph-cluster]# echo &quot;osd pool default pg num = 256&quot; &gt;&gt; ~/ceph-cluster/ceph.conf
-[root@ceph-mon ceph-cluster]# echo &quot;osd pool default pgp num = 256&quot; &gt;&gt; ~/ceph-cluster/ceph.conf
-[root@ceph-mon ceph-cluster]# ceph-deploy --overwrite-conf admin ceph-mon ceph-osd1 ceph-osd2
-</code></pre><blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-mon ceph-cluster]# ceph osd pool set rbd size 2</span><br><span class="line">set pool 0 size to 2</span><br><span class="line">[root@ceph-mon ceph-cluster]# ceph osd pool set rbd min_size 2</span><br><span class="line">set pool 0 min_size to 2</span><br><span class="line">[root@ceph-mon ceph-cluster]# ceph osd pool set rbd pg_num 256</span><br><span class="line">set pool 0 pg_num to 256</span><br><span class="line">[root@ceph-mon ceph-cluster]# ceph osd pool set rbd pgp_num 256</span><br><span class="line">set pool 0 pgp_num to 256</span><br><span class="line">[root@ceph-mon ceph-cluster]# ceph health</span><br><span class="line">HEALTH_OK</span><br></pre></td></tr></table></figure>
+<p>更详细一点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-mon ceph-cluster]# ceph -s</span><br><span class="line">    cluster 38a7726b-6018-41f4-83c2-911b325116df</span><br><span class="line">     health HEALTH_OK</span><br><span class="line">     monmap e1: 1 mons at &#123;ceph-mon=192.168.128.131:6789/0&#125;</span><br><span class="line">            election epoch 2, quorum 0 ceph-mon</span><br><span class="line">     osdmap e46: 8 osds: 8 up, 8 in</span><br><span class="line">      pgmap v72: 256 pgs, 1 pools, 0 bytes data, 0 objects</span><br><span class="line">            276 MB used, 159 GB / 159 GB avail</span><br><span class="line">                 256 active+clean</span><br></pre></td></tr></table></figure>
+<p>如果操作没有问题的话记得把上面操作写到ceph.conf文件里，并同步部署的各节点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-mon ceph-cluster]# echo &quot;osd pool default size = 2&quot;  &gt;&gt; ~/ceph-cluster/ceph.conf</span><br><span class="line">[root@ceph-mon ceph-cluster]# echo &quot;osd pool default min size = 2&quot; &gt;&gt; ~/ceph-cluster/ceph.conf</span><br><span class="line">[root@ceph-mon ceph-cluster]# echo &quot;osd pool default pg num = 256&quot; &gt;&gt; ~/ceph-cluster/ceph.conf</span><br><span class="line">[root@ceph-mon ceph-cluster]# echo &quot;osd pool default pgp num = 256&quot; &gt;&gt; ~/ceph-cluster/ceph.conf</span><br><span class="line">[root@ceph-mon ceph-cluster]# ceph-deploy --overwrite-conf admin ceph-mon ceph-osd1 ceph-osd2</span><br></pre></td></tr></table></figure>
+<blockquote>
 <p>如果一切可以重来</p>
 </blockquote>
 <p>部署过程中如果出现任何奇怪的问题无法解决，可以简单的删除一切从头再来：</p>
-<pre><code>[root@ceph-mon ceph-cluster]# ceph-deploy purge ceph-mon ceph-osd1 ceph-osd2
-[root@ceph-mon ceph-cluster]# ceph-deploy purgedata ceph-mon ceph-osd1 ceph-osd2
-[root@ceph-mon ceph-cluster]# ceph-deploy forgetkeys
-</code></pre><blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-mon ceph-cluster]# ceph-deploy purge ceph-mon ceph-osd1 ceph-osd2</span><br><span class="line">[root@ceph-mon ceph-cluster]# ceph-deploy purgedata ceph-mon ceph-osd1 ceph-osd2</span><br><span class="line">[root@ceph-mon ceph-cluster]# ceph-deploy forgetkeys</span><br></pre></td></tr></table></figure>
+<blockquote>
 <p>Troubelshooting</p>
 </blockquote>
 <p>如果出现任何网络问题，首先确认节点可以互相无密码ssh，各个节点的防火墙已关闭或加入规则</p>

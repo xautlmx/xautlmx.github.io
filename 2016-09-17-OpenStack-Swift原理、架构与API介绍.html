@@ -92,7 +92,7 @@
 <meta property="og:image" content="https://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_3.png">
 <meta property="og:image" content="https://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_4.png">
 <meta property="og:image" content="https://img.koenli.com/OpenStack%20Swift%E5%8E%9F%E7%90%86%E3%80%81%E6%9E%B6%E6%9E%84%E4%B8%8EAPI%E4%BB%8B%E7%BB%8D_5.png">
-<meta property="og:updated_time" content="2018-10-27T17:21:37.822Z">
+<meta property="og:updated_time" content="2019-01-30T15:05:07.039Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OpenStack Swift原理、架构与API介绍">
 <meta name="twitter:description" content="背景与概览 Swift最初是由Rackspace公司开发的高可用分布式对象存储服务，并于2010年贡献给OpenStack开源社区作为其最初的核心子项目之一，为其Nova子项目提供虚机镜像存储服务。Swift构筑在比较便宜的标准硬件存储基础设施之上，无需采用RAID（磁盘冗余阵列），通过在软件层面引入一致性散列技术和数据冗余性，牺牲一定程度的数据一致性来达到高可用性和可伸缩性，支持多租户模式、容器">
@@ -429,21 +429,8 @@
 </ul>
 <h1 id="API"><a href="#API" class="headerlink" title="API"></a>API</h1><hr>
 <p>Swift通过Proxy Server向外提供基于HTTP的REST服务接口，对账户、容器和对象进行CRUD等操作。在访问Swift服务之前，需要先通过认证服务获取访问令牌，然后在发送的请求中加入头部信息X-Auth-Token。下面是请求返回账户中的容器列表的示例：</p>
-<pre><code>GET /v1/&lt;account&gt; HTTP/1.1
-Host: storage.swift.com
-X-Auth-Token: easdfd18-0fad-4b3a-81b4-b63c95ec1cba
-响应头部信息中包含状态码 200，容器列表包含在响应体中：
-HTTP/1.1 200 Ok
-Date: Thu, 07 Jan 2016 12:58:07 GMT
-Server: Apache
-Content-Type: text/plain; charset=UTF-8
-Content-Length: 32
-
-images
-movies
-documents
-backups
-</code></pre><p>Swift支持的所有操作可以总结为下表:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">GET /v1/&lt;account&gt; HTTP/1.1</span><br><span class="line">Host: storage.swift.com</span><br><span class="line">X-Auth-Token: easdfd18-0fad-4b3a-81b4-b63c95ec1cba</span><br><span class="line">响应头部信息中包含状态码 200，容器列表包含在响应体中：</span><br><span class="line">HTTP/1.1 200 Ok</span><br><span class="line">Date: Thu, 07 Jan 2016 12:58:07 GMT</span><br><span class="line">Server: Apache</span><br><span class="line">Content-Type: text/plain; charset=UTF-8</span><br><span class="line">Content-Length: 32</span><br><span class="line"></span><br><span class="line">images</span><br><span class="line">movies</span><br><span class="line">documents</span><br><span class="line">backups</span><br></pre></td></tr></table></figure>
+<p>Swift支持的所有操作可以总结为下表:</p>
 <table>
 <thead>
 <tr>
