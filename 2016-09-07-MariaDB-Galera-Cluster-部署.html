@@ -88,7 +88,7 @@
 <meta property="og:description" content="MariaDB作为Mysql的一个分支，在开源项目中已经广泛使用，例如大热的openstack，所以，为了保证服务的高可用性，同时提高系统的负载能力，集群部署是必不可少的。 MariaDB Galera Cluster 介绍 MariaDB集群是MariaDB同步多主机集群。它仅支持XtraDB/ InnoDB存储引擎（虽然有对MyISAM实验支持 - 看wsrep_replicate_myisa">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://img.koenli.com/MariaDB%20Galera%20Cluster%20%E9%83%A8%E7%BD%B2_1.png">
-<meta property="og:updated_time" content="2018-10-27T17:21:37.820Z">
+<meta property="og:updated_time" content="2019-01-30T15:51:03.506Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MariaDB Galera Cluster 部署">
 <meta name="twitter:description" content="MariaDB作为Mysql的一个分支，在开源项目中已经广泛使用，例如大热的openstack，所以，为了保证服务的高可用性，同时提高系统的负载能力，集群部署是必不可少的。 MariaDB Galera Cluster 介绍 MariaDB集群是MariaDB同步多主机集群。它仅支持XtraDB/ InnoDB存储引擎（虽然有对MyISAM实验支持 - 看wsrep_replicate_myisa">
@@ -405,111 +405,31 @@
 <h2 id="安装环境准备"><a href="#安装环境准备" class="headerlink" title="安装环境准备"></a>安装环境准备</h2><p>安装MariaDB集群至少需要3台服务器（如果只有两台的话需要特殊配置，请参照<a href="http://galeracluster.com/documentation-webpages/twonode.html" target="_blank" rel="noopener">官方文档</a>）</p>
 <p>操作系统版本：CentOS7.1（CentOS-7-x86_64-Minimal-1503-01）</p>
 <p>在三台机器上修改/etc/hosts文件：</p>
-<pre><code># cat /etc/hosts
-127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-192.168.128.131        node1
-192.168.128.132        node2
-192.168.128.133        node3
-</code></pre><p>为了保证节点间相互通信，需要禁用三台机器的防火墙设置（如果需要防火墙，则参照<a href="http://galeracluster.com/documentation-webpages/galerainstallation.html#firewall-configuration" target="_blank" rel="noopener">官方网站</a>增加防火墙信息设置）</p>
-<pre><code># systemctl stop firewalld
-# systemctl disable firewalld
-</code></pre><p>然后将<code>/etc/sysconfig/selinux</code>的<code>selinux</code>设置成<code>disabled</code>,这样初始化环境就完成了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;&gt; /etc/hosts &lt;&lt; EOF</span><br><span class="line">192.168.128.131		node1</span><br><span class="line">192.168.128.132		node2</span><br><span class="line">192.168.128.133		node3</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>为了保证节点间相互通信，需要禁用三台机器的防火墙设置（如果需要防火墙，则参照<a href="http://galeracluster.com/documentation-webpages/galerainstallation.html#firewall-configuration" target="_blank" rel="noopener">官方网站</a>增加防火墙信息设置）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl disable firewalld</span><br></pre></td></tr></table></figure>
+<p>然后将<code>/etc/sysconfig/selinux</code>的<code>selinux</code>设置成<code>disabled</code>并重启机器,这样初始化环境就完成了。</p>
 <h2 id="安装MariaDB-Galera-Cluster"><a href="#安装MariaDB-Galera-Cluster" class="headerlink" title="安装MariaDB Galera Cluster"></a>安装MariaDB Galera Cluster</h2><p>在<a href="https://downloads.mariadb.org/mariadb/repositories/#mirror=neusoft" target="_blank" rel="noopener">MariaDB Repository Generator</a>选择对应的系统版本和MariaDB版本，复制相应的yum源配置到/etc/yum.repos.d/MariaDB.repo</p>
-<pre><code>[root@node1 ~]# yum install -y MariaDB-Galera-server galera rsync MariaDB-client
-[root@node2 ~]# yum install -y MariaDB-Galera-server galera rsync MariaDB-client
-[root@node3 ~]# yum install -y MariaDB-Galera-server galera rsync MariaDB-client
-</code></pre><h2 id="配置-MariaDB-Galera-Cluster"><a href="#配置-MariaDB-Galera-Cluster" class="headerlink" title="配置 MariaDB Galera Cluster"></a>配置 MariaDB Galera Cluster</h2><blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# yum install -y MariaDB-Galera-server galera rsync MariaDB-client</span><br><span class="line">[root@node2 ~]# yum install -y MariaDB-Galera-server galera rsync MariaDB-client</span><br><span class="line">[root@node3 ~]# yum install -y MariaDB-Galera-server galera rsync MariaDB-client</span><br></pre></td></tr></table></figure>
+<h2 id="配置-MariaDB-Galera-Cluster"><a href="#配置-MariaDB-Galera-Cluster" class="headerlink" title="配置 MariaDB Galera Cluster"></a>配置 MariaDB Galera Cluster</h2><blockquote>
 <p>初始化数据库服务（只在一个节点进行，然后关闭数据库）</p>
 </blockquote>
-<pre><code>[root@node1 ~]# service mysql start
-[root@node1 ~]# service mysql stop
-</code></pre><blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# service mysql start</span><br><span class="line">[root@node1 ~]# service mysql stop</span><br></pre></td></tr></table></figure>
+<blockquote>
 <p>修改/etc/my.cnf.d/galera.cnf</p>
 </blockquote>
-<pre><code>[root@node1 ~]# cat /etc/my.cnf.d/galera.cnf
-[mysqld]
-wsrep_provider = /usr/lib64/galera/libgalera_smm.so
-wsrep_cluster_address = &quot;gcomm://node1,node2,node3&quot;
-wsrep_node_name = node1
-wsrep_node_address = 192.168.128.131
-</code></pre><p>将此文件复制到<code>node2</code>、<code>node3</code>，注意要把<code>wsrep_node_name</code>和<code>wsrep_node_address</code>改成相应节点的<code>hostname</code>和<code>ip</code>。</p>
-<h2 id="启动MariaDB-Galera-Cluster服务"><a href="#启动MariaDB-Galera-Cluster服务" class="headerlink" title="启动MariaDB Galera Cluster服务"></a>启动MariaDB Galera Cluster服务</h2><pre><code>[root@node1 ~]# mysqld --wsrep-new-cluster --user=root &amp;
-</code></pre><p>此时会出现如下报错：</p>
-<pre><code>160907 17:05:55 [ERROR] WSREP: Only binlog_format = &apos;ROW&apos; is currently supported. Configured value: &apos;STATEMENT&apos;. Please adjust your configuration
-</code></pre><p>解决方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# cat /etc/my.cnf.d/galera.cnf</span><br><span class="line">[mysqld]</span><br><span class="line">wsrep_provider = /usr/lib64/galera/libgalera_smm.so</span><br><span class="line">wsrep_cluster_address = &quot;gcomm://node1,node2,node3&quot;</span><br><span class="line">wsrep_node_name = node1</span><br><span class="line">wsrep_node_address = 192.168.128.131</span><br></pre></td></tr></table></figure>
+<p>将此文件复制到<code>node2</code>、<code>node3</code>，注意要把<code>wsrep_node_name</code>和<code>wsrep_node_address</code>改成相应节点的<code>hostname</code>和<code>ip</code>。</p>
+<h2 id="启动MariaDB-Galera-Cluster服务"><a href="#启动MariaDB-Galera-Cluster服务" class="headerlink" title="启动MariaDB Galera Cluster服务"></a>启动MariaDB Galera Cluster服务</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# mysqld --wsrep-new-cluster --user=root &amp;</span><br></pre></td></tr></table></figure>
+<p>此时会出现如下报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">160907 17:05:55 [ERROR] WSREP: Only binlog_format = &apos;ROW&apos; is currently supported. Configured value: &apos;STATEMENT&apos;. Please adjust your configuration</span><br></pre></td></tr></table></figure>
+<p>解决方法：</p>
 <p>在<code>/etc/my.cnf.d/galera.cnf</code>中添加一行<code>binlog_format=ROW</code></p>
 <p>在输出信息中看到类似如下信息证明启动成功，继续启动其他节点：</p>
-<pre><code>160907 17:09:08 [Note] mysqld: ready for connections.
-Version: &apos;5.5.51-MariaDB-wsrep&apos;  socket: &apos;/var/lib/mysql/mysql.sock&apos;  port: 3306  MariaDB Server, wsrep_25.14.r9949137`
-
-[root@node2 ~]# service mysql start
-[root@node3 ~]# service mysql start
-</code></pre><p><strong>注：</strong><code>--wsrep-new-cluster</code>这个参数只能在初始化集群使用，且只能在一个节点使用。</p>
-<h2 id="查看集群状态"><a href="#查看集群状态" class="headerlink" title="查看集群状态"></a>查看集群状态</h2><pre><code>[root@node1 ~]# mysql -e &apos;show status like &quot;wsrep_%&quot;&apos;
-+------------------------------+----------------------------------------------------------------+
-| Variable_name                | Value                                                          |
-+------------------------------+----------------------------------------------------------------+
-| wsrep_local_state_uuid       | bb27d68e-74da-11e6-8aa4-469f840e1e54                           |
-| wsrep_protocol_version       | 7                                                              |
-| wsrep_last_committed         | 0                                                              |
-| wsrep_replicated             | 0                                                              |
-| wsrep_replicated_bytes       | 0                                                              |
-| wsrep_repl_keys              | 0                                                              |
-| wsrep_repl_keys_bytes        | 0                                                              |
-| wsrep_repl_data_bytes        | 0                                                              |
-| wsrep_repl_other_bytes       | 0                                                              |
-| wsrep_received               | 7                                                              |
-| wsrep_received_bytes         | 699                                                            |
-| wsrep_local_commits          | 0                                                              |
-| wsrep_local_cert_failures    | 0                                                              |
-| wsrep_local_replays          | 0                                                              |
-| wsrep_local_send_queue       | 0                                                              |
-| wsrep_local_send_queue_max   | 1                                                              |
-| wsrep_local_send_queue_min   | 0                                                              |
-| wsrep_local_send_queue_avg   | 0.000000                                                       |
-| wsrep_local_recv_queue       | 0                                                              |
-| wsrep_local_recv_queue_max   | 2                                                              |
-| wsrep_local_recv_queue_min   | 0                                                              |
-| wsrep_local_recv_queue_avg   | 0.142857                                                       |
-| wsrep_local_cached_downto    | 18446744073709551615                                           |
-| wsrep_flow_control_paused_ns | 0                                                              |
-| wsrep_flow_control_paused    | 0.000000                                                       |
-| wsrep_flow_control_sent      | 0                                                              |
-| wsrep_flow_control_recv      | 0                                                              |
-| wsrep_cert_deps_distance     | 0.000000                                                       |
-| wsrep_apply_oooe             | 0.000000                                                       |
-| wsrep_apply_oool             | 0.000000                                                       |
-| wsrep_apply_window           | 0.000000                                                       |
-| wsrep_commit_oooe            | 0.000000                                                       |
-| wsrep_commit_oool            | 0.000000                                                       |
-| wsrep_commit_window          | 0.000000                                                       |
-| wsrep_local_state            | 4                                                              |
-| wsrep_local_state_comment    | Synced                                                         |
-| wsrep_cert_index_size        | 0                                                              |
-| wsrep_causal_reads           | 0                                                              |
-| wsrep_cert_interval          | 0.000000                                                       |
-| wsrep_incoming_addresses     | 192.168.128.131:3306,192.168.128.132:3306,192.168.128.133:3306 |
-| wsrep_desync_count           | 0                                                              |
-| wsrep_evs_delayed            |                                                                |
-| wsrep_evs_evict_list         |                                                                |
-| wsrep_evs_repl_latency       | 0/0/0/0/0                                                      |
-| wsrep_evs_state              | OPERATIONAL                                                    |
-| wsrep_gcomm_uuid             | bb2686c8-74da-11e6-9cde-5fd4f88f878c                           |
-| wsrep_cluster_conf_id        | 3                                                              |
-| wsrep_cluster_size           | 3                                                              |
-| wsrep_cluster_state_uuid     | bb27d68e-74da-11e6-8aa4-469f840e1e54                           |
-| wsrep_cluster_status         | Primary                                                        |
-| wsrep_connected              | ON                                                             |
-| wsrep_local_bf_aborts        | 0                                                              |
-| wsrep_local_index            | 2                                                              |
-| wsrep_provider_name          | Galera                                                         |
-| wsrep_provider_vendor        | Codership Oy &lt;info@codership.com&gt;                              |
-| wsrep_provider_version       | 25.3.17(r3619)                                                 |
-| wsrep_ready                  | ON                                                             |
-| wsrep_thread_count           | 2                                                              |
-+------------------------------+----------------------------------------------------------------+
-</code></pre><blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">160907 17:09:08 [Note] mysqld: ready for connections.</span><br><span class="line">Version: &apos;5.5.51-MariaDB-wsrep&apos;  socket: &apos;/var/lib/mysql/mysql.sock&apos;  port: 3306  MariaDB Server, wsrep_25.14.r9949137`</span><br><span class="line"></span><br><span class="line">[root@node2 ~]# service mysql start</span><br><span class="line">[root@node3 ~]# service mysql start</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong><code>--wsrep-new-cluster</code>这个参数只能在初始化集群使用，且只能在一个节点使用。</p>
+<h2 id="查看集群状态"><a href="#查看集群状态" class="headerlink" title="查看集群状态"></a>查看集群状态</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# mysql -e &apos;show status like &quot;wsrep_%&quot;&apos;</span><br><span class="line">+------------------------------+----------------------------------------------------------------+</span><br><span class="line">| Variable_name                | Value                                                          |</span><br><span class="line">+------------------------------+----------------------------------------------------------------+</span><br><span class="line">| wsrep_local_state_uuid       | bb27d68e-74da-11e6-8aa4-469f840e1e54                           |</span><br><span class="line">| wsrep_protocol_version       | 7                                                              |</span><br><span class="line">| wsrep_last_committed         | 0                                                              |</span><br><span class="line">| wsrep_replicated             | 0                                                              |</span><br><span class="line">| wsrep_replicated_bytes       | 0                                                              |</span><br><span class="line">| wsrep_repl_keys              | 0                                                              |</span><br><span class="line">| wsrep_repl_keys_bytes        | 0                                                              |</span><br><span class="line">| wsrep_repl_data_bytes        | 0                                                              |</span><br><span class="line">| wsrep_repl_other_bytes       | 0                                                              |</span><br><span class="line">| wsrep_received               | 7                                                              |</span><br><span class="line">| wsrep_received_bytes         | 699                                                            |</span><br><span class="line">| wsrep_local_commits          | 0                                                              |</span><br><span class="line">| wsrep_local_cert_failures    | 0                                                              |</span><br><span class="line">| wsrep_local_replays          | 0                                                              |</span><br><span class="line">| wsrep_local_send_queue       | 0                                                              |</span><br><span class="line">| wsrep_local_send_queue_max   | 1                                                              |</span><br><span class="line">| wsrep_local_send_queue_min   | 0                                                              |</span><br><span class="line">| wsrep_local_send_queue_avg   | 0.000000                                                       |</span><br><span class="line">| wsrep_local_recv_queue       | 0                                                              |</span><br><span class="line">| wsrep_local_recv_queue_max   | 2                                                              |</span><br><span class="line">| wsrep_local_recv_queue_min   | 0                                                              |</span><br><span class="line">| wsrep_local_recv_queue_avg   | 0.142857                                                       |</span><br><span class="line">| wsrep_local_cached_downto    | 18446744073709551615                                           |</span><br><span class="line">| wsrep_flow_control_paused_ns | 0                                                              |</span><br><span class="line">| wsrep_flow_control_paused    | 0.000000                                                       |</span><br><span class="line">| wsrep_flow_control_sent      | 0                                                              |</span><br><span class="line">| wsrep_flow_control_recv      | 0                                                              |</span><br><span class="line">| wsrep_cert_deps_distance     | 0.000000                                                       |</span><br><span class="line">| wsrep_apply_oooe             | 0.000000                                                       |</span><br><span class="line">| wsrep_apply_oool             | 0.000000                                                       |</span><br><span class="line">| wsrep_apply_window           | 0.000000                                                       |</span><br><span class="line">| wsrep_commit_oooe            | 0.000000                                                       |</span><br><span class="line">| wsrep_commit_oool            | 0.000000                                                       |</span><br><span class="line">| wsrep_commit_window          | 0.000000                                                       |</span><br><span class="line">| wsrep_local_state            | 4                                                              |</span><br><span class="line">| wsrep_local_state_comment    | Synced                                                         |</span><br><span class="line">| wsrep_cert_index_size        | 0                                                              |</span><br><span class="line">| wsrep_causal_reads           | 0                                                              |</span><br><span class="line">| wsrep_cert_interval          | 0.000000                                                       |</span><br><span class="line">| wsrep_incoming_addresses     | 192.168.128.131:3306,192.168.128.132:3306,192.168.128.133:3306 |</span><br><span class="line">| wsrep_desync_count           | 0                                                              |</span><br><span class="line">| wsrep_evs_delayed            |                                                                |</span><br><span class="line">| wsrep_evs_evict_list         |                                                                |</span><br><span class="line">| wsrep_evs_repl_latency       | 0/0/0/0/0                                                      |</span><br><span class="line">| wsrep_evs_state              | OPERATIONAL                                                    |</span><br><span class="line">| wsrep_gcomm_uuid             | bb2686c8-74da-11e6-9cde-5fd4f88f878c                           |</span><br><span class="line">| wsrep_cluster_conf_id        | 3                                                              |</span><br><span class="line">| wsrep_cluster_size           | 3                                                              |</span><br><span class="line">| wsrep_cluster_state_uuid     | bb27d68e-74da-11e6-8aa4-469f840e1e54                           |</span><br><span class="line">| wsrep_cluster_status         | Primary                                                        |</span><br><span class="line">| wsrep_connected              | ON                                                             |</span><br><span class="line">| wsrep_local_bf_aborts        | 0                                                              |</span><br><span class="line">| wsrep_local_index            | 2                                                              |</span><br><span class="line">| wsrep_provider_name          | Galera                                                         |</span><br><span class="line">| wsrep_provider_vendor        | Codership Oy &lt;info@codership.com&gt;                              |</span><br><span class="line">| wsrep_provider_version       | 25.3.17(r3619)                                                 |</span><br><span class="line">| wsrep_ready                  | ON                                                             |</span><br><span class="line">| wsrep_thread_count           | 2                                                              |</span><br><span class="line">+------------------------------+----------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<blockquote>
 <p>几个关键参数</p>
 </blockquote>
 <p><code>wsrep_connected = on</code> 链接已开启</p>
@@ -517,30 +437,8 @@ Version: &apos;5.5.51-MariaDB-wsrep&apos;  socket: &apos;/var/lib/mysql/mysql.so
 <p><code>wsrep_cluster_size =3</code> 集群中节点的数量</p>
 <p><code>wsrep_incoming_addresses = 192.168.128.131:3306,192.168.128.132:3306,192.168.128.133:3306</code> 集群中节点的访问地址</p>
 <h2 id="验证数据同步"><a href="#验证数据同步" class="headerlink" title="验证数据同步"></a>验证数据同步</h2><p>在node1上新建数据库galera_koen,然后在node2和node3上查询，如果可以查询到galera_koen这个库，说明数据同步成功，集群运行正常。</p>
-<pre><code>[root@node1 ~]# mysql -e &quot;create database galera_koen&quot;
-
-[root@node2 ~]# mysql -e &quot;show databases;&quot;
-+--------------------+
-| Database           |
-+--------------------+
-| information_schema |
-| galera_koen        |
-| mysql              |
-| performance_schema |
-| test               |
-+--------------------+
-
-[root@node3 ~]# mysql -e &quot;show databases;&quot;
-+--------------------+
-| Database           |
-+--------------------+
-| information_schema |
-| galera_koen        |
-| mysql              |
-| performance_schema |
-| test               |
-+--------------------+
-</code></pre><p>至此，MariaDB Galera Cluster已经成功部署。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# mysql -e &quot;create database galera_koen&quot;</span><br><span class="line"></span><br><span class="line">[root@node2 ~]# mysql -e &quot;show databases;&quot;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| galera_koen        |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| test               |</span><br><span class="line">+--------------------+</span><br><span class="line"></span><br><span class="line">[root@node3 ~]# mysql -e &quot;show databases;&quot;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| galera_koen        |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| test               |</span><br><span class="line">+--------------------+</span><br></pre></td></tr></table></figure>
+<p>至此，MariaDB Galera Cluster已经成功部署。</p>
 <ul>
 <li>EOF</li>
 </ul>
