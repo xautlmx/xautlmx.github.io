@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://img.koenli.com/Flask%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93_1.png">
 <meta property="og:image" content="https://img.koenli.com/Flask%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93_2.png">
-<meta property="og:updated_time" content="2018-10-27T17:21:37.798Z">
+<meta property="og:updated_time" content="2019-02-16T02:46:11.623Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Flask——数据库">
 <meta name="twitter:description" content="数据库按照一定规则保存程序数据，程序再发起查询取回所需的数据。Web程序最常用基于关系模型的数据库，这种数据库也称为SQL数据库，因为它们使用结构化查询语句。不过最近几年文档数据库和键值对数据库成了流行的替代选择，这两种数据库合称NoSQL数据库。 SQL数据库 关系型数据库把数据存储在表中，表模拟程序中不同的实体。例如，订单管理程序的数据库中可能有表customers、products和orde">
@@ -828,12 +828,8 @@ Administrator
 <h1 id="集成Python-shell"><a href="#集成Python-shell" class="headerlink" title="集成Python shell"></a>集成Python shell</h1><hr>
 <p>每次启动shell会话都要导入数据库实例和模型，这真是份枯燥的工作。为了避免一直重复导入，我们可以做些配置，让Flask-Script的shell命令自动导入特定的对象。</p>
 <p>若想把对象添加导入列表中，我们要为shell命令注册一个make_context()回调函数</p>
-<pre><code>from flask.ext.script import Shell
-
-def make_shell_context():
-    return dict(app=app, db=db, User=User, Role=Role)
-manager.add_command(&quot;shell&quot;, Shell(make_context=make_shell_context))
-</code></pre><p>make_shell_context()函数注册了程序、数据库实例以及模型，因此这些对象能直接导入shell：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from flask.ext.script import Shell</span><br><span class="line"></span><br><span class="line">def make_shell_context():</span><br><span class="line">    return dict(app=app, db=db, User=User, Role=Role)</span><br><span class="line">manager.add_command(&quot;shell&quot;, Shell(make_context=make_shell_context))</span><br></pre></td></tr></table></figure>
+<p>make_shell_context()函数注册了程序、数据库实例以及模型，因此这些对象能直接导入shell：</p>
 <pre><code>(env) [root@server1 myproject]# python run.py shell
 &gt;&gt;&gt; app
 &lt;Flask &apos;run&apos;&gt;
@@ -852,11 +848,8 @@ manager.add_command(&quot;shell&quot;, Shell(make_context=make_shell_context))
 <h2 id="创建迁移仓库"><a href="#创建迁移仓库" class="headerlink" title="创建迁移仓库"></a>创建迁移仓库</h2><p>首先，我们要在虚拟环境中安装Flask-Migrate：</p>
 <pre><code>(env) [root@server1 myproject]# pip install flask-migrate
 </code></pre><p>这个扩展的初始化方法如下：</p>
-<pre><code>from flask.ext.migrate import Migrate, MigrateCommand
-#...
-migrate = Migrate(app, db)
-manager.add_command(&apos;db&apos;, MigrateCommand)
-</code></pre><p>为了导出数据库迁移命令，Flask-Migrate提供了一个MigrateCommand类，可附加到Flask-Script的manager对象上。在这个例子中，MigrateCommand类使用db命令附加。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from flask.ext.migrate import Migrate, MigrateCommand</span><br><span class="line">#...</span><br><span class="line">migrate = Migrate(app, db)</span><br><span class="line">manager.add_command(&apos;db&apos;, MigrateCommand)</span><br></pre></td></tr></table></figure>
+<p>为了导出数据库迁移命令，Flask-Migrate提供了一个MigrateCommand类，可附加到Flask-Script的manager对象上。在这个例子中，MigrateCommand类使用db命令附加。</p>
 <p>在维护数据库迁移之前，要使用init子命令创建迁移仓库：</p>
 <pre><code>(env) [root@server1 myproject]# python run.py db init
   Creating directory /root/myproject/migrations ... done

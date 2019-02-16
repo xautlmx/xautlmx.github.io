@@ -116,7 +116,7 @@
 <meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_27.png">
 <meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_28.png">
 <meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_29.png">
-<meta property="og:updated_time" content="2018-10-27T17:21:37.745Z">
+<meta property="og:updated_time" content="2019-02-16T03:31:30.260Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PXE+Kickstart无人值守安装RedHat">
 <meta name="twitter:description" content="简介 什么是PXEPXE(Pre-boot Execution Environment，预启动执行环境)是由Intel公司开发的最新技术，工作于Client/Server的网络模式，支持工作站通过网络从远端服务器下载映像，并由此支持通过网络启动操作系统，在启动过程中，终端要求服务器分配IP地址，再用TFTP（trivial file transfer protocol）或MTFTP(multica">
@@ -418,56 +418,35 @@
 <p>实验环境：VMware Workstation Pro 12<br>系统平台：RedHat Enterprise Linux 6.5 (最小化安装)<br>网络模式：NAT模式（共享主机的IP地址）<br>DHCP / TFTP IP：192.168.220.139<br>HTTP / FTP / NFS IP：192.168.220.139<br>防火墙已关闭/iptables: Firewall is not running.<br>SELINUX=disabled</p>
 <h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><hr>
 <p>生成ks.cfg 文件需要system-config-kickstart 工具，而此工具依赖于X Windows，所以我们需要安装X Windows 和Desktop 并重启系统，操作如下：</p>
-<pre><code># yum groupinstall &quot;X Window System&quot; &quot;Desktop&quot; &quot;Desktop Platform&quot; &quot;chinese-support&quot; &quot;fonts&quot; -y
-# reboot
-</code></pre><h1 id="配置HTTP安装方式"><a href="#配置HTTP安装方式" class="headerlink" title="配置HTTP安装方式"></a>配置HTTP安装方式</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum groupinstall &quot;X Window System&quot; &quot;Desktop&quot; &quot;Desktop Platform&quot; &quot;chinese-support&quot; &quot;fonts&quot; -y</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<h1 id="配置HTTP安装方式"><a href="#配置HTTP安装方式" class="headerlink" title="配置HTTP安装方式"></a>配置HTTP安装方式</h1><hr>
 <p><strong>系统的安装方式可以选择HTTP、FTP、 NFS，我们这里介绍HTTP方式的安装。</strong></p>
-<h2 id="安装并配置HTTP"><a href="#安装并配置HTTP" class="headerlink" title="安装并配置HTTP"></a>安装并配置HTTP</h2><pre><code># yum install httpd –y
-</code></pre><p>开启服务并设置开机启动</p>
-<pre><code># /etc/init.d/httpd start
-# chkconfig httpd on
-</code></pre><h2 id="加载ISO镜像"><a href="#加载ISO镜像" class="headerlink" title="加载ISO镜像"></a>加载ISO镜像</h2><p>在虚拟机中设置加载ISO镜像</p>
+<h2 id="安装并配置HTTP"><a href="#安装并配置HTTP" class="headerlink" title="安装并配置HTTP"></a>安装并配置HTTP</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install httpd –y</span><br></pre></td></tr></table></figure>
+<p>开启服务并设置开机启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/httpd start</span><br><span class="line">chkconfig httpd on</span><br></pre></td></tr></table></figure>
+<h2 id="加载ISO镜像"><a href="#加载ISO镜像" class="headerlink" title="加载ISO镜像"></a>加载ISO镜像</h2><p>在虚拟机中设置加载ISO镜像</p>
 <p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_3.png" alt=""></p>
 <p>将iso文件挂载至/mnt/cdrom</p>
-<pre><code># mkdir /mnt/cdrom
-# mount /dev/cdrom /mnt/cdrom
-</code></pre><h2 id="复制光盘全部内容至HTTP的根目录-var-www-html下"><a href="#复制光盘全部内容至HTTP的根目录-var-www-html下" class="headerlink" title="复制光盘全部内容至HTTP的根目录/var/www/html下"></a>复制光盘全部内容至HTTP的根目录/var/www/html下</h2><pre><code># cp -r /mnt/cdrom /var/www/html/
-</code></pre><p>至此HTTP部分设置完毕。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir /mnt/cdrom</span><br><span class="line">mount /dev/cdrom /mnt/cdrom</span><br></pre></td></tr></table></figure>
+<h2 id="复制光盘全部内容至HTTP的根目录-var-www-html下"><a href="#复制光盘全部内容至HTTP的根目录-var-www-html下" class="headerlink" title="复制光盘全部内容至HTTP的根目录/var/www/html下"></a>复制光盘全部内容至HTTP的根目录/var/www/html下</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cp -r /mnt/cdrom /var/www/html/</span><br><span class="line">umount /mnt/cdrom</span><br><span class="line">rm -rf /mnt/cdrom</span><br></pre></td></tr></table></figure>
+<p>至此HTTP部分设置完毕。</p>
 <h1 id="配置TFTP"><a href="#配置TFTP" class="headerlink" title="配置TFTP"></a>配置TFTP</h1><hr>
-<h2 id="安装tftp-server"><a href="#安装tftp-server" class="headerlink" title="安装tftp-server"></a>安装tftp-server</h2><pre><code># yum install xinetd tftp-server -y
-</code></pre><h2 id="启用tftp服务"><a href="#启用tftp服务" class="headerlink" title="启用tftp服务"></a>启用tftp服务</h2><p><strong>将/etc/xinetd.d/tftp中的disable选项设为no</strong></p>
-<pre><code># vim /etc/xinetd.d/tftp
-# default: off
-# description: The tftp server serves files using the trivial file transfer \
-#       protocol.  The tftp protocol is often used to boot diskless \
-#       workstations, download configuration files to network-aware printers, \
-#       and to start the installation process for some operating systems.
-service tftp
-{
-        socket_type             = dgram
-        protocol                = udp
-        wait                    = yes
-        user                    = root
-        server                  = /usr/sbin/in.tftpd
-        server_args             = -s /var/lib/tftpboot
-        disable                 = no
-        per_source              = 11
-        cps                     = 100 2
-        flags                   = IPv4
-}
-</code></pre><h2 id="启动tftp服务"><a href="#启动tftp服务" class="headerlink" title="启动tftp服务"></a>启动tftp服务</h2><p>因为tftp服务是挂载在超级进程xinetd 下的，所以通过启动xinetd 来启动tftp服务</p>
-<pre><code># /etc/init.d/xinetd restart
-</code></pre><p>设置开机启动xinetd</p>
-<pre><code># chkconfig xinetd on
-</code></pre><h1 id="配置支持PXE的启动程序"><a href="#配置支持PXE的启动程序" class="headerlink" title="配置支持PXE的启动程序"></a>配置支持PXE的启动程序</h1><hr>
-<h2 id="安装syslinux"><a href="#安装syslinux" class="headerlink" title="安装syslinux"></a>安装syslinux</h2><pre><code># yum install syslinux -y
-</code></pre><p><strong>说明：syslinux是一个功能强大的引导加载程序，而且兼容各种介质。更加确切地说：SYSLINUX是一个小型的Linux操作系统，它的目的是简化首次安装Linux的时间，并建立修护或其它特殊用途的启动盘。</strong></p>
-<h2 id="复制pxelinux-0文件至-var-lib-tftpboot-文件夹中"><a href="#复制pxelinux-0文件至-var-lib-tftpboot-文件夹中" class="headerlink" title="复制pxelinux.0文件至/var/lib/tftpboot/文件夹中"></a>复制pxelinux.0文件至/var/lib/tftpboot/文件夹中</h2><pre><code># cp /usr/share/syslinux/pxelinux.0 /var/lib/tftpboot/
-</code></pre><h2 id="复制iso镜像中的-image-pxeboot-initrd-img和vmlinux至-var-lib-tftpboot-文件夹中"><a href="#复制iso镜像中的-image-pxeboot-initrd-img和vmlinux至-var-lib-tftpboot-文件夹中" class="headerlink" title="复制iso镜像中的/image/pxeboot/initrd.img和vmlinux至/var/lib/tftpboot/文件夹中"></a>复制iso镜像中的/image/pxeboot/initrd.img和vmlinux至/var/lib/tftpboot/文件夹中</h2><pre><code># cp /var/www/html/cdrom/images/pxeboot/{initrd.img,vmlinuz} /var/lib/tftpboot/
-</code></pre><h2 id="复制iso镜像中的-isolinux-msg至-var-lib-tftpboot-文件夹中"><a href="#复制iso镜像中的-isolinux-msg至-var-lib-tftpboot-文件夹中" class="headerlink" title="复制iso镜像中的/isolinux/*.msg至/var/lib/tftpboot/文件夹中"></a>复制iso镜像中的/isolinux/*.msg至/var/lib/tftpboot/文件夹中</h2><pre><code># cp /var/www/html/cdrom/isolinux/*.msg /var/lib/tftpboot/
-</code></pre><h2 id="在-var-lib-tftpboot-中新建一个pxelinux-cfg目录"><a href="#在-var-lib-tftpboot-中新建一个pxelinux-cfg目录" class="headerlink" title="在/var/lib/tftpboot/中新建一个pxelinux.cfg目录"></a>在/var/lib/tftpboot/中新建一个pxelinux.cfg目录</h2><pre><code># mkdir /var/lib/tftpboot/pxelinux.cfg
-</code></pre><h2 id="将iso镜像中的-isolinux目录中的isolinux-cfg复制到pxelinux-cfg目录中，同时更改文件名称为default"><a href="#将iso镜像中的-isolinux目录中的isolinux-cfg复制到pxelinux-cfg目录中，同时更改文件名称为default" class="headerlink" title="将iso镜像中的/isolinux目录中的isolinux.cfg复制到pxelinux.cfg目录中，同时更改文件名称为default"></a>将iso镜像中的/isolinux目录中的isolinux.cfg复制到pxelinux.cfg目录中，同时更改文件名称为default</h2><pre><code># cp /var/www/html/cdrom/isolinux/isolinux.cfg /var/lib/tftpboot/pxelinux.cfg/default
-</code></pre><h2 id="修改default文件"><a href="#修改default文件" class="headerlink" title="修改default文件"></a>修改default文件</h2><pre><code># vim /var/lib/tftpboot/pxelinux.cfg/default
+<h2 id="安装tftp-server"><a href="#安装tftp-server" class="headerlink" title="安装tftp-server"></a>安装tftp-server</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install xinetd tftp-server -y</span><br></pre></td></tr></table></figure>
+<h2 id="启用tftp服务"><a href="#启用tftp服务" class="headerlink" title="启用tftp服务"></a>启用tftp服务</h2><p><strong>将/etc/xinetd.d/tftp中的disable选项设为no</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">cp -a /etc/xinetd.d/tftp /etc/xinetd.d/tftp.bak</span><br><span class="line">cat &gt; /etc/xinetd.d/tftp &lt;&lt; EOF</span><br><span class="line"># default: off</span><br><span class="line"># description: The tftp server serves files using the trivial file transfer \</span><br><span class="line">#       protocol.  The tftp protocol is often used to boot diskless \</span><br><span class="line">#       workstations, download configuration files to network-aware printers, \</span><br><span class="line">#       and to start the installation process for some operating systems.</span><br><span class="line">service tftp</span><br><span class="line">&#123;</span><br><span class="line">        socket_type             = dgram</span><br><span class="line">        protocol                = udp</span><br><span class="line">        wait                    = yes</span><br><span class="line">        user                    = root</span><br><span class="line">        server                  = /usr/sbin/in.tftpd</span><br><span class="line">        server_args             = -s /var/lib/tftpboot</span><br><span class="line">        disable                 = no</span><br><span class="line">        per_source              = 11</span><br><span class="line">        cps                     = 100 2</span><br><span class="line">        flags                   = IPv4</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h2 id="启动tftp服务"><a href="#启动tftp服务" class="headerlink" title="启动tftp服务"></a>启动tftp服务</h2><p>因为tftp服务是挂载在超级进程xinetd 下的，所以通过启动xinetd 来启动tftp服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/xinetd restart</span><br></pre></td></tr></table></figure>
+<p>设置开机启动xinetd</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chkconfig xinetd on</span><br></pre></td></tr></table></figure>
+<h1 id="配置支持PXE的启动程序"><a href="#配置支持PXE的启动程序" class="headerlink" title="配置支持PXE的启动程序"></a>配置支持PXE的启动程序</h1><hr>
+<h2 id="安装syslinux"><a href="#安装syslinux" class="headerlink" title="安装syslinux"></a>安装syslinux</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install syslinux -y</span><br></pre></td></tr></table></figure>
+<p><strong>说明：syslinux是一个功能强大的引导加载程序，而且兼容各种介质。更加确切地说：SYSLINUX是一个小型的Linux操作系统，它的目的是简化首次安装Linux的时间，并建立修护或其它特殊用途的启动盘。</strong></p>
+<h2 id="复制pxelinux-0文件至-var-lib-tftpboot-文件夹中"><a href="#复制pxelinux-0文件至-var-lib-tftpboot-文件夹中" class="headerlink" title="复制pxelinux.0文件至/var/lib/tftpboot/文件夹中"></a>复制pxelinux.0文件至/var/lib/tftpboot/文件夹中</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /usr/share/syslinux/pxelinux.0 /var/lib/tftpboot/</span><br></pre></td></tr></table></figure>
+<h2 id="复制iso镜像中的-image-pxeboot-initrd-img和vmlinux至-var-lib-tftpboot-文件夹中"><a href="#复制iso镜像中的-image-pxeboot-initrd-img和vmlinux至-var-lib-tftpboot-文件夹中" class="headerlink" title="复制iso镜像中的/image/pxeboot/initrd.img和vmlinux至/var/lib/tftpboot/文件夹中"></a>复制iso镜像中的/image/pxeboot/initrd.img和vmlinux至/var/lib/tftpboot/文件夹中</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /var/www/html/cdrom/images/pxeboot/&#123;initrd.img,vmlinuz&#125; /var/lib/tftpboot/</span><br></pre></td></tr></table></figure>
+<h2 id="复制iso镜像中的-isolinux-msg至-var-lib-tftpboot-文件夹中"><a href="#复制iso镜像中的-isolinux-msg至-var-lib-tftpboot-文件夹中" class="headerlink" title="复制iso镜像中的/isolinux/*.msg至/var/lib/tftpboot/文件夹中"></a>复制iso镜像中的/isolinux/*.msg至/var/lib/tftpboot/文件夹中</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /var/www/html/cdrom/isolinux/*.msg /var/lib/tftpboot/</span><br></pre></td></tr></table></figure>
+<h2 id="在-var-lib-tftpboot-中新建一个pxelinux-cfg目录"><a href="#在-var-lib-tftpboot-中新建一个pxelinux-cfg目录" class="headerlink" title="在/var/lib/tftpboot/中新建一个pxelinux.cfg目录"></a>在/var/lib/tftpboot/中新建一个pxelinux.cfg目录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /var/lib/tftpboot/pxelinux.cfg</span><br></pre></td></tr></table></figure>
+<h2 id="将iso镜像中的-isolinux目录中的isolinux-cfg复制到pxelinux-cfg目录中，同时更改文件名称为default"><a href="#将iso镜像中的-isolinux目录中的isolinux-cfg复制到pxelinux-cfg目录中，同时更改文件名称为default" class="headerlink" title="将iso镜像中的/isolinux目录中的isolinux.cfg复制到pxelinux.cfg目录中，同时更改文件名称为default"></a>将iso镜像中的/isolinux目录中的isolinux.cfg复制到pxelinux.cfg目录中，同时更改文件名称为default</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /var/www/html/cdrom/isolinux/isolinux.cfg /var/lib/tftpboot/pxelinux.cfg/default</span><br></pre></td></tr></table></figure>
+<h2 id="修改default文件"><a href="#修改default文件" class="headerlink" title="修改default文件"></a>修改default文件</h2><pre><code># vim /var/lib/tftpboot/pxelinux.cfg/default
 default autoinstall     #默认启动的是&apos;label autoinstall&apos;中标记的启动内核
 #prompt 1
 timeout 600
@@ -511,9 +490,9 @@ label memtest86
   kernel memtest
   append -
 </code></pre><h1 id="配置DHCP"><a href="#配置DHCP" class="headerlink" title="配置DHCP"></a>配置DHCP</h1><hr>
-<h2 id="安装DHCP服务器"><a href="#安装DHCP服务器" class="headerlink" title="安装DHCP服务器"></a>安装DHCP服务器</h2><pre><code># yum install dhcp -y
-</code></pre><h2 id="复制配置模板文件到DHCP的配置目录中"><a href="#复制配置模板文件到DHCP的配置目录中" class="headerlink" title="复制配置模板文件到DHCP的配置目录中"></a>复制配置模板文件到DHCP的配置目录中</h2><pre><code># cp -f /usr/share/doc/dhcp-4.1.1/dhcpd.conf.sample /etc/dhcp/dhcpd.conf
-</code></pre><h2 id="修改-etc-dhcp-dhcpd-conf-配置文件"><a href="#修改-etc-dhcp-dhcpd-conf-配置文件" class="headerlink" title="修改/etc/dhcp/dhcpd.conf 配置文件"></a>修改/etc/dhcp/dhcpd.conf 配置文件</h2><pre><code># vim /etc/dhcp/dhcpd.conf
+<h2 id="安装DHCP服务器"><a href="#安装DHCP服务器" class="headerlink" title="安装DHCP服务器"></a>安装DHCP服务器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install dhcp -y</span><br></pre></td></tr></table></figure>
+<h2 id="复制配置模板文件到DHCP的配置目录中"><a href="#复制配置模板文件到DHCP的配置目录中" class="headerlink" title="复制配置模板文件到DHCP的配置目录中"></a>复制配置模板文件到DHCP的配置目录中</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -f /usr/share/doc/dhcp-4.1.1/dhcpd.conf.sample /etc/dhcp/dhcpd.conf</span><br></pre></td></tr></table></figure>
+<h2 id="修改-etc-dhcp-dhcpd-conf-配置文件"><a href="#修改-etc-dhcp-dhcpd-conf-配置文件" class="headerlink" title="修改/etc/dhcp/dhcpd.conf 配置文件"></a>修改/etc/dhcp/dhcpd.conf 配置文件</h2><pre><code># vim /etc/dhcp/dhcpd.conf
 option domain-name &quot;example.com&quot;;
 option domain-name-servers 192.168.220.139;
 default-lease-time 600;
@@ -524,16 +503,16 @@ subnet 192.168.220.0 netmask 255.255.255.0 {
   filename      &quot;pxelinux.0&quot;;       #pxelinux启动文件位置
   next-server   192.168.220.139;    #TFTP Server的IP地址
 }
-</code></pre><h2 id="启动DHCP服务"><a href="#启动DHCP服务" class="headerlink" title="启动DHCP服务"></a>启动DHCP服务</h2><pre><code># /etc/init.d/dhcpd restart
-</code></pre><p>设置开机自启</p>
-<pre><code># chkconfig dhcpd on
-</code></pre><h1 id="生成ks-cfg文件"><a href="#生成ks-cfg文件" class="headerlink" title="生成ks.cfg文件"></a>生成ks.cfg文件</h1><hr>
-<h2 id="安装Kickstart"><a href="#安装Kickstart" class="headerlink" title="安装Kickstart"></a>安装Kickstart</h2><pre><code># yum install system-config-kickstart -y
-</code></pre><h2 id="在桌面环境下配置Kickstart"><a href="#在桌面环境下配置Kickstart" class="headerlink" title="在桌面环境下配置Kickstart"></a>在桌面环境下配置Kickstart</h2><p>启动X Windows环境</p>
-<pre><code># startx
-</code></pre><p>配置Kickstart</p>
-<pre><code># system-config-kickstart
-</code></pre><p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_4.png" alt=""></p>
+</code></pre><h2 id="启动DHCP服务"><a href="#启动DHCP服务" class="headerlink" title="启动DHCP服务"></a>启动DHCP服务</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/dhcpd restart</span><br></pre></td></tr></table></figure>
+<p>设置开机自启</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chkconfig dhcpd on</span><br></pre></td></tr></table></figure>
+<h1 id="生成ks-cfg文件"><a href="#生成ks-cfg文件" class="headerlink" title="生成ks.cfg文件"></a>生成ks.cfg文件</h1><hr>
+<h2 id="安装Kickstart"><a href="#安装Kickstart" class="headerlink" title="安装Kickstart"></a>安装Kickstart</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install system-config-kickstart -y</span><br></pre></td></tr></table></figure>
+<h2 id="在桌面环境下配置Kickstart"><a href="#在桌面环境下配置Kickstart" class="headerlink" title="在桌面环境下配置Kickstart"></a>在桌面环境下配置Kickstart</h2><p>启动X Windows环境</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">startx</span><br></pre></td></tr></table></figure>
+<p>配置Kickstart</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">system-config-kickstart</span><br></pre></td></tr></table></figure>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_4.png" alt=""></p>
 <p>A. 设置语言，键盘，时区，Root密码，安装完毕后重启等。</p>
 <p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_5.png" alt=""></p>
 <p>B. 设置安装方式，这篇文章介绍的是HTTP方式的安装，故选择HTTP</p>

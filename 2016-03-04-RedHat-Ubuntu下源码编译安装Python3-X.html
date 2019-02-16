@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="下载Python源码包 Python官网：https://www.python.org/Python源码包下载地址：https://www.python.org/downloads/source/ 安装Python 解压Python源码包 RedHat6.X/7.X  # tar zxf Python-3.5.1.tgz  Ubuntu  $ sudo tar zxf Python-3.5.1.t">
+<meta name="description" content="下载Python源码包 Python官网：https://www.python.org/Python源码包下载地址：https://www.python.org/downloads/source/ 安装Python 解压Python源码包 RedHat6.X/7.X  1tar zxf Python-3.5.1.tgz  Ubuntu  1sudo tar zxf Python-3.5.1.tgz">
 <meta name="keywords" content="Linux,Python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RedHat&#x2F;Ubuntu下源码编译安装Python3.X">
 <meta property="og:url" content="http://koenli.github.io/2016-03-04-RedHat-Ubuntu下源码编译安装Python3-X.html">
 <meta property="og:site_name" content="Koenli&#39;s Blog">
-<meta property="og:description" content="下载Python源码包 Python官网：https://www.python.org/Python源码包下载地址：https://www.python.org/downloads/source/ 安装Python 解压Python源码包 RedHat6.X/7.X  # tar zxf Python-3.5.1.tgz  Ubuntu  $ sudo tar zxf Python-3.5.1.t">
+<meta property="og:description" content="下载Python源码包 Python官网：https://www.python.org/Python源码包下载地址：https://www.python.org/downloads/source/ 安装Python 解压Python源码包 RedHat6.X/7.X  1tar zxf Python-3.5.1.tgz  Ubuntu  1sudo tar zxf Python-3.5.1.tgz">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://img.koenli.com/RedHat/Ubuntu%E4%B8%8B%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Python3.X_1.png">
-<meta property="og:updated_time" content="2018-10-27T17:21:37.755Z">
+<meta property="og:updated_time" content="2019-02-16T03:10:47.140Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RedHat&#x2F;Ubuntu下源码编译安装Python3.X">
-<meta name="twitter:description" content="下载Python源码包 Python官网：https://www.python.org/Python源码包下载地址：https://www.python.org/downloads/source/ 安装Python 解压Python源码包 RedHat6.X/7.X  # tar zxf Python-3.5.1.tgz  Ubuntu  $ sudo tar zxf Python-3.5.1.t">
+<meta name="twitter:description" content="下载Python源码包 Python官网：https://www.python.org/Python源码包下载地址：https://www.python.org/downloads/source/ 安装Python 解压Python源码包 RedHat6.X/7.X  1tar zxf Python-3.5.1.tgz  Ubuntu  1sudo tar zxf Python-3.5.1.tgz">
 <meta name="twitter:image" content="https://img.koenli.com/RedHat/Ubuntu%E4%B8%8B%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Python3.X_1.png">
 
 
@@ -374,73 +374,49 @@
 <h2 id="解压Python源码包"><a href="#解压Python源码包" class="headerlink" title="解压Python源码包"></a>解压Python源码包</h2><blockquote>
 <p>RedHat6.X/7.X</p>
 </blockquote>
-<pre><code># tar zxf Python-3.5.1.tgz
-</code></pre><blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar zxf Python-3.5.1.tgz</span><br></pre></td></tr></table></figure>
+<blockquote>
 <p>Ubuntu</p>
 </blockquote>
-<pre><code>$ sudo tar zxf Python-3.5.1.tgz
-</code></pre><p><strong>注：由于我下的源码包是以.tgz为后缀，使用的参数是-zxf，若是其他格式的压缩文件，参数会有不同</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tar zxf Python-3.5.1.tgz</span><br></pre></td></tr></table></figure>
+<p><strong>注：由于我下的源码包是以.tgz为后缀，使用的参数是-zxf，若是其他格式的压缩文件，参数会有不同</strong></p>
 <h2 id="编译安装Python"><a href="#编译安装Python" class="headerlink" title="编译安装Python"></a>编译安装Python</h2><blockquote>
 <p>RedHat6.X/7.X</p>
 </blockquote>
-<pre><code># cd Python-3.5.1
-# ./configure --prefix=/usr/local/python-3.5.1
-</code></pre><p><code>--prefix</code>参数可以指定Python的安装目录，若未指定则默认安装在/usr/local/下；更多设置选项可通过<code>./configure --help</code>查找</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd Python-3.5.1</span><br><span class="line">./configure --prefix=/usr/local/python-3.5.1</span><br></pre></td></tr></table></figure>
+<p><code>--prefix</code>参数可以指定Python的安装目录，若未指定则默认安装在/usr/local/下；更多设置选项可通过<code>./configure --help</code>查找</p>
 <p>执行<code>./configure</code>时可能会相继出现如下提示：</p>
 <p><img src="https://img.koenli.com/RedHat/Ubuntu%E4%B8%8B%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85Python3.X_1.png" alt=""></p>
 <p><strong>解决方法</strong>：</p>
-<pre><code># yum install gcc -y
-# ./configure --prefix=/usr/local/python-3.5.1
-</code></pre><p>设置好安装目录后进行编译并安装：</p>
-<pre><code># make &amp;&amp; make install
-</code></pre><blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install gcc -y</span><br><span class="line">./configure --prefix=/usr/local/python-3.5.1</span><br></pre></td></tr></table></figure>
+<p>设置好安装目录后进行编译并安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+<blockquote>
 <p>Ubuntu</p>
 </blockquote>
-<pre><code>$ cd Python-3.5.1/
-
-$ sudo ./configure --prefix=/usr/local/python-3.5.1
-</code></pre><p><code>--prefix</code>参数可以指定Python的安装目录，若未指定则默认安装在/usr/local/下；更多设置选项可通过<code>sudo ./configure --help</code>查找</p>
-<pre><code>$ sudo make
-
-$ sudo make install
-</code></pre><h1 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h1><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd Python-3.5.1/</span><br><span class="line">sudo ./configure --prefix=/usr/local/python-3.5.1</span><br></pre></td></tr></table></figure>
+<p><code>--prefix</code>参数可以指定Python的安装目录，若未指定则默认安装在/usr/local/下；更多设置选项可通过<code>sudo ./configure --help</code>查找</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+<h1 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h1><hr>
 <p>因为RedHat6.X/7.X/Ubuntu下默认自带有Python2.X，如果直接运行<code>python</code>命令进入的是python2.X的版本，除非输入绝对路径访问刚才安装好的新版本<code>/usr/local/python-3.5.1/bin/python3</code>，但这样每次都输绝对路径太麻烦了，所以就需要修改PATH环境变量</p>
 <blockquote>
 <p>RedHat6.X/7.X</p>
 </blockquote>
-<pre><code># vim ~/.bash_profile
-...
-PATH=$PATH:$HOME/bin:/usr/local/python-3.5.1/bin
-...
-</code></pre><p>在原本PATH变量的最后加上<code>:/usr/local/python-3.5.1/bin</code>，即之前设置的python的安装目录下的bin目录</p>
-<pre><code># source ~/.bash_profile
-</code></pre><p>配置好PATH之后，最后还要做一件事情，就是在/usr/bin/目录下建个链接文件指向/usr/local/python-3.3/bin/python3.3这个文件， 这样以后只要直接输入<code>python</code>就自动启动3.5.1版本了</p>
-<pre><code># rm -rf /usr/bin/python
-# ln -s /usr/local/python-3.5.1/bin/python3 /usr/bin/python
-# python
-Python 3.5.1 (default, Mar  5 2016, 19:08:10) 
-[GCC 4.8.3 20140911 (Red Hat 4.8.3-9)] on linux
-Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
-&gt;&gt;&gt;
-</code></pre><p>执行<code>python</code>后如果显示python的版本为3.5.1说明配置成功！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bash_profile</span><br><span class="line">...</span><br><span class="line">PATH=$PATH:$HOME/bin:/usr/local/python-3.5.1/bin</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>在原本PATH变量的最后加上<code>:/usr/local/python-3.5.1/bin</code>，即之前设置的python的安装目录下的bin目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source ~/.bash_profile</span><br></pre></td></tr></table></figure>
+<p>配置好PATH之后，最后还要做一件事情，就是在/usr/bin/目录下建个链接文件指向/usr/local/python-3.3/bin/python3.3这个文件， 这样以后只要直接输入<code>python</code>就自动启动3.5.1版本了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">rm -rf /usr/bin/python</span><br><span class="line">ln -s /usr/local/python-3.5.1/bin/python3 /usr/bin/python</span><br><span class="line">python</span><br><span class="line">Python 3.5.1 (default, Mar  5 2016, 19:08:10) </span><br><span class="line">[GCC 4.8.3 20140911 (Red Hat 4.8.3-9)] on linux</span><br><span class="line">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+<p>执行<code>python</code>后如果显示python的版本为3.5.1说明配置成功！</p>
 <blockquote>
 <p>Ubuntu</p>
 </blockquote>
-<pre><code>$ sudo vim /etc/environment
-PATH=&quot;/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/python-3.5.1/bin&quot;
-</code></pre><p>在原本PATH变量的最后加上<code>:/usr/local/python-3.5.1/bin</code>，即之前设置的python的安装目录下的bin目录</p>
-<pre><code>$ source /etc/environment
-</code></pre><p>配置好PATH之后，最后还要做一件事情，就是在/usr/bin/目录下建个链接文件指向/usr/local/python-3.3/bin/python3.3这个文件， 这样以后只要直接输入<code>python</code>就自动启动3.5.1版本了</p>
-<pre><code>$ sudo rm -rf /usr/bin/python
-
-$ sudo ln -s /usr/local/python-3.5.1/bin/python3 /usr/bin/python
-
-$ python
-Python 3.5.1 (default, Dec 31 2015, 03:28:15) 
-[GCC 4.8.2] on linux
-Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
-&gt;&gt;&gt;
-</code></pre><p>执行<code>python</code>后如果显示python的版本为3.5.1说明配置成功！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/environment</span><br><span class="line">...</span><br><span class="line">PATH=&quot;/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/python-3.5.1/bin&quot;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>在原本PATH变量的最后加上<code>:/usr/local/python-3.5.1/bin</code>，即之前设置的python的安装目录下的bin目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/environment</span><br></pre></td></tr></table></figure>
+<p>配置好PATH之后，最后还要做一件事情，就是在/usr/bin/目录下建个链接文件指向/usr/local/python-3.3/bin/python3.3这个文件， 这样以后只要直接输入<code>python</code>就自动启动3.5.1版本了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo rm -rf /usr/bin/python</span><br><span class="line">sudo ln -s /usr/local/python-3.5.1/bin/python3 /usr/bin/python</span><br><span class="line">python</span><br><span class="line">Python 3.5.1 (default, Dec 31 2015, 03:28:15) </span><br><span class="line">[GCC 4.8.2] on linux</span><br><span class="line">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+<p>执行<code>python</code>后如果显示python的版本为3.5.1说明配置成功！</p>
 <ul>
 <li>EOF</li>
 </ul>

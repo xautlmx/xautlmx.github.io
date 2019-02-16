@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Koenli&#39;s Blog">
 <meta property="og:description" content="前言 作为一名运维人员，保证数据的安全是根本职责，所以在维护系统的时候，要慎之又慎，但是有时难免会出现数据被误删除的情况，在这个时候该如何快速、有效地恢复数据显得至关重要，extundelete就是其中的一个选择。 如何使用”rm -rf”命令 在Linux系统下，通过命令“rm -rf”可以将任何数据直接从硬盘删除，并且没有任何提示，同时Linux下也没有与Windows下回收站类似的功能，也就">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2015-12-02T16:51:47.590Z">
+<meta property="og:updated_time" content="2019-02-16T03:15:12.628Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Extundelete--数据恢复软件">
 <meta name="twitter:description" content="前言 作为一名运维人员，保证数据的安全是根本职责，所以在维护系统的时候，要慎之又慎，但是有时难免会出现数据被误删除的情况，在这个时候该如何快速、有效地恢复数据显得至关重要，extundelete就是其中的一个选择。 如何使用”rm -rf”命令 在Linux系统下，通过命令“rm -rf”可以将任何数据直接从硬盘删除，并且没有任何提示，同时Linux下也没有与Windows下回收站类似的功能，也就">
@@ -381,17 +381,13 @@
 <h2 id="安装的先决条件"><a href="#安装的先决条件" class="headerlink" title="安装的先决条件"></a>安装的先决条件</h2><blockquote>
 <p>开发工具</p>
 </blockquote>
-<pre><code># yum groupinstall &quot;Development Tools&quot; -y
-</code></pre><blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum groupinstall &quot;Development Tools&quot; -y</span><br></pre></td></tr></table></figure>
+<blockquote>
 <p>安装依赖包e2fsprogs-devel</p>
 </blockquote>
-<pre><code># yum install e2fsprogs-devel.x86_64 -y
-</code></pre><h2 id="安装extundelete-1"><a href="#安装extundelete-1" class="headerlink" title="安装extundelete"></a>安装extundelete</h2><pre><code># tar jxf extundelete-0.2.4.tar.bz2
-# cd extundelete-0.2.4
-# ./configure
-# make
-# make install
-</code></pre><p>默认情况下，如果在<code>./configure</code>时未指定安装路径，会将extundelete装在/usr/local/文件夹下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install e2fsprogs-devel.x86_64 -y</span><br></pre></td></tr></table></figure>
+<h2 id="安装extundelete-1"><a href="#安装extundelete-1" class="headerlink" title="安装extundelete"></a>安装extundelete</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tar jxf extundelete-0.2.4.tar.bz2</span><br><span class="line">cd extundelete-0.2.4</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<p>默认情况下，如果在<code>./configure</code>时未指定安装路径，会将extundelete装在/usr/local/文件夹下</p>
 <h1 id="extundelete用法详解"><a href="#extundelete用法详解" class="headerlink" title="extundelete用法详解"></a>extundelete用法详解</h1><hr>
 <p>extundelete用法如下：</p>
 <pre><code>extundelete --help
@@ -440,14 +436,11 @@ eb42e4b3f953ce00e78e11bf50652a80  test/mytest.txt
 </code></pre><blockquote>
 <p>卸载磁盘分区</p>
 </blockquote>
-<pre><code>在将数据误删除后，立即需要做的就是卸载这块磁盘分区：
-
-# umount /data/
-</code></pre><p><strong>注：卸载磁盘分区时必须先退出磁盘分区所挂载的目录，否则将出现类似如下报错</strong></p>
-<pre><code>umount: /data: device is busy.
-        (In some cases useful info about processes that use
-         the device is found by lsof(8) or fuser(1))
-</code></pre><blockquote>
+<p>在将数据误删除后，立即需要做的就是卸载这块磁盘分区：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">umount /data/</span><br></pre></td></tr></table></figure>
+<p><strong>注：卸载磁盘分区时必须先退出磁盘分区所挂载的目录，否则将出现类似如下报错</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">umount: /data: device is busy.</span><br><span class="line">        (In some cases useful info about processes that use</span><br><span class="line">         the device is found by lsof(8) or fuser(1))</span><br></pre></td></tr></table></figure>
+<blockquote>
 <p>查询可恢复的数据信息</p>
 </blockquote>
 <p>通过extundelete命令可以查询/dev/sdb1分区可恢复的数据信息：</p>
