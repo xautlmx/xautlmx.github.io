@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="系统,Linux," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言 作为一名运维人员，保证数据的安全是根本职责，所以在维护系统的时候，要慎之又慎，但是有时难免会出现数据被误删除的情况，在这个时候该如何快速、有效地恢复数据显得至关重要，extundelete就是其中的一个选择。 如何使用”rm -rf”命令 在Linux系统下，通过命令“rm -rf”可以将任何数据直接从硬盘删除，并且没有任何提示，同时Linux下也没有与Windows下回收站类似的功能，也就">
+<meta name="keywords" content="系统,Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Extundelete--数据恢复软件">
+<meta property="og:url" content="http://koenli.github.io/ck3ycvjvg0008r3kcenau7vic.html">
+<meta property="og:site_name" content="Koenli&#39;s Blog">
+<meta property="og:description" content="前言 作为一名运维人员，保证数据的安全是根本职责，所以在维护系统的时候，要慎之又慎，但是有时难免会出现数据被误删除的情况，在这个时候该如何快速、有效地恢复数据显得至关重要，extundelete就是其中的一个选择。 如何使用”rm -rf”命令 在Linux系统下，通过命令“rm -rf”可以将任何数据直接从硬盘删除，并且没有任何提示，同时Linux下也没有与Windows下回收站类似的功能，也就">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-02-16T03:15:12.628Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Extundelete--数据恢复软件">
+<meta name="twitter:description" content="前言 作为一名运维人员，保证数据的安全是根本职责，所以在维护系统的时候，要慎之又慎，但是有时难免会出现数据被误删除的情况，在这个时候该如何快速、有效地恢复数据显得至关重要，extundelete就是其中的一个选择。 如何使用”rm -rf”命令 在Linux系统下，通过命令“rm -rf”可以将任何数据直接从硬盘删除，并且没有任何提示，同时Linux下也没有与Windows下回收站类似的功能，也就">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://koenli.github.io/ck3ycvjvg0008r3kcenau7vic.html"/>
+
+
+
+
+
+  <title>Extundelete--数据恢复软件 | Koenli's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Koenli's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://koenli.github.io/ck3ycvjvg0008r3kcenau7vic.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Koenli">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Koenli's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Extundelete--数据恢复软件</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-12-03T00:49:19+08:00">
+                2015-12-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux营地/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux营地</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/ck3ycvjvg0008r3kcenau7vic.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/ck3ycvjvg0008r3kcenau7vic.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/ck3ycvjvg0008r3kcenau7vic.html" class="leancloud_visitors" data-flag-title="Extundelete--数据恢复软件">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><hr>
+<p>作为一名运维人员，保证数据的安全是根本职责，所以在维护系统的时候，要慎之又慎，但是有时难免会出现数据被误删除的情况，在这个时候该如何快速、有效地恢复数据显得至关重要，extundelete就是其中的一个选择。</p>
+<h1 id="如何使用”rm-rf”命令"><a href="#如何使用”rm-rf”命令" class="headerlink" title="如何使用”rm -rf”命令"></a>如何使用”rm -rf”命令</h1><hr>
+<p>在Linux系统下，通过命令“rm -rf”可以将任何数据直接从硬盘删除，并且没有任何提示，同时Linux下也没有与Windows下回收站类似的功能，也就意味着，数据在删除后通过常规的手段是无法恢复的，因此使用这个命令要非常慎重。在使用rm命令的时候，比较稳妥的方法是把命令参数放到后面，这样有一个提醒的作用。其实还有一个方法。那就是将要删除的东西通过mv命令移动到系统下的/tmp目录下，然后写个脚本定期执行清除操作，这样做就可以在一定程度上降低误删除数据的危险性。</p>
+<p>其实保证数据安全最好的方法是做好备份，虽然备份不是万能的，但是没有备份是万万不行的。任何数据恢复工具都有一定局限性，都不能保证完整地恢复出所有数据，因此，把备份作为核心，把数据恢复工具作为辅助是运维人员必须坚持的一个准则。</p>
+<h1 id="extundelete与ext3grep的异同"><a href="#extundelete与ext3grep的异同" class="headerlink" title="extundelete与ext3grep的异同"></a>extundelete与ext3grep的异同</h1><hr>
+<p>在Linux下，基于开源的数据恢复工具有很多，常见的有debugfs、R-Linux、ext3grep、extundelete等，比较常用的有ext3grep和extundelete，这两个工具的恢复原理基本一样，只是extundelete功能更加强大。</p>
+<p>extundelete是基于Linux的一个数据恢复工具，它通过分析文件系统的日志，解析出所有文件的inode信息，从而可以恢复Linux下主流的ext3、ext4文件系统下被误删除的文件。而ext3grep仅支持ext3文件系统的恢复。在恢复速度上，extundelete要快很多，因为extundelete的恢复机制是扫描inode和恢复数据同时进行，并且支持单个文件恢复、单个目录恢复、inode恢复、block恢复、完整磁盘恢复等，而ext3grep就略显笨拙了，它需要首先扫描完要恢复数据的所有inode信息，然后才能开始数据恢复，所以在恢复速度上相对较慢，并且在功能上也不支持目录恢复、时间段恢复等。</p>
+<h1 id="extundelete的恢复原理"><a href="#extundelete的恢复原理" class="headerlink" title="extundelete的恢复原理"></a>extundelete的恢复原理</h1><hr>
+<p>在利用extundelete恢复文件时并不依赖特定文件格式，首先extundelete会通过文件系统的inode信息（根目录的inode一般为2）来获得当前文件系统下所有文件的信息，包括存在的和已经删除的文件，这些信息包括文件名和inode。然后利用inode信息结合日志去查询该inode所在的block位置，包括直接块、间接块等信息。最后利用dd命令将这些信息备份出来，从而恢复数据文件。</p>
+<h1 id="安装extundelete"><a href="#安装extundelete" class="headerlink" title="安装extundelete"></a>安装extundelete</h1><hr>
+<p>下载地址：<a href="http://sourceforge.net/projects/extundelete/" target="_blank" rel="noopener">http://sourceforge.net/projects/extundelete/</a></p>
+<h2 id="安装的先决条件"><a href="#安装的先决条件" class="headerlink" title="安装的先决条件"></a>安装的先决条件</h2><blockquote>
+<p>开发工具</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum groupinstall &quot;Development Tools&quot; -y</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>安装依赖包e2fsprogs-devel</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install e2fsprogs-devel.x86_64 -y</span><br></pre></td></tr></table></figure>
+<h2 id="安装extundelete-1"><a href="#安装extundelete-1" class="headerlink" title="安装extundelete"></a>安装extundelete</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tar jxf extundelete-0.2.4.tar.bz2</span><br><span class="line">cd extundelete-0.2.4</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<p>默认情况下，如果在<code>./configure</code>时未指定安装路径，会将extundelete装在/usr/local/文件夹下</p>
+<h1 id="extundelete用法详解"><a href="#extundelete用法详解" class="headerlink" title="extundelete用法详解"></a>extundelete用法详解</h1><hr>
+<p>extundelete用法如下：</p>
+<pre><code>extundelete --help
+</code></pre><p>命令格式：</p>
+<pre><code>extundelete [option] [action] device-file
+</code></pre><p>其中，参数(options)有：</p>
+<ul>
+<li>–version，-[Vv]，显示软件版本号</li>
+<li>–help，显示软件帮助信息</li>
+<li>–superblock，显示超级块信息</li>
+<li>–journal，显示日志信息</li>
+<li>–after dtime，时间参数，表示在某段时间之后被删的文件或目录</li>
+<li>–before dtime，时间参数，表示在某段时间之前被删的文件或目录</li>
+</ul>
+<p>动作(action)有：</p>
+<ul>
+<li>–inode ino，显示节点“ino”的信息</li>
+<li>–block blk，显示数据块“blk”的信息</li>
+<li>–restore-inode ino[,ino,…]，恢复命令参数，表示恢复节点“ino”的文件，恢复的文件会自动放在当前目录下的RESTORED_FILES文件夹中，使用节点编号作为扩展名</li>
+<li>–restore-file ‘path’，恢复命令参数，表示将恢复指定路径的文件，并把恢复的文件放在当前目录下的RESTORED_FILES目录中</li>
+<li>–restore-files ‘path’，恢复命令参数，表示将恢复在路径中已列出的所有文件</li>
+<li>–restore-all，恢复命令参数，表示将尝试恢复所有目录和文件</li>
+<li>-j journal，表示从已经命名的文件中读取扩展日志</li>
+<li>-b blocknumber，表示使用之前备份的超级块来打开文件系统，一般用于查看现有超级块是不是当前所要的文件</li>
+<li>-B blocksize，通过制定数据块大小来打开文件系统，一般用于查看已经知道大小的文件</li>
+</ul>
+<h1 id="实战：使用extundelete恢复数据"><a href="#实战：使用extundelete恢复数据" class="headerlink" title="实战：使用extundelete恢复数据"></a>实战：使用extundelete恢复数据</h1><hr>
+<p>在数据被误删除后，第一时间要做的是卸载被删除数据所在的磁盘或者磁盘分区，如果是系统根分区的数据遭到误删除，就需要将系统进入单用户，并且将根分区以只读模式挂载。这样做的原因很简单，因为将文件删除后，仅仅是将文件的inode节点中的扇区指针清零，实际文件还存储在磁盘上，如果磁盘以读写模式挂载，这些已删除的文件的数据块就可能被操作系统重新分配出去，在这些数据块被新的数据覆盖后，这些数据就真的丢失了，恢复工具也无力回天。所以，以只读模式挂载磁盘可以尽量降低数据块中数据被覆盖的风险，以提高恢复数据成功的比率。</p>
+<h2 id="通过extundelete恢复单个文件"><a href="#通过extundelete恢复单个文件" class="headerlink" title="通过extundelete恢复单个文件"></a>通过extundelete恢复单个文件</h2><blockquote>
+<p>模拟数据误删除环境</p>
+</blockquote>
+<pre><code># mkdir /data
+# mkfs.ext4 /dev/sdb1
+# mount /dev/sdb1 /data/
+# cp /etc/passwd /data/
+# cp -r /etc/sysconfig/network-scripts /data/
+# mkdir /data/test
+# echo &quot;extundelete test&quot; &gt; /data/test/mytest.txt
+# ls /data/
+lost+found  network-scripts  passwd  test
+# md5sum passwd 
+499b16cbdef03e814f3405fccd188dcc  passwd
+# md5sum test/mytest.txt 
+eb42e4b3f953ce00e78e11bf50652a80  test/mytest.txt
+# rm -rf /data/*
+</code></pre><blockquote>
+<p>卸载磁盘分区</p>
+</blockquote>
+<p>在将数据误删除后，立即需要做的就是卸载这块磁盘分区：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">umount /data/</span><br></pre></td></tr></table></figure>
+<p><strong>注：卸载磁盘分区时必须先退出磁盘分区所挂载的目录，否则将出现类似如下报错</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">umount: /data: device is busy.</span><br><span class="line">        (In some cases useful info about processes that use</span><br><span class="line">         the device is found by lsof(8) or fuser(1))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>查询可恢复的数据信息</p>
+</blockquote>
+<p>通过extundelete命令可以查询/dev/sdb1分区可恢复的数据信息：</p>
+<pre><code># extundelete /dev/sdb1 --inode 2
+...
+File name                                       | Inode number | Deleted status
+.                                                 2
+..                                                2
+lost+found                                        11             Deleted
+passwd                                            12             Deleted
+network-scripts                                   8193           Deleted
+test                                              8194           Deleted
+</code></pre><p>根据上面的输出，标记为Deleted状态的是已经删除的文件或目录。同时还可以看到每个已删除的文件的inode值，接下来就可以恢复文件了。</p>
+<blockquote>
+<p>恢复单个文件</p>
+</blockquote>
+<pre><code># extundelete /dev/sdb1 --restore-file passwd
+NOTICE: Extended attributes are not restored.
+Loading filesystem metadata ... 16 groups loaded.
+Loading journal descriptors ... 57 descriptors loaded.
+Successfully restored file passwd
+# cd RECOVERED_FILES/
+# ls
+passwd
+# md5sum passwd 
+499b16cbdef03e814f3405fccd188dcc  passwd
+</code></pre><p><strong>注：“–restore-file”后面指定的是恢复文件路径，这个路径是文件的相对路径。相对路径是相对于原来文件的存储路径而言的，比如，原来文件的存储路径是/data/passwd，那么参数后面直接指定passwd文件即可，如果原来文件的存储路径是/data/test/mytest.txt，那么在参数后面通过“test/mytest.txt”指定即可</strong></p>
+<p>在文件恢复成功后，extundelete命令默认会在执行命令的当前目录下创建一个RECOVERED_FILES目录，此目录用于存放恢复的文件，所以执行extundelete命令的当前目录是可写的。</p>
+<p>恢复成功后，通过md5sum命令校验，校验码与之前的完全一致，表明文件恢复成功。</p>
+<h2 id="通过extundelete恢复单个目录"><a href="#通过extundelete恢复单个目录" class="headerlink" title="通过extundelete恢复单个目录"></a>通过extundelete恢复单个目录</h2><p>extundelete除了支持恢复单个文件，也支持恢复单个目录，在需要恢复目录时，通过“–restore-directory”选项即可恢复指定目录的所有数据。</p>
+<pre><code># extundelete /dev/sdb1 --restore-directory network-scripts
+NOTICE: Extended attributes are not restored.
+Loading filesystem metadata ... 16 groups loaded.
+Loading journal descriptors ... 57 descriptors loaded.
+Searching for recoverable inodes in directory /network-scripts ... 
+33 recoverable inodes found.
+Looking through the directory structure for deleted files ... 
+5 recoverable inodes still lost.
+# cd RECOVERED_FILES/
+# ls
+network-scripts
+</code></pre><p>可以看到之前删除的目录network-scripts已经成功恢复了，进入这个目录检查发现，所有文件内容和大小都正常。</p>
+<h2 id="通过extundelete恢复所有删除数据"><a href="#通过extundelete恢复所有删除数据" class="headerlink" title="通过extundelete恢复所有删除数据"></a>通过extundelete恢复所有删除数据</h2><p>当需要恢复的数据较多时，一个个地指定文件或目录将是一项非常繁重和耗时的工作，此时可以通过“restore-all”选项来恢复所有被删除的文件或文件夹。</p>
+<pre><code># extundelete /dev/sdb1 --restore-all
+NOTICE: Extended attributes are not restored.
+Loading filesystem metadata ... 16 groups loaded.
+Loading journal descriptors ... 57 descriptors loaded.
+Searching for recoverable inodes in directory / ... 
+33 recoverable inodes found.
+Looking through the directory structure for deleted files ... 
+0 recoverable inodes still lost.
+# cd RECOVERED_FILES/
+# ls
+network-scripts  passwd  test
+# md5sum passwd 
+499b16cbdef03e814f3405fccd188dcc  passwd
+# md5sum test/mytest.txt 
+eb42e4b3f953ce00e78e11bf50652a80  test/mytest.txt
+</code></pre><h2 id="通过extundelete恢复某个时间段的数据"><a href="#通过extundelete恢复某个时间段的数据" class="headerlink" title="通过extundelete恢复某个时间段的数据"></a>通过extundelete恢复某个时间段的数据</h2><p>有时候删除了大量的数据，其中很多数据都是么用的，我们仅需要恢复其中的一部分数据，此时，如果采用恢复全部数据的办法，不但耗时，而且浪费资源，在这种情况下，就需要采用另外一种恢复机制有选择地恢复，extundelete提供了“–after”和“–before”参数，可以通过指定某个时间段，进而只恢复这个时间段内的数据。</p>
+<pre><code># date +%s
+1449027652
+# extundelete --after 1449020452 --restore-all /dev/sdb1 
+Only show and process deleted entries if they are deleted on or after 1449020452 and before 9223372036854775807.
+NOTICE: Extended attributes are not restored.
+Loading filesystem metadata ... 16 groups loaded.
+Loading journal descriptors ... 57 descriptors loaded.
+Searching for recoverable inodes in directory / ... 
+33 recoverable inodes found.
+Looking through the directory structure for deleted files ... 
+0 recoverable inodes still lost.
+# cd RECOVERED_FILES/
+# ls
+network-scripts  passwd  test
+# md5sum passwd 
+499b16cbdef03e814f3405fccd188dcc  passwd
+# md5sum test/mytest.txt 
+eb42e4b3f953ce00e78e11bf50652a80  test/mytest.txt
+</code></pre><p>在上面的例子中恢复的是两个小时之内被删除的文件。在这个操作过程中，需要注意的是“–after”参数后面跟的时间是个总秒数。起算时间是“1970-01-01 00:00:00 UTC”，通过”date +%s”命令即可将当前时间转换为总秒数，因为恢复的是两个小时之内的数据，所以“1449020452”这个值就是通过“1449027652”减去“60<em>60</em>2=7200”获得的。</p>
+<ul>
+<li>EOF</li>
+</ul>
+<p>本文作者：Koen</p>
+<p>参考书籍：《高性能Linux服务器构建实战：系统安全、故障排查、自动化运维与集群架构》</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/系统/" rel="tag"># 系统</a>
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ck3ycvjvu0012r3kc8xz1v72q.html" rel="next" title="Ntopng--网络流量监控与分析工具">
+                <i class="fa fa-chevron-left"></i> Ntopng--网络流量监控与分析工具
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ck3ycvjw1001sr3kc172t3eul.html" rel="prev" title="RedHat/Ubuntu下源码编译安装Python3.X">
+                RedHat/Ubuntu下源码编译安装Python3.X <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/avatar.jpg"
+                alt="Koenli" />
+            
+              <p class="site-author-name" itemprop="name">Koenli</p>
+              <p class="site-description motion-element" itemprop="description">想要出类拔萃，就要做别人不想做的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何使用”rm-rf”命令"><span class="nav-number">2.</span> <span class="nav-text">如何使用”rm -rf”命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#extundelete与ext3grep的异同"><span class="nav-number">3.</span> <span class="nav-text">extundelete与ext3grep的异同</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#extundelete的恢复原理"><span class="nav-number">4.</span> <span class="nav-text">extundelete的恢复原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装extundelete"><span class="nav-number">5.</span> <span class="nav-text">安装extundelete</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装的先决条件"><span class="nav-number">5.1.</span> <span class="nav-text">安装的先决条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装extundelete-1"><span class="nav-number">5.2.</span> <span class="nav-text">安装extundelete</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#extundelete用法详解"><span class="nav-number">6.</span> <span class="nav-text">extundelete用法详解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实战：使用extundelete恢复数据"><span class="nav-number">7.</span> <span class="nav-text">实战：使用extundelete恢复数据</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#通过extundelete恢复单个文件"><span class="nav-number">7.1.</span> <span class="nav-text">通过extundelete恢复单个文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过extundelete恢复单个目录"><span class="nav-number">7.2.</span> <span class="nav-text">通过extundelete恢复单个目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过extundelete恢复所有删除数据"><span class="nav-number">7.3.</span> <span class="nav-text">通过extundelete恢复所有删除数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过extundelete恢复某个时间段的数据"><span class="nav-number">7.4.</span> <span class="nav-text">通过extundelete恢复某个时间段的数据</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Koenli</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: 'XD8aPBomWwb9OrD5OlP3F42U-gzGzoHsz',
+        appKey: 'EHcp6RUK4G6BGD0dqfrz0IDo',
+        placeholder: '想对作者说点什么',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("XD8aPBomWwb9OrD5OlP3F42U-gzGzoHsz", "EHcp6RUK4G6BGD0dqfrz0IDo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
