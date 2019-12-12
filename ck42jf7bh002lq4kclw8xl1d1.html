@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Docker," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在部署之前我们先来了解下关于Kubernetes的几个核心知识点 Kubernetes是什么  Kubernetes是Google在2014年开源的一个容器集群管理系统，Kubernetes简称K8S。 K8S用于容器化应用程序的部署、扩展和管理 K8S提供了容器编排，资源调度，弹性伸缩，部署管理，服务发现等一系列功能。 Kubernetes目标是让部署容器化应用简单高效  Kubernetes特">
+<meta name="keywords" content="Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在CentOS7上二进制部署Kubernetes高可用集群">
+<meta property="og:url" content="http://koenli.github.io/ck42jf7bh002lq4kclw8xl1d1.html">
+<meta property="og:site_name" content="Koenli&#39;s Blog">
+<meta property="og:description" content="在部署之前我们先来了解下关于Kubernetes的几个核心知识点 Kubernetes是什么  Kubernetes是Google在2014年开源的一个容器集群管理系统，Kubernetes简称K8S。 K8S用于容器化应用程序的部署、扩展和管理 K8S提供了容器编排，资源调度，弹性伸缩，部署管理，服务发现等一系列功能。 Kubernetes目标是让部署容器化应用简单高效  Kubernetes特">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://img.koenli.com/%E5%9C%A8CentOS7%E4%B8%8A%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%83%A8%E7%BD%B2Kubernetes%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4_1.jpg">
+<meta property="og:image" content="https://img.koenli.com/%E5%9C%A8CentOS7%E4%B8%8A%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%83%A8%E7%BD%B2Kubernetes%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4_2.png">
+<meta property="og:image" content="https://img.koenli.com/%E5%9C%A8CentOS7%E4%B8%8A%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%83%A8%E7%BD%B2Kubernetes%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4_3.png">
+<meta property="og:updated_time" content="2019-12-12T09:45:51.267Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在CentOS7上二进制部署Kubernetes高可用集群">
+<meta name="twitter:description" content="在部署之前我们先来了解下关于Kubernetes的几个核心知识点 Kubernetes是什么  Kubernetes是Google在2014年开源的一个容器集群管理系统，Kubernetes简称K8S。 K8S用于容器化应用程序的部署、扩展和管理 K8S提供了容器编排，资源调度，弹性伸缩，部署管理，服务发现等一系列功能。 Kubernetes目标是让部署容器化应用简单高效  Kubernetes特">
+<meta name="twitter:image" content="https://img.koenli.com/%E5%9C%A8CentOS7%E4%B8%8A%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%83%A8%E7%BD%B2Kubernetes%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4_1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://koenli.github.io/ck42jf7bh002lq4kclw8xl1d1.html"/>
+
+
+
+
+
+  <title>在CentOS7上二进制部署Kubernetes高可用集群 | Koenli's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Koenli's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://koenli.github.io/ck42jf7bh002lq4kclw8xl1d1.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Koenli">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Koenli's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">在CentOS7上二进制部署Kubernetes高可用集群</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T19:24:54+08:00">
+                2019-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/容器/" itemprop="url" rel="index">
+                    <span itemprop="name">容器</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/ck42jf7bh002lq4kclw8xl1d1.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/ck42jf7bh002lq4kclw8xl1d1.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/ck42jf7bh002lq4kclw8xl1d1.html" class="leancloud_visitors" data-flag-title="在CentOS7上二进制部署Kubernetes高可用集群">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在部署之前我们先来了解下关于Kubernetes的几个核心知识点</p>
+<h1 id="Kubernetes是什么"><a href="#Kubernetes是什么" class="headerlink" title="Kubernetes是什么"></a>Kubernetes是什么</h1><hr>
+<ul>
+<li>Kubernetes是Google在2014年开源的一个容器集群管理系统，Kubernetes简称K8S。</li>
+<li>K8S用于容器化应用程序的部署、扩展和管理</li>
+<li>K8S提供了容器编排，资源调度，弹性伸缩，部署管理，服务发现等一系列功能。</li>
+<li>Kubernetes目标是让部署容器化应用简单高效</li>
+</ul>
+<h1 id="Kubernetes特性"><a href="#Kubernetes特性" class="headerlink" title="Kubernetes特性"></a>Kubernetes特性</h1><hr>
+<ul>
+<li>自我修复</li>
+</ul>
+<p>在节点故障时重新启动失败的容器，替换和重新部署，保证预期的副本数量；杀死健康检查失败的容器，并且在未准备好之前不会处理客户端请求，确保上线服务不中断。</p>
+<ul>
+<li>弹性伸缩</li>
+</ul>
+<p>使用命令、UI或者基于CPU使用情况自动快速扩容和缩容应用程序实例，保证应用业务高峰并发时的高可用性；业务低峰时回收资源，以最小成本运行服务。</p>
+<ul>
+<li>自动部署和回滚</li>
+</ul>
+<p>K8S采用滚动更新策略更新应用，一次更新一个Pod，而不是同时删除所有Pod，如果更新过程中出现问题，将回滚更改，确保升级不会影响业务。</p>
+<ul>
+<li>服务发现和负载均衡</li>
+</ul>
+<p>K8S为多个容器提供一个统一访问入口（内部IP地址和一个DNS名称），并且负载均衡关联所有容器，使得用户无需考虑容器IP问题</p>
+<ul>
+<li>机密和配置管理</li>
+</ul>
+<p>管理机密数据和应用程序配置，而不需要把敏感数据暴露在镜像里，提高敏感数据安全性。并可以将一些常用的配置存储在K8S中，方便应用程序使用。</p>
+<ul>
+<li>存储编排</li>
+</ul>
+<p>挂载外部存储系统，无论是来自本地存储，公有云（如AWS），还是网络存储（如NFS、GlusterFS、Ceph）都作为集群资源的一部分使用，极大提高存储使用灵活性</p>
+<ul>
+<li>批处理</li>
+</ul>
+<p>提供一次性任务，定时任务；满足批量数据处理和分析的场景</p>
+<h1 id="Kubernetes集群架构与组件"><a href="#Kubernetes集群架构与组件" class="headerlink" title="Kubernetes集群架构与组件"></a>Kubernetes集群架构与组件</h1><hr>
+<p><img src="https://img.koenli.com/%E5%9C%A8CentOS7%E4%B8%8A%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%83%A8%E7%BD%B2Kubernetes%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4_1.jpg" alt=""></p>
+<h2 id="Master组件"><a href="#Master组件" class="headerlink" title="Master组件"></a>Master组件</h2><ul>
+<li>kube-apiserver</li>
+</ul>
+<p>Kubernetes API，集群的统一入口，各组件协调者，以RESTful API提供接口服务，所有对象资源的增删查改和监听操作都交给APIServer处理后再提交给etcd存储。</p>
+<ul>
+<li>kube-controller-manager</li>
+</ul>
+<p>处理集群中常规后台任务，一个资源对应一个控制器，而ControllerManager就是负责管理这些控制器的。</p>
+<ul>
+<li>kube-scheduler</li>
+</ul>
+<p>根据调度算法为新创建的Pod选择一个Node节点，可以任意部署，可以部署在同一个节点，也可以部署在不同的节点上。</p>
+<ul>
+<li>etcd</li>
+</ul>
+<p>分布式键值存储系统。用于保存集群状态数据，比如Pod、Service等对象信息。</p>
+<h2 id="Node组件"><a href="#Node组件" class="headerlink" title="Node组件"></a>Node组件</h2><ul>
+<li>kubelet</li>
+</ul>
+<p>kubelet是Master在Node节点上的Agent，管理本机运行容器的生命周期，比如创建容器、Pod挂载数据卷、下载secret、获取容器和节点状态等工作。kubelet将每个Pod转换成一组容器。</p>
+<ul>
+<li>kube-proxy</li>
+</ul>
+<p>在Node节点上实现Pod网络代理，维护网络规则和四层负载均衡工作</p>
+<ul>
+<li>docker或rocket</li>
+</ul>
+<p>容器引擎，运行容器</p>
+<h1 id="Kubernetes核心概念"><a href="#Kubernetes核心概念" class="headerlink" title="Kubernetes核心概念"></a>Kubernetes核心概念</h1><hr>
+<h2 id="Pod"><a href="#Pod" class="headerlink" title="Pod"></a>Pod</h2><ul>
+<li>最小部署单元</li>
+<li>一组容器的集合</li>
+<li>一个Pod中的容器共享网络命名空间</li>
+<li>Pod是暂短的</li>
+</ul>
+<h2 id="Controllers"><a href="#Controllers" class="headerlink" title="Controllers"></a>Controllers</h2><ul>
+<li>ReplicaSet：确保预期的Pod副本数量</li>
+<li>Deployment：无状态应用部署</li>
+<li>StatefulSet：有状态应用部署</li>
+<li>DaemonSet：确保所有Node运行同一个Pod</li>
+<li>Job：一次性任务</li>
+<li>CronJob：定时任务</li>
+</ul>
+<h2 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h2><ul>
+<li>防止Pod失联</li>
+<li>定义一组Pod的访问策略</li>
+</ul>
+<h2 id="Label"><a href="#Label" class="headerlink" title="Label"></a>Label</h2><p>标签，附加到某个资源上，用于关联对象、查询和筛选</p>
+<h2 id="Namespace"><a href="#Namespace" class="headerlink" title="Namespace"></a>Namespace</h2><p>命名空间，将对象逻辑上分离</p>
+<h1 id="生产环境K8S平台规划"><a href="#生产环境K8S平台规划" class="headerlink" title="生产环境K8S平台规划"></a>生产环境K8S平台规划</h1><hr>
+<h2 id="单Master集群"><a href="#单Master集群" class="headerlink" title="单Master集群"></a>单Master集群</h2><p><img src="https://img.koenli.com/%E5%9C%A8CentOS7%E4%B8%8A%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%83%A8%E7%BD%B2Kubernetes%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4_2.png" alt=""></p>
+<h2 id="多Master集群-HA"><a href="#多Master集群-HA" class="headerlink" title="多Master集群(HA)"></a>多Master集群(HA)</h2><p><img src="https://img.koenli.com/%E5%9C%A8CentOS7%E4%B8%8A%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%83%A8%E7%BD%B2Kubernetes%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4_3.png" alt=""></p>
+<h1 id="服务器硬件配置推荐"><a href="#服务器硬件配置推荐" class="headerlink" title="服务器硬件配置推荐"></a>服务器硬件配置推荐</h1><hr>
+<h2 id="mater节点"><a href="#mater节点" class="headerlink" title="mater节点"></a>mater节点</h2><ul>
+<li><p>物理机虚拟机均可，至少1台，高可用集群至少2台（etcd集群必须奇数台）</p>
+</li>
+<li><p>配置推荐：实验环境2核2G、测试环境2核4G、生产环境8核16G</p>
+</li>
+<li><p>关闭所有swap分区或不划分swap分区</p>
+</li>
+</ul>
+<h2 id="node节点"><a href="#node节点" class="headerlink" title="node节点"></a>node节点</h2><ul>
+<li><p>物理机虚拟机均可，大于等于1台</p>
+</li>
+<li><p>配置推荐：实验环境2核2G、测试环境4核8G、生产环境16核64G</p>
+</li>
+<li><p>关闭所有swap分区或不划分swap分区</p>
+</li>
+</ul>
+<h1 id="实验环境信息"><a href="#实验环境信息" class="headerlink" title="实验环境信息"></a>实验环境信息</h1><hr>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">主机名</th>
+<th style="text-align:center">配置</th>
+<th style="text-align:center">操作系统</th>
+<th style="text-align:center">IP地址</th>
+<th style="text-align:center">角色</th>
+<th style="text-align:center">组件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">k8s-master1</td>
+<td style="text-align:center">2核2G</td>
+<td style="text-align:center">CentOS7.5</td>
+<td style="text-align:center">10.211.55.4</td>
+<td style="text-align:center">master</td>
+<td style="text-align:center">kube-apiserver<br>kube-controller-manager<br>kube-scheduler<br>etcd<br>nginx</td>
+</tr>
+<tr>
+<td style="text-align:center">k8s-master2</td>
+<td style="text-align:center">2核2G</td>
+<td style="text-align:center">CentOS7.5</td>
+<td style="text-align:center">10.211.55.7</td>
+<td style="text-align:center">master</td>
+<td style="text-align:center">kube-apiserver<br>kube-controller-manager<br>kube-scheduler<br>nginx</td>
+</tr>
+<tr>
+<td style="text-align:center">k8s-node1</td>
+<td style="text-align:center">2核2G</td>
+<td style="text-align:center">CentOS7.5</td>
+<td style="text-align:center">10.211.55.5</td>
+<td style="text-align:center">node</td>
+<td style="text-align:center">kubelet<br>kube-proxy<br>docker<br>etcd</td>
+</tr>
+<tr>
+<td style="text-align:center">k8s-node2</td>
+<td style="text-align:center">2核2G</td>
+<td style="text-align:center">CentOS7.5</td>
+<td style="text-align:center">10.211.55.6</td>
+<td style="text-align:center">node</td>
+<td style="text-align:center">kubelet<br>kube-proxy<br>docker<br>etcd</td>
+</tr>
+</tbody>
+</table>
+<p>VIP:10.211.55.10</p>
+<h1 id="系统初始化"><a href="#系统初始化" class="headerlink" title="系统初始化"></a>系统初始化</h1><hr>
+<h2 id="关闭防火墙"><a href="#关闭防火墙" class="headerlink" title="关闭防火墙"></a>关闭防火墙</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl disable firewalld</span><br></pre></td></tr></table></figure>
+<h2 id="关闭selinux"><a href="#关闭selinux" class="headerlink" title="关闭selinux"></a>关闭selinux</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">setenforce 0</span><br><span class="line">sed -i "s/^SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config</span><br></pre></td></tr></table></figure>
+<h2 id="关闭swap"><a href="#关闭swap" class="headerlink" title="关闭swap"></a>关闭swap</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">swapoff -a</span><br><span class="line">echo 'swapoff -a ' &gt;&gt; /etc/rc.d/rc.local</span><br></pre></td></tr></table></figure>
+<h2 id="配置主机名"><a href="#配置主机名" class="headerlink" title="配置主机名"></a>配置主机名</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostnamectl set-hostname &lt;hostname&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="添加所有节点的本地host解析"><a href="#添加所有节点的本地host解析" class="headerlink" title="添加所有节点的本地host解析"></a>添加所有节点的本地host解析</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;&gt; /etc/hosts &lt;&lt; EOF</span><br><span class="line">x.x.x.x hostname1</span><br><span class="line">y.y.y.y hostname2</span><br><span class="line">...</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h2 id="安装基础软件包"><a href="#安装基础软件包" class="headerlink" title="安装基础软件包"></a>安装基础软件包</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install vim net-tools lrzsz unzip dos2unix telnet sysstat iotop pciutils lsof tcpdump psmisc bc wget -y</span><br></pre></td></tr></table></figure>
+<h2 id="内核开启网络支持"><a href="#内核开启网络支持" class="headerlink" title="内核开启网络支持"></a>内核开启网络支持</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;  /etc/sysctl.d/k8s.conf &lt;&lt; EOF</span><br><span class="line">net.bridge.bridge-nf-call-ip6tables = 1</span><br><span class="line">net.bridge.bridge-nf-call-iptables = 1</span><br><span class="line">net.ipv4.ip_forward = 1</span><br><span class="line">net.ipv4.ip_nonlocal_bind = 1</span><br><span class="line">EOF</span><br><span class="line">modprobe br_netfilter</span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+<h2 id="配置所有master到所有节点（包括自身）的ssh免密登录"><a href="#配置所有master到所有节点（包括自身）的ssh免密登录" class="headerlink" title="配置所有master到所有节点（包括自身）的ssh免密登录"></a>配置所有master到所有节点（包括自身）的ssh免密登录</h2><p>依此在所有的master节点上做如下操作：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br><span class="line">ssh-copy-id -i ~/.ssh/id_rsa.pub k8s-master1</span><br></pre></td></tr></table></figure>
+<h2 id="节点之间时间同步"><a href="#节点之间时间同步" class="headerlink" title="节点之间时间同步"></a>节点之间时间同步</h2><h3 id="server端"><a href="#server端" class="headerlink" title="server端"></a>server端</h3><p><strong>注：</strong>如果环境可以访问互联网，可以不需要自己搭建server端，参考后面的client端部分设置所有节点与公网ntp时间服务器(例如time1.cloud.tencent.com)同步时间即可</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">安装chrony并备份配置文件</span></span><br><span class="line">yum install chrony ntpdate -y</span><br><span class="line">cp -a /etc/chrony.conf /etc/chrony.conf.bak</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">修改server端配置文件如下，标注的地方需要修改</span></span><br><span class="line">cat &gt; /etc/chrony.conf &lt;&lt; EOF</span><br><span class="line">stratumweight 0</span><br><span class="line">driftfile /var/lib/chrony/drift</span><br><span class="line">rtcsync</span><br><span class="line">makestep 10 3</span><br><span class="line">allow 10.211.55.0/24    #设置为实际环境客户端所属IP网段</span><br><span class="line">smoothtime 400 0.01</span><br><span class="line"> </span><br><span class="line">bindcmdaddress 127.0.0.1</span><br><span class="line">bindcmdaddress ::1</span><br><span class="line"> </span><br><span class="line">local stratum 8</span><br><span class="line">manual</span><br><span class="line">keyfile /etc/chrony.keys</span><br><span class="line"><span class="meta">#</span><span class="bash">initstepslew 10 client1 client3 client6</span></span><br><span class="line">noclientlog</span><br><span class="line">logchange 0.5</span><br><span class="line">logdir /var/log/chrony</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">启动服务，设置开机自启</span></span><br><span class="line">systemctl restart chronyd.service</span><br><span class="line">systemctl enable  chronyd.service</span><br><span class="line">systemctl status chronyd.service</span><br></pre></td></tr></table></figure>
+<h3 id="client端"><a href="#client端" class="headerlink" title="client端"></a>client端</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">安装chrony并备份配置文件</span></span><br><span class="line">yum install chrony ntpdate -y</span><br><span class="line">cp -a /etc/chrony.conf /etc/chrony.conf.bak</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">修改client端配置文件</span></span><br><span class="line">sed -i "s%^server%#server%g" /etc/chrony.conf</span><br><span class="line">echo "server 10.211.55.4 iburst" &gt;&gt; /etc/chrony.conf    #添加一行，其中的IP地址替换为实际环境server端的IP地址</span><br><span class="line"></span><br><span class="line">ntpdate  10.211.55.4    #手动同步一次时间，其中的IP地址替换为实际环境server端的IP地址</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">启动服务，设置开机自启</span></span><br><span class="line">systemctl restart chronyd.service</span><br><span class="line">systemctl enable  chronyd.service</span><br><span class="line">systemctl status chronyd.service</span><br><span class="line"></span><br><span class="line">chronyc  sources    #查看ntp_servers状态</span><br><span class="line">chronyc  tracking    #查看ntp详细信息</span><br></pre></td></tr></table></figure>
+<h1 id="安装CFSSL工具"><a href="#安装CFSSL工具" class="headerlink" title="安装CFSSL工具"></a>安装CFSSL工具</h1><hr>
+<pre><code>CFSSL是CloudFlare开源的一款PKI/TLS工具。 CFSSL 包含一个命令行工具 和一个用于 签名，验证并且捆绑TLS证书的 HTTP API 服务。 使用Go语言编写
+</code></pre><p>Github地址：<a href="https://github.com/cloudflare/cfssl" target="_blank" rel="noopener">https://github.com/cloudflare/cfssl</a><br>官网地址：<a href="https://pkg.cfssl.org/" target="_blank" rel="noopener">https://pkg.cfssl.org/</a></p>
+<p>在其中一台节点（一般是master1）上执行如下指令直接进行安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl -s -L -o /usr/local/bin/cfssl https://pkg.cfssl.org/R1.2/cfssl_linux-amd64</span><br><span class="line">curl -s -L -o /usr/local/bin/cfssljson https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64</span><br><span class="line">curl -s -L -o /usr/local/bin/cfssl-certinfo https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64</span><br><span class="line">chmod +x /usr/local/bin/cfssl*</span><br></pre></td></tr></table></figure>
+<p>如果环境无法联网，则到官网下载最新版本的cfssl_linux-amd64、cfssljson_linux-amd64、cfssl-certinfo_linux-amd64并上传到其中一台节点的/root目录下（一般是master1），并执行如下指令安装cfssl</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mv cfssl_linux-amd64 /usr/local/bin/cfssl</span><br><span class="line">mv cfssljson_linux-amd64 /usr/local/bin/cfssljson</span><br><span class="line">mv cfssl-certinfo_linux-amd64 /usr/local/bin/cfssl-certinfo</span><br><span class="line">chmod +x /usr/local/bin/cfssl*</span><br></pre></td></tr></table></figure>
+<h1 id="部署etcd数据库集群"><a href="#部署etcd数据库集群" class="headerlink" title="部署etcd数据库集群"></a>部署etcd数据库集群</h1><hr>
+<pre><code>etcd 是基于 Raft 的分布式 key-value 存储系统，由 CoreOS 开发，常用于服务发现、共享配置以及并发控制（如 leader 选举、分布式锁等）。kubernetes 使用 etcd 存储所有运行数据。
+</code></pre><p>Github地址：<a href="https://github.com/etcd-io/etcd" target="_blank" rel="noopener">https://github.com/etcd-io/etcd</a><br>官网地址：<a href="https://etcd.io/" target="_blank" rel="noopener">https://etcd.io/</a></p>
+<h2 id="使用cfssl为etcd生成自签证书"><a href="#使用cfssl为etcd生成自签证书" class="headerlink" title="使用cfssl为etcd生成自签证书"></a>使用cfssl为etcd生成自签证书</h2><p>在安装了cfssl工具的节点上执行如下指令为etcd创建对应的ca机构并生成自签证书</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">mkdir /root/etcd-cert &amp;&amp; cd /root/etcd-cert</span><br><span class="line"><span class="meta">#</span><span class="bash">配置ca-csr.json</span></span><br><span class="line">cat &gt; ca-csr.json &lt;&lt; EOF</span><br><span class="line">&#123;</span><br><span class="line">    "CN": "etcd CA",</span><br><span class="line">    "key": &#123;</span><br><span class="line">        "algo": "rsa",</span><br><span class="line">        "size": 2048</span><br><span class="line">    &#125;,</span><br><span class="line">    "names": [</span><br><span class="line">        &#123;</span><br><span class="line">            "C": "CN",</span><br><span class="line">            "L": "ShenZhen",</span><br><span class="line">            "ST": "ShenZhen"</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">配置证书生成策略，让CA软件知道颁发什么样的证书</span></span><br><span class="line">cat &gt; ca-config.json &lt;&lt; EOF</span><br><span class="line">&#123;</span><br><span class="line">  "signing": &#123;</span><br><span class="line">    "default": &#123;</span><br><span class="line">      "expiry": "876000h"</span><br><span class="line">    &#125;,</span><br><span class="line">    "profiles": &#123;</span><br><span class="line">      "etcd": &#123;</span><br><span class="line">         "expiry": "876000h",</span><br><span class="line">         "usages": [</span><br><span class="line">            "signing",</span><br><span class="line">            "key encipherment",</span><br><span class="line">            "server auth",</span><br><span class="line">            "client auth"</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p><strong>ca-config.json：</strong>定义多个profiles,分别指定不同的过期时间，使用场景等参数，这里我们只定义了etcd一个profile</p>
+<p><strong>signing：</strong> 表示该证书可用于签名其它证书</p>
+<p><strong>server auth：</strong>表示client可以使用该CA对server提供的证书进行验证</p>
+<p><strong>client auth：</strong>表示server可以用该CA对client提供的证书进行验证</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">注：hosts中需配置所有etcd集群节点的IP地址</span></span><br><span class="line">cat &gt; etcd-csr.json &lt;&lt; EOF</span><br><span class="line">&#123;</span><br><span class="line">    "CN": "etcd",</span><br><span class="line">    "hosts": [</span><br><span class="line">        "10.211.55.4",</span><br><span class="line">        "10.211.55.5",</span><br><span class="line">        "10.211.55.6"</span><br><span class="line">        ],</span><br><span class="line">    "key": &#123;</span><br><span class="line">        "algo": "rsa",</span><br><span class="line">        "size": 2048</span><br><span class="line">    &#125;,</span><br><span class="line">    "names": [</span><br><span class="line">        &#123;</span><br><span class="line">            "C": "CN",</span><br><span class="line">            "L": "ShenZhen",</span><br><span class="line">            "ST": "ShenZhen"</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">生成CA证书和私钥</span></span><br><span class="line">cfssl gencert -initca ca-csr.json | cfssljson -bare ca -</span><br><span class="line"><span class="meta">#</span><span class="bash">为etcd生成自签证书</span></span><br><span class="line">cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=etcd etcd-csr.json | cfssljson -bare etcd</span><br></pre></td></tr></table></figure>
+<h2 id="部署etcd3-4之前版本"><a href="#部署etcd3-4之前版本" class="headerlink" title="部署etcd3.4之前版本"></a>部署etcd3.4之前版本</h2><p>访问<a href="https://github.com/etcd-io/etcd/releases" target="_blank" rel="noopener">https://github.com/etcd-io/etcd/releases</a>下载etcd3.4之前版本的二进制包（本文以3.3.18为例），并上传到其中一台etcd节点的/root目录下，然后执行如下指令解压并创建etcd相关目录和配置文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">解压到/opt</span></span><br><span class="line">tar zxf etcd-v3.3.18-linux-amd64.tar.gz -C /opt/</span><br><span class="line">mv /opt/etcd-v3.3.18-linux-amd64/ /opt/etcd</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">创建二进制文件存放目录、配置文件存放目录、证书存放目录</span></span><br><span class="line">mkdir /opt/etcd/bin</span><br><span class="line">mkdir /opt/etcd/cfg</span><br><span class="line">mkdir /opt/etcd/ssl</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">拷贝二进制文件到bin目录下</span></span><br><span class="line">cp -a /opt/etcd/etcd* /opt/etcd/bin/</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">拷贝上一步生成的自签证书到ssl目录下</span></span><br><span class="line">cp -a /root/etcd-cert/&#123;ca,etcd,etcd-key&#125;.pem /opt/etcd/ssl/</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">创建etcd集群配置文件，标注部分按实际情况进行修改</span></span><br><span class="line">cat &gt; /opt/etcd/cfg/etcd.conf &lt;&lt; EOF</span><br><span class="line"><span class="meta">#</span><span class="bash">[Member]</span></span><br><span class="line"><span class="meta">#</span><span class="bash">自定义此etcd节点的名称，集群内唯一</span></span><br><span class="line">ETCD_NAME="etcd-1"</span><br><span class="line"><span class="meta">#</span><span class="bash">定义etcd数据存放目录</span></span><br><span class="line">ETCD_DATA_DIR="/var/lib/etcd/default.etcd"</span><br><span class="line"><span class="meta">#</span><span class="bash">定义本机和成员之间通信的地址</span></span><br><span class="line">ETCD_LISTEN_PEER_URLS="https://10.211.55.4:2380" </span><br><span class="line"><span class="meta">#</span><span class="bash">定义etcd对外提供服务的地址</span></span><br><span class="line">ETCD_LISTEN_CLIENT_URLS="https://10.211.55.4:2379"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">[Clustering]</span></span><br><span class="line"><span class="meta">#</span><span class="bash">定义该节点成员对等URL地址，且会通告集群的其余成员节点</span></span><br><span class="line">ETCD_INITIAL_ADVERTISE_PEER_URLS="https://10.211.55.4:2380"</span><br><span class="line"><span class="meta">#</span><span class="bash">此成员的客户端URL列表，用于通告群集的其余部分</span></span><br><span class="line">ETCD_ADVERTISE_CLIENT_URLS="https://10.211.55.4:2379"</span><br><span class="line"><span class="meta">#</span><span class="bash">集群中所有节点的信息</span></span><br><span class="line">ETCD_INITIAL_CLUSTER="etcd-1=https://10.211.55.4:2380,etcd-2=https://10.211.55.5:2380,etcd-3=https://10.211.55.6:2380"</span><br><span class="line"><span class="meta">#</span><span class="bash">创建集群的token，这个值每个集群保持唯一</span></span><br><span class="line">ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster"</span><br><span class="line"><span class="meta">#</span><span class="bash">设置new为初始静态或DNS引导期间出现的所有成员。如果将此选项设置为existing，则etcd将尝试加入现有群集</span></span><br><span class="line">ETCD_INITIAL_CLUSTER_STATE="new"</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">创建etcd的systemd服务管理文件</span></span><br><span class="line">vim /usr/lib/systemd/system/etcd.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Etcd Server</span><br><span class="line">After=network.target</span><br><span class="line">After=network-online.target</span><br><span class="line">Wants=network-online.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=notify</span><br><span class="line">EnvironmentFile=/opt/etcd/cfg/etcd.conf</span><br><span class="line">ExecStart=/opt/etcd/bin/etcd \</span><br><span class="line">        --name=$&#123;ETCD_NAME&#125; \</span><br><span class="line">        --data-dir=$&#123;ETCD_DATA_DIR&#125; \</span><br><span class="line">        --listen-peer-urls=$&#123;ETCD_LISTEN_PEER_URLS&#125; \</span><br><span class="line">        --listen-client-urls=$&#123;ETCD_LISTEN_CLIENT_URLS&#125;,http://127.0.0.1:2379 \</span><br><span class="line">        --advertise-client-urls=$&#123;ETCD_ADVERTISE_CLIENT_URLS&#125; \</span><br><span class="line">        --initial-advertise-peer-urls=$&#123;ETCD_INITIAL_ADVERTISE_PEER_URLS&#125; \</span><br><span class="line">        --initial-cluster=$&#123;ETCD_INITIAL_CLUSTER&#125; \</span><br><span class="line">        --initial-cluster-token=$&#123;ETCD_INITIAL_CLUSTER_TOKEN&#125; \</span><br><span class="line">        --initial-cluster-state=new \</span><br><span class="line">        --cert-file=/opt/etcd/ssl/etcd.pem \</span><br><span class="line">        --key-file=/opt/etcd/ssl/etcd-key.pem \</span><br><span class="line">        --peer-cert-file=/opt/etcd/ssl/etcd.pem \</span><br><span class="line">        --peer-key-file=/opt/etcd/ssl/etcd-key.pem \</span><br><span class="line">        --trusted-ca-file=/opt/etcd/ssl/ca.pem \</span><br><span class="line">        --peer-trusted-ca-file=/opt/etcd/ssl/ca.pem</span><br><span class="line">Restart=on-failure</span><br><span class="line">LimitNOFILE=65536</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+<p>将etcd目录和systemd服务管理文件拷贝到其余etcd集群节点上，并修改etcd配置文件中的<strong>名称</strong>和<strong>IP地址</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">拷贝etcd目录和etcd.service到其余etcd集群节点上</span></span><br><span class="line">scp -r /opt/etcd/ k8s-node1:/opt/</span><br><span class="line">scp -r /usr/lib/systemd/system/etcd.service k8s-node1:/usr/lib/systemd/system/</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">修改etcd集群配置文件，标注部分按实际情况进行修改</span></span><br><span class="line">vim /opt/etcd/cfg/etcd.conf</span><br><span class="line"><span class="meta">#</span><span class="bash">[Member]</span></span><br><span class="line"><span class="meta">#</span><span class="bash">自定义此etcd节点的名称，集群内唯一</span></span><br><span class="line">ETCD_NAME="etcd-1"</span><br><span class="line"><span class="meta">#</span><span class="bash">定义etcd数据存放目录</span></span><br><span class="line">ETCD_DATA_DIR="/var/lib/etcd/default.etcd"</span><br><span class="line"><span class="meta">#</span><span class="bash">定义本机和成员之间通信的地址</span></span><br><span class="line">ETCD_LISTEN_PEER_URLS="https://10.211.55.4:2380" </span><br><span class="line"><span class="meta">#</span><span class="bash">定义etcd对外提供服务的地址</span></span><br><span class="line">ETCD_LISTEN_CLIENT_URLS="https://10.211.55.4:2379"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">[Clustering]</span></span><br><span class="line"><span class="meta">#</span><span class="bash">定义该节点成员对等URL地址，且会通告集群的其余成员节点</span></span><br><span class="line">ETCD_INITIAL_ADVERTISE_PEER_URLS="https://10.211.55.4:2380"</span><br><span class="line"><span class="meta">#</span><span class="bash">此成员的客户端URL列表，用于通告群集的其余部分</span></span><br><span class="line">ETCD_ADVERTISE_CLIENT_URLS="https://10.211.55.4:2379"</span><br><span class="line"><span class="meta">#</span><span class="bash">集群中所有节点的信息</span></span><br><span class="line">ETCD_INITIAL_CLUSTER="etcd-1=https://10.211.55.4:2380,etcd-2=https://10.211.55.5:2380,etcd-3=https://10.211.55.6:2380"</span><br><span class="line"><span class="meta">#</span><span class="bash">创建集群的token，这个值每个集群保持唯一</span></span><br><span class="line">ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster"</span><br><span class="line"><span class="meta">#</span><span class="bash">设置new为初始静态或DNS引导期间出现的所有成员。如果将此选项设置为existing，则etcd将尝试加入现有群集</span></span><br><span class="line">ETCD_INITIAL_CLUSTER_STATE="new"</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>在所有etcd集群节点上启动etcd并设置开机自启</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl enable etcd</span><br><span class="line">systemctl start etcd</span><br><span class="line">#注：在第一台节点上执行start后会一直卡着无法返回命令提示符，这是因为在等待其他节点准备就绪，继续启动其余节点即可</span><br><span class="line"></span><br><span class="line">systemctl status etcd</span><br></pre></td></tr></table></figure>
+<p>在任意etcd节点上执行如下指令查看集群状态，若所有节点均处于healthy状态则表示etcd集群部署成功</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/etcd/bin/etcdctl --ca-file=/opt/etcd/ssl/ca.pem --cert-file=/opt/etcd/ssl/etcd.pem --key-file=/opt/etcd/ssl/etcd-key.pem --endpoints="https://10.211.55.4:2379,https://10.211.55.5:2379,https://10.211.55.6:2379" cluster-health</span><br></pre></td></tr></table></figure>
+<h2 id="部署etcd3-4版本"><a href="#部署etcd3-4版本" class="headerlink" title="部署etcd3.4版本"></a>部署etcd3.4版本</h2><p>访问<a href="https://github.com/etcd-io/etcd/releases" target="_blank" rel="noopener">https://github.com/etcd-io/etcd/releases</a>下载etcd3.4版本的二进制包（本文以3.4.3为例），并上传到其中一台etcd节点的/root目录下，然后执行如下指令解压并创建etcd相关目录和配置文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">解压到/opt</span></span><br><span class="line">tar zxf etcd-v3.4.3-linux-amd64.tar.gz -C /opt/</span><br><span class="line">mv /opt/etcd-v3.4.3-linux-amd64/ /opt/etcd</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">创建二进制文件存放目录、配置文件存放目录、证书存放目录</span></span><br><span class="line">mkdir /opt/etcd/bin</span><br><span class="line">mkdir /opt/etcd/cfg</span><br><span class="line">mkdir /opt/etcd/ssl</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">拷贝二进制文件到bin目录下</span></span><br><span class="line">cp -a /opt/etcd/etcd* /opt/etcd/bin/</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">拷贝上一步生成的自签证书到ssl目录下</span></span><br><span class="line">cp -a /root/etcd-cert/&#123;ca,etcd,etcd-key&#125;.pem /opt/etcd/ssl/</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">创建etcd集群配置文件，标注部分按实际情况进行修改</span></span><br><span class="line">cat &gt; /opt/etcd/cfg/etcd.conf &lt;&lt; EOF</span><br><span class="line"><span class="meta">#</span><span class="bash">[Member]</span></span><br><span class="line"><span class="meta">#</span><span class="bash">自定义此etcd节点的名称，集群内唯一</span></span><br><span class="line">ETCD_NAME="etcd-1"</span><br><span class="line"><span class="meta">#</span><span class="bash">定义etcd数据存放目录</span></span><br><span class="line">ETCD_DATA_DIR="/var/lib/etcd/default.etcd"</span><br><span class="line"><span class="meta">#</span><span class="bash">定义本机和成员之间通信的地址</span></span><br><span class="line">ETCD_LISTEN_PEER_URLS="https://10.211.55.4:2380" </span><br><span class="line"><span class="meta">#</span><span class="bash">定义etcd对外提供服务的地址</span></span><br><span class="line">ETCD_LISTEN_CLIENT_URLS="https://10.211.55.4:2379,http://127.0.0.1:2379"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">[Clustering]</span></span><br><span class="line"><span class="meta">#</span><span class="bash">定义该节点成员对等URL地址，且会通告集群的其余成员节点</span></span><br><span class="line">ETCD_INITIAL_ADVERTISE_PEER_URLS="https://10.211.55.4:2380"</span><br><span class="line"><span class="meta">#</span><span class="bash">此成员的客户端URL列表，用于通告群集的其余部分</span></span><br><span class="line">ETCD_ADVERTISE_CLIENT_URLS="https://10.211.55.4:2379"</span><br><span class="line"><span class="meta">#</span><span class="bash">集群中所有节点的信息</span></span><br><span class="line">ETCD_INITIAL_CLUSTER="etcd-1=https://10.211.55.4:2380,etcd-2=https://10.211.55.5:2380,etcd-3=https://10.211.55.6:2380"</span><br><span class="line"><span class="meta">#</span><span class="bash">创建集群的token，这个值每个集群保持唯一</span></span><br><span class="line">ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster"</span><br><span class="line"><span class="meta">#</span><span class="bash">设置new为初始静态或DNS引导期间出现的所有成员。如果将此选项设置为existing，则etcd将尝试加入现有群集</span></span><br><span class="line">ETCD_INITIAL_CLUSTER_STATE="new"</span><br><span class="line"><span class="meta">#</span><span class="bash">flannel操作etcd使用的是v2的API，而kubernetes操作etcd使用的v3的API，在最新版ETCD3.4版本中默认关闭v2版本，所以为了兼容flannel，要设置开启v2的API</span></span><br><span class="line">ETCD_ENABLE_V2="true"</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">创建etcd的systemd unit文件</span></span><br><span class="line">vim /usr/lib/systemd/system/etcd.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Etcd Server</span><br><span class="line">After=network.target</span><br><span class="line">After=network-online.target</span><br><span class="line">Wants=network-online.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=notify</span><br><span class="line">EnvironmentFile=/opt/etcd/cfg/etcd.conf</span><br><span class="line">ExecStart=/opt/etcd/bin/etcd \</span><br><span class="line">        --cert-file=/opt/etcd/ssl/etcd.pem \</span><br><span class="line">        --key-file=/opt/etcd/ssl/etcd-key.pem \</span><br><span class="line">        --peer-cert-file=/opt/etcd/ssl/etcd.pem \</span><br><span class="line">        --peer-key-file=/opt/etcd/ssl/etcd-key.pem \</span><br><span class="line">        --trusted-ca-file=/opt/etcd/ssl/ca.pem \</span><br><span class="line">        --peer-trusted-ca-file=/opt/etcd/ssl/ca.pem</span><br><span class="line">Restart=on-failure</span><br><span class="line">LimitNOFILE=65536</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+<p>将etcd目录和systemd unit文件拷贝到其余etcd集群节点上，并修改etcd配置文件中的<strong>名称</strong>和<strong>IP地址</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">拷贝etcd目录和etcd.service到其余etcd集群节点上</span></span><br><span class="line">scp -r /opt/etcd/ k8s-node1:/opt/</span><br><span class="line">scp -r /usr/lib/systemd/system/etcd.service k8s-node1:/usr/lib/systemd/system/</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">修改etcd集群配置文件</span></span><br><span class="line">vim /opt/etcd/cfg/etcd.conf</span><br><span class="line"><span class="meta">#</span><span class="bash">[Member]</span></span><br><span class="line"><span class="meta">#</span><span class="bash">自定义此etcd节点的名称，集群内唯一</span></span><br><span class="line">ETCD_NAME="etcd-1"</span><br><span class="line"><span class="meta">#</span><span class="bash">定义etcd数据存放目录</span></span><br><span class="line">ETCD_DATA_DIR="/var/lib/etcd/default.etcd"</span><br><span class="line"><span class="meta">#</span><span class="bash">定义本机和成员之间通信的地址</span></span><br><span class="line">ETCD_LISTEN_PEER_URLS="https://10.211.55.4:2380" </span><br><span class="line"><span class="meta">#</span><span class="bash">定义etcd对外提供服务的地址</span></span><br><span class="line">ETCD_LISTEN_CLIENT_URLS="https://10.211.55.4:2379,http://127.0.0.1:2379"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">[Clustering]</span></span><br><span class="line"><span class="meta">#</span><span class="bash">定义该节点成员对等URL地址，且会通告集群的其余成员节点</span></span><br><span class="line">ETCD_INITIAL_ADVERTISE_PEER_URLS="https://10.211.55.4:2380"</span><br><span class="line"><span class="meta">#</span><span class="bash">此成员的客户端URL列表，用于通告群集的其余部分</span></span><br><span class="line">ETCD_ADVERTISE_CLIENT_URLS="https://10.211.55.4:2379"</span><br><span class="line"><span class="meta">#</span><span class="bash">集群中所有节点的信息</span></span><br><span class="line">ETCD_INITIAL_CLUSTER="etcd-1=https://10.211.55.4:2380,etcd-2=https://10.211.55.5:2380,etcd-3=https://10.211.55.6:2380"</span><br><span class="line"><span class="meta">#</span><span class="bash">创建集群的token，这个值每个集群保持唯一</span></span><br><span class="line">ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster"</span><br><span class="line"><span class="meta">#</span><span class="bash">设置new为初始静态或DNS引导期间出现的所有成员。如果将此选项设置为existing，则etcd将尝试加入现有群集</span></span><br><span class="line">ETCD_INITIAL_CLUSTER_STATE="new"</span><br><span class="line"><span class="meta">#</span><span class="bash">flannel操作etcd使用的是v2的API，而kubernetes操作etcd使用的v3的API，在最新版ETCD3.4版本中默认关闭v2版本，所以为了兼容flannel，要设置开启v2的API</span></span><br><span class="line">ETCD_ENABLE_V2="true"</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>在所有etcd集群节点上设置etcd开机自启并启动etcd</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl enable etcd</span><br><span class="line">systemctl start etcd</span><br><span class="line">#注：在第一台节点上执行start后会一直卡着无法返回命令提示符，这是因为在等待其他节点准备就绪，继续启动其余节点即可</span><br><span class="line"></span><br><span class="line">systemctl status etcd</span><br></pre></td></tr></table></figure>
+<p>在任意etcd节点上执行如下指令查看集群状态，若所有节点均处于healthy状态则表示etcd集群部署成功</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/etcd/bin/etcdctl --cacert=/opt/etcd/ssl/ca.pem --cert=/opt/etcd/ssl/etcd.pem --key=/opt/etcd/ssl/etcd-key.pem --endpoints="https://10.211.55.4:2379,https://10.211.55.5:2379,https://10.211.55.6:2379" endpoint health</span><br></pre></td></tr></table></figure>
+<h2 id="卸载etcd"><a href="#卸载etcd" class="headerlink" title="卸载etcd"></a>卸载etcd</h2><p>若安装失败需要卸载重新安装，在所有etcd节点上执行如下指令即可:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop etcd</span><br><span class="line">systemctl disable etcd</span><br><span class="line">rm -rf /opt/etcd/</span><br><span class="line">rm -rf /usr/lib/systemd/system/etcd.service</span><br><span class="line">rm -rf /var/lib/etcd/</span><br></pre></td></tr></table></figure>
+<p>更新中…</p>
+<ul>
+<li>EOF</li>
+</ul>
+<p>本文作者：Koen</p>
+<p>参考链接：</p>
+<p><a href="https://blog.csdn.net/snipercai/article/details/101012124" target="_blank" rel="noopener">https://blog.csdn.net/snipercai/article/details/101012124</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Docker/" rel="tag"># Docker</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ck42jf7bf002dq4kcqgjxcje9.html" rel="next" title="在CentOS7上使用kubeadm快速部署Kubernetes高可用集群">
+                <i class="fa fa-chevron-left"></i> 在CentOS7上使用kubeadm快速部署Kubernetes高可用集群
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/avatar.jpg"
+                alt="Koenli" />
+            
+              <p class="site-author-name" itemprop="name">Koenli</p>
+              <p class="site-description motion-element" itemprop="description">想要出类拔萃，就要做别人不想做的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes是什么"><span class="nav-number">1.</span> <span class="nav-text">Kubernetes是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes特性"><span class="nav-number">2.</span> <span class="nav-text">Kubernetes特性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes集群架构与组件"><span class="nav-number">3.</span> <span class="nav-text">Kubernetes集群架构与组件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Master组件"><span class="nav-number">3.1.</span> <span class="nav-text">Master组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Node组件"><span class="nav-number">3.2.</span> <span class="nav-text">Node组件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes核心概念"><span class="nav-number">4.</span> <span class="nav-text">Kubernetes核心概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Pod"><span class="nav-number">4.1.</span> <span class="nav-text">Pod</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Controllers"><span class="nav-number">4.2.</span> <span class="nav-text">Controllers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Service"><span class="nav-number">4.3.</span> <span class="nav-text">Service</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Label"><span class="nav-number">4.4.</span> <span class="nav-text">Label</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Namespace"><span class="nav-number">4.5.</span> <span class="nav-text">Namespace</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#生产环境K8S平台规划"><span class="nav-number">5.</span> <span class="nav-text">生产环境K8S平台规划</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单Master集群"><span class="nav-number">5.1.</span> <span class="nav-text">单Master集群</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多Master集群-HA"><span class="nav-number">5.2.</span> <span class="nav-text">多Master集群(HA)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#服务器硬件配置推荐"><span class="nav-number">6.</span> <span class="nav-text">服务器硬件配置推荐</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mater节点"><span class="nav-number">6.1.</span> <span class="nav-text">mater节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node节点"><span class="nav-number">6.2.</span> <span class="nav-text">node节点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验环境信息"><span class="nav-number">7.</span> <span class="nav-text">实验环境信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#系统初始化"><span class="nav-number">8.</span> <span class="nav-text">系统初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关闭防火墙"><span class="nav-number">8.1.</span> <span class="nav-text">关闭防火墙</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关闭selinux"><span class="nav-number">8.2.</span> <span class="nav-text">关闭selinux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关闭swap"><span class="nav-number">8.3.</span> <span class="nav-text">关闭swap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置主机名"><span class="nav-number">8.4.</span> <span class="nav-text">配置主机名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加所有节点的本地host解析"><span class="nav-number">8.5.</span> <span class="nav-text">添加所有节点的本地host解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装基础软件包"><span class="nav-number">8.6.</span> <span class="nav-text">安装基础软件包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内核开启网络支持"><span class="nav-number">8.7.</span> <span class="nav-text">内核开启网络支持</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置所有master到所有节点（包括自身）的ssh免密登录"><span class="nav-number">8.8.</span> <span class="nav-text">配置所有master到所有节点（包括自身）的ssh免密登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#节点之间时间同步"><span class="nav-number">8.9.</span> <span class="nav-text">节点之间时间同步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#server端"><span class="nav-number">8.9.1.</span> <span class="nav-text">server端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#client端"><span class="nav-number">8.9.2.</span> <span class="nav-text">client端</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装CFSSL工具"><span class="nav-number">9.</span> <span class="nav-text">安装CFSSL工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#部署etcd数据库集群"><span class="nav-number">10.</span> <span class="nav-text">部署etcd数据库集群</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用cfssl为etcd生成自签证书"><span class="nav-number">10.1.</span> <span class="nav-text">使用cfssl为etcd生成自签证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署etcd3-4之前版本"><span class="nav-number">10.2.</span> <span class="nav-text">部署etcd3.4之前版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署etcd3-4版本"><span class="nav-number">10.3.</span> <span class="nav-text">部署etcd3.4版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#卸载etcd"><span class="nav-number">10.4.</span> <span class="nav-text">卸载etcd</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Koenli</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: 'XD8aPBomWwb9OrD5OlP3F42U-gzGzoHsz',
+        appKey: 'EHcp6RUK4G6BGD0dqfrz0IDo',
+        placeholder: '想对作者说点什么',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("XD8aPBomWwb9OrD5OlP3F42U-gzGzoHsz", "EHcp6RUK4G6BGD0dqfrz0IDo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
