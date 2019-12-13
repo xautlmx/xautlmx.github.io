@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python,语言,Flask," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="初始化 所有Flask都必须创建一个程序实例。Web服务器使用一种名为Web服务器网关接口的（Web Server Gateway Interface，WSGI）的协议，把接收自客户端的所有请求都转交给这个对象处理。程序实例是Flask类的对象，经常使用下述代码构建： 12from flask import Flaskapp = Flask(__name__) Flask类的构造函数只有一个必须指">
+<meta name="keywords" content="Python,语言,Flask">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flask——程序的基本结构">
+<meta property="og:url" content="http://koenli.github.io/ck43sijlw000k72kc4g2ckabi.html">
+<meta property="og:site_name" content="Koenli&#39;s Blog">
+<meta property="og:description" content="初始化 所有Flask都必须创建一个程序实例。Web服务器使用一种名为Web服务器网关接口的（Web Server Gateway Interface，WSGI）的协议，把接收自客户端的所有请求都转交给这个对象处理。程序实例是Flask类的对象，经常使用下述代码构建： 12from flask import Flaskapp = Flask(__name__) Flask类的构造函数只有一个必须指">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-02-16T02:51:22.629Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Flask——程序的基本结构">
+<meta name="twitter:description" content="初始化 所有Flask都必须创建一个程序实例。Web服务器使用一种名为Web服务器网关接口的（Web Server Gateway Interface，WSGI）的协议，把接收自客户端的所有请求都转交给这个对象处理。程序实例是Flask类的对象，经常使用下述代码构建： 12from flask import Flaskapp = Flask(__name__) Flask类的构造函数只有一个必须指">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://koenli.github.io/ck43sijlw000k72kc4g2ckabi.html"/>
+
+
+
+
+
+  <title>Flask——程序的基本结构 | Koenli's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Koenli's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://koenli.github.io/ck43sijlw000k72kc4g2ckabi.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Koenli">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Koenli's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Flask——程序的基本结构</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-17T18:22:18+08:00">
+                2016-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Web阵地/" itemprop="url" rel="index">
+                    <span itemprop="name">Web阵地</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Web阵地/Code堡垒/" itemprop="url" rel="index">
+                    <span itemprop="name">Code堡垒</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/ck43sijlw000k72kc4g2ckabi.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/ck43sijlw000k72kc4g2ckabi.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/ck43sijlw000k72kc4g2ckabi.html" class="leancloud_visitors" data-flag-title="Flask——程序的基本结构">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h1><hr>
+<p>所有Flask都必须创建一个程序实例。Web服务器使用一种名为Web服务器网关接口的（Web Server Gateway Interface，WSGI）的协议，把接收自客户端的所有请求都转交给这个对象处理。程序实例是Flask类的对象，经常使用下述代码构建：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from flask import Flask</span><br><span class="line">app = Flask(__name__)</span><br></pre></td></tr></table></figure>
+<p>Flask类的构造函数只有一个必须指定的参数，即程序主模块或包的名字。在大多数程序中，Python的<code>__name__</code>变量就是所需的值。</p>
+<blockquote>
+<p>将构造函数的name参数传给Flask程序，Flask可以用这个参数决定程序的根目录，以便稍后能够找到相对于程序根目录的资源文件位置。</p>
+</blockquote>
+<h1 id="路由与视图函数"><a href="#路由与视图函数" class="headerlink" title="路由与视图函数"></a>路由与视图函数</h1><hr>
+<p>客户端（例如Web浏览器）把请求发送给Web服务器，Web服务器再把请求发送给Flask程序实例。程序实例需要知道对每个URL请求运行哪些代码，所以保存了一个URL到Python函数的映射关系。处理URL和函数之间关系的程序称为<strong>路由</strong></p>
+<p>在Flask程序中定义路由的最简便的方式，是使用程序实例提供的app.route修饰器，把修饰器的函数注册为路由。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@app.route(&apos;/&apos;)</span><br><span class="line">def index():</span><br><span class="line">    return &apos;&lt;h1&gt;Hello World!&lt;/h1&gt;&apos;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>修饰器是Python语言的标准特性，可以使用不同的方式修改函数的行为。惯常用法是使用修饰器把函数注册为事件的处理程序。</p>
+</blockquote>
+<p>前例把index()函数注册为程序根地址的处理程序。如果部署程序的服务器域名为<a href="http://www.example.com，在浏览器中访问http://www.example.com后，会触发服务器执行index()函数。这个函数的返回值称为**响应**，是客户端接收到的内容。如果客户端是Web浏览器，响应就是显示给用户查看的文档。" target="_blank" rel="noopener">www.example.com，在浏览器中访问http://www.example.com后，会触发服务器执行index()函数。这个函数的返回值称为**响应**，是客户端接收到的内容。如果客户端是Web浏览器，响应就是显示给用户查看的文档。</a></p>
+<p>像index()这样的函数称为<strong>视图函数</strong>（view function）。视图函数返回的响应可以是包含HTML的简单字符串，也可以是复杂的表单。</p>
+<p>另外，Flask还支持包含可变部分的URL，只需在route修饰器中使用特殊的句法即可。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@app.route(&apos;/user/&lt;name&gt;&apos;)</span><br><span class="line">def user(name):</span><br><span class="line">    return &apos;&lt;h1&gt;Hello,%s!&lt;/h1&gt;&apos; %name</span><br></pre></td></tr></table></figure>
+<p>尖括号中的内容是动态部分，任何能匹配静态部分的URL都会映射到这个路由上。调用试图函数时，Flask会将动态部分作为参数传入函数。在这个视图函数中，参数用于生成针对个人的欢迎消息。路由中的动态部分默认使用字符串，不过也可使用类型定义。例如，路由/user/<a href="int:id" target="_blank" rel="noopener">int:id</a>只会匹配动态片段id为整数的URL。Flask支持在路由中使用<code>int</code>、<code>float</code>和<code>path</code>类型。<code>path</code>类型也是字符串，但不把斜线视作分隔符，而将其当做动态片段的一部分。</p>
+<h1 id="启动服务器"><a href="#启动服务器" class="headerlink" title="启动服务器"></a>启动服务器</h1><hr>
+<p>程序实例用run方法启动Flask集成的开发Web服务器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    app.run(debug=True,host=&apos;0.0.0.0&apos;)</span><br></pre></td></tr></table></figure>
+<p><code>__name__==&#39;__main__&#39;</code>是Python的惯常用法，在这里确保直接执行这个脚本时才启动开发Web服务器。如果这个脚本由其他脚本引入，程序假定父级脚本会启动不同的服务器，因此不会执行app.run()。</p>
+<p>服务器启动后，会进入轮询，等待并处理请求。轮询会一直运行，直到程序停止，比如按Ctrl-C键。</p>
+<blockquote>
+<p>有一些选项参数可被app.run()函数接受用于设置Web服务器的操作模式。在开发过程中启动调试模式会带来一些便利，比如说激活调试器和重载程序。要想启动调试模式，我们可以把debug参数设为True。</p>
+</blockquote>
+<h1 id="一个完整的程序"><a href="#一个完整的程序" class="headerlink" title="一个完整的程序"></a>一个完整的程序</h1><hr>
+<p>前面介绍了Flask Web程序的不同组成部分，现在尝试开发一个完整的程序，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from flask import Flask</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">@app.route(&apos;/&apos;)</span><br><span class="line">def index():</span><br><span class="line">    return &apos;&lt;h1&gt;Hello World!&lt;/h1&gt;&apos;</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    app.run(debug=True,host=&apos;0.0.0.0&apos;)</span><br></pre></td></tr></table></figure>
+<p>使用下述命令启动程序：</p>
+<pre><code># python run.py 
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger pin code: 953-142-708
+</code></pre><p>程序运行后，打开浏览器，在地址栏中输入http://<ip>:5000，能访问到Hello World页面，如果输入了其他地址，程序将不知道如何处理，因此会向浏览器返回错误代码404。</ip></p>
+<p>继续向上述代码中添加一个动态路由，访问这个地址http://<ip>:5000/user/xautlmx，你会看到一则针对个人的欢迎消息。</ip></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">from flask import Flask</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">@app.route(&apos;/&apos;)</span><br><span class="line">def index():</span><br><span class="line">    return &apos;&lt;h1&gt;Hello World!&lt;/h1&gt;&apos;</span><br><span class="line"></span><br><span class="line">@app.route(&apos;/user/&lt;name&gt;&apos;)</span><br><span class="line">def user(name):</span><br><span class="line">    return &apos;&lt;h1&gt;Hello,%s!&lt;/h1&gt;&apos; %name</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    app.run(debug=True,host=&apos;0.0.0.0&apos;)</span><br></pre></td></tr></table></figure>
+<h1 id="请求-响应循环"><a href="#请求-响应循环" class="headerlink" title="请求-响应循环"></a>请求-响应循环</h1><hr>
+<h2 id="程序和请求上下文"><a href="#程序和请求上下文" class="headerlink" title="程序和请求上下文"></a>程序和请求上下文</h2><p>Flask从客户端收到请求时，要让视图函数能访问一些对象，这样才能处理请求。请求对象就是一个很好的例子，它封装了客户端发送的HTTP请求。</p>
+<p>要想让视图函数能够访问请求对象，一个显而易见的方式是将其作为参数传入视图函数，不过这会导致程序中的每个视图函数都增加一个参数。除了访问请求对象，如果视图函数在处理请求时还要访问其他对象，情况会变得更糟。</p>
+<p>为了避免大量可有可无的参数把视图函数弄得一团糟，Flask使用<strong>上下文</strong>临时把某些对象变为全局可访问。有了上下文，就可以写出下面的视图函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">from flask import Flask,request</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">@app.route(&apos;/&apos;)</span><br><span class="line">def index():</span><br><span class="line">    user_agent = request.headers.get(&apos;User-Agent&apos;)</span><br><span class="line">    return &apos;&lt;h1&gt;Your browser is %s&lt;/h1&gt;&apos; %user_agent</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    app.run(debug=True,host=&apos;0.0.0.0&apos;)</span><br></pre></td></tr></table></figure>
+<p>注意在这个视图函数中我们如何把request当做全局变量使用。事实上，request不可能是全局变量。试想，在多线程服务器中，多个线程同时处理不同客户端发送的不同请求时，每个线程看到的request对象必然不同。Flask使用上下文让特定的变量在一个线程中全局可访问，与此同时却不会干扰其他线程。</p>
+<blockquote>
+<p>线程是可单独管理的最小指令集。进程经常使用多个活动线程，有时还会共享内存或文件句柄等资源。多线程Web服务器会创建一个线程池，再从线程池中选择一个线程用于处理接收到的请求。</p>
+</blockquote>
+<p>在Flask中有两种上下文：<strong>程序上下文</strong>和<strong>请求上下文</strong>。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">变量名</th>
+<th style="text-align:center">上下文</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">current_app</td>
+<td style="text-align:center">程序上下文</td>
+<td style="text-align:center">当前激活程序的程序实例</td>
+</tr>
+<tr>
+<td style="text-align:center">g</td>
+<td style="text-align:center">程序上下文</td>
+<td style="text-align:center">处理请求时用作临时存储的对象。每次请求都会重设这个变量</td>
+</tr>
+<tr>
+<td style="text-align:center">request</td>
+<td style="text-align:center">请求上下文</td>
+<td style="text-align:center">请求对象，封装了客户端发出的HTTP请求中的内容</td>
+</tr>
+<tr>
+<td style="text-align:center">session</td>
+<td style="text-align:center">请求上下文</td>
+<td style="text-align:center">用户会话，用于存储请求之间需要“记住”的值的字典</td>
+</tr>
+</tbody>
+</table>
+<p>Flask在分发请求之前激活（或推送）程序和请求上下文，请求处理完成后再将其删除。程序上下文被推送后，就可以在线程中使用current_app和g变量。类似地，请求上下文被推送后，就可以使用request和session变量。如果使用这些变量时我们没有激活程序上下文或请求上下文，就会导致错误。</p>
+<p>下面这个Python shell会话演示了程序上下文的使用方法（run是上述程序Flask程序的文件名）：</p>
+<pre><code>&gt;&gt;&gt; from run import app
+&gt;&gt;&gt; from flask import current_app
+&gt;&gt;&gt; current_app.name
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+  File &quot;/root/myproject/venv/lib/python2.7/site-packages/werkzeug/local.py&quot;, line 343, in __getattr__
+    return getattr(self._get_current_object(), name)
+  File &quot;/root/myproject/venv/lib/python2.7/site-packages/werkzeug/local.py&quot;, line 302, in _get_current_object
+    return self.__local()
+  File &quot;/root/myproject/venv/lib/python2.7/site-packages/flask/globals.py&quot;, line 34, in _find_app
+    raise RuntimeError(&apos;working outside of application context&apos;)
+RuntimeError: working outside of application context
+&gt;&gt;&gt; app_ctx = app.app_context()
+&gt;&gt;&gt; app_ctx.push()
+&gt;&gt;&gt; current_app.name
+&apos;run&apos;
+&gt;&gt;&gt; app_ctx.pop()
+</code></pre><h2 id="请求调度"><a href="#请求调度" class="headerlink" title="请求调度"></a>请求调度</h2><p>程序收到客户端发来的请求时，要找到处理该请求的视图函数。为了完成这个任务，Flask会在程序的URL映射中查找请求的URL。URL映射是URL和视图函数之间的对应关系。Flask使用app.route修饰器或者非修饰器形式的app.add_url_rule()生成映射。</p>
+<p>要想查看Flask程序中的URL映射是什么样子，我们可以在Python shell中检查为run.py生成的映射。测试之前，确保激活了虚拟环境：</p>
+<pre><code># python
+&gt;&gt;&gt; from run import app
+&gt;&gt;&gt; app.url_map
+Map([&lt;Rule &apos;/&apos; (HEAD, OPTIONS, GET) -&gt; index&gt;,
+ &lt;Rule &apos;/static/&lt;filename&gt;&apos; (HEAD, OPTIONS, GET) -&gt; static&gt;])
+</code></pre><p><code>/</code>路由在程序中使用app.route修饰器定义。<code>/static/&lt;filename&gt;</code>路由是Flask添加的特殊路由，用于访问静态文件</p>
+<p>URL映射中的HEAD、OPTIONS、GET是请求方法，由路由进行处理。Flask为每个路由都指定了请求方法，这样不同的请求方法发送到相同的URL上时，会使用不同的视图函数进行处理。HEAD和OPTIONS方法由Flask自动处理，因此可以说，在这个程序中，URL映射中的2个路由都使用GET方法。</p>
+<h2 id="请求钩子"><a href="#请求钩子" class="headerlink" title="请求钩子"></a>请求钩子</h2><p>有时在处理请求之前或之后执行代码会很有用。例如，在请求开始时，我们可能需要创建数据库连接或者认证发起请求的用户。为了避免在每个视图函数中都使用重复的代码，Flask提供了注册通用函数的功能，注册的函数可在请求被分发到视图函数之前或之后调用。</p>
+<p>请求钩子使用修饰器实现。Flask至此以下4种钩子：</p>
+<ul>
+<li>before_first_request：注册一个函数，在处理第一个请求之前运行。</li>
+<li>before_request：注册一个函数，在每次请求之前运行。</li>
+<li>after_request：注册一个函数，如果没有未处理的异常抛出，在每次请求之后运行。</li>
+<li>teardown_request：注册一个函数，即使有未处理的异常抛出，也在每次请求之后运行。</li>
+</ul>
+<p>在请求钩子函数和视图函数之间共享数据一般使用上下文全局变量g。例如：before_request处理程序可以从数据库中加载已登录用户，并将其保存到g.user中。随后调用视图函数时，视图函数再使用g.user获取用户。</p>
+<h2 id="响应"><a href="#响应" class="headerlink" title="响应"></a>响应</h2><p>Flask调用视图函数后，会将其返回值作为响应的内容。大多数情况下，响应就是一个简单的字符串，作为HTML页面回送客户端。</p>
+<p>但HTTP协议需要的不仅是作为请求响应的字符串。HTTP响应中一个很重要的部分是<strong>状态码</strong>，Flask默认设为200，这个代码表明请求已经被成功处理。</p>
+<p>如果视图函数返回的响应需要使用不同的状态码，那么可以把数字代码作为第二个返回值，添加到响应文本之后。例如，下述视图函数返回一个404状态码，表示请求无效：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">from flask import Flask,request</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">@app.route(&apos;/&apos;)</span><br><span class="line">def index():</span><br><span class="line">    user_agent = request.headers.get(&apos;User-Agent&apos;)</span><br><span class="line">    return &apos;&lt;h1&gt;Your browser is %s&lt;/h1&gt;&apos; %user_agent,404</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    app.run(debug=True,host=&apos;0.0.0.0&apos;)</span><br></pre></td></tr></table></figure>
+<p>视图函数返回的响应还可以接受第三个参数，这是一个由首部（header）组成的字典，可以添加到HTTP响应中。一般情况下并不需要这么做。</p>
+<p>如果不想返回由1个、2个或3个值组成的元组，Flask试图函数还可以返回Response对象。make_response()函数可接受1个、2个或3个参数（和视图函数的返回值一样），并返回一个Response对象。有时我们需要在视图函数中进行这种转换，然后在响应对象上调用各种方法，进一步设置响应。下例创建了一个响应对象，然后设置了cookie：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from flask import Flask,make_response</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">@app.route(&apos;/&apos;)</span><br><span class="line">def index():</span><br><span class="line">    response = make_response(&apos;&lt;h1&gt;This document carries a cookie!&lt;/h1&gt;&apos;)</span><br><span class="line">    response.set_cookie(&apos;answer&apos;,&apos;42&apos;)</span><br><span class="line">    return response</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    app.run(debug=True,host=&apos;0.0.0.0&apos;)</span><br></pre></td></tr></table></figure>
+<p>有一种名为重定向的特殊响应类型。这种响应没有页面文档，只告诉浏览器一个新地址用以加载新页面。重定向经常在Web表单中使用。</p>
+<p>重定向经常使用302状态码表示，指向的地址由Location首部提供。重定向响应可以使用3个值形式的返回值生成，也可在Response对象中设定。不过，由于使用频繁，Flask提供了redirect()辅助函数，用于生成这种响应：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from flask import Flask,redirect</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">@app.route(&apos;/&apos;)</span><br><span class="line">def index():</span><br><span class="line">    return redirect(&apos;http://www.baidu.com&apos;)</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    app.run(debug=True,host=&apos;0.0.0.0&apos;)</span><br></pre></td></tr></table></figure>
+<p>还有一种特殊的响应由abort函数生成，用于处理错误。在下面这个例子中，如果URL中动态参数id不存在，就返回状态码404：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">from flask import Flask,abort</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">@app.route(&apos;/user/&lt;id&gt;&apos;)</span><br><span class="line">def get_user(id):</span><br><span class="line">    if id:</span><br><span class="line">        return &apos;&lt;h1&gt;Hello %s&lt;/h1&gt;&apos; %id</span><br><span class="line">    else:</span><br><span class="line">        abort(404)</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    app.run(debug=True,host=&apos;0.0.0.0&apos;)</span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong>abort不会把控制权交还给调用它的函数，而是抛出异常把控制权交给Web服务器。</p>
+<h1 id="Flask扩展"><a href="#Flask扩展" class="headerlink" title="Flask扩展"></a>Flask扩展</h1><hr>
+<p>Flask被设计为可扩展形式，故而没有提供一些重要的功能，例如数据库和用户认证，所以开发者可以自由选择最合适程序的包，或者按需求自行开发。</p>
+<p>社区成员开发了大量不同用途的扩展，如果这还不能满足需求，你还可使用所有Python标准包或代码库。</p>
+<h2 id="使用Flask-Script支持命令行选项"><a href="#使用Flask-Script支持命令行选项" class="headerlink" title="使用Flask-Script支持命令行选项"></a>使用Flask-Script支持命令行选项</h2><p>Flask的开发Web服务器支持很多启动设置选项，但只能在脚本中作为参数传给app.run()函数。这种方式并不十分方便，传递设置选项的理想方式是使用命令行参数。</p>
+<p>Flask-Script是一个Flask扩展，为Flask程序添加了一个命令行解释器。Flask-Script自带了一组常用选项，而且还支持自定义命令。</p>
+<p>Flask-Script扩展使用pip安装：</p>
+<pre><code>(venv) [root@server1 myproject]# pip install flask-script
+</code></pre><p>然后更改程序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from flask import Flask,abort</span><br><span class="line">from flask.ext.script import Manager</span><br><span class="line">app = Flask(__name__)</span><br><span class="line">manager = Manager(app)</span><br><span class="line"></span><br><span class="line">@app.route(&apos;/&apos;)</span><br><span class="line">def index():</span><br><span class="line">    return &apos;&lt;h1&gt;Hello World!&lt;/h1&gt;&apos;</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    manager.run()</span><br></pre></td></tr></table></figure>
+<p>专为Flask开发的扩展都包含在flask.ext命名空间下。Flask-Script输出了一个名为Manager的类，可从flask.ext.script中引入。</p>
+<p>这个扩展的初始化方法也适用于其他很多扩展：<strong>把程序实例作为参数传给构造函数，初始化主类的实例。创建的对象可以在各个扩展中使用。</strong>在这里，服务器由manager.run()启动，启动后就能解析命令行了。</p>
+<p>修改之后的程序可以使用一组基本命令行选项。现在运行run.py，会显示一个用法消息：</p>
+<pre><code># python run.py
+usage: run.py [-?] {shell,runserver} ...
+
+positional arguments:
+  {shell,runserver}
+    shell            Runs a Python shell inside Flask application context.
+    runserver        Runs the Flask development server i.e. app.run()
+
+optional arguments:
+  -?, --help         show this help message and exit
+</code></pre><p>shell命令用于在程序的上下文中启动Python shell会话。可以使用这个会话中运行维护任务或测试，还可以调试异常。下面列举几个常用的命令行选项和参数：</p>
+<ul>
+<li>runserver 以调试模式启动Web服务器</li>
+<li>runserver –host 指定Web服务器再哪个网络接口上监听来自客户端的连接</li>
+<li><p>runserver –port 指定Web服务器监听的端口</p>
+</li>
+<li><p>EOF</p>
+</li>
+</ul>
+<p>本文作者：Koen</p>
+<p>参考书籍：《Flask Web开发——基于Python的Web应用开发实战》</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/语言/" rel="tag"># 语言</a>
+          
+            <a href="/tags/Flask/" rel="tag"># Flask</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ck43sijly000p72kc393a0nh3.html" rel="next" title="Flask开发环境搭建">
+                <i class="fa fa-chevron-left"></i> Flask开发环境搭建
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ck43sijlt000d72kclv800e90.html" rel="prev" title="Flask——模板">
+                Flask——模板 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/avatar.jpg"
+                alt="Koenli" />
+            
+              <p class="site-author-name" itemprop="name">Koenli</p>
+              <p class="site-description motion-element" itemprop="description">想要出类拔萃，就要做别人不想做的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#初始化"><span class="nav-number">1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#路由与视图函数"><span class="nav-number">2.</span> <span class="nav-text">路由与视图函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动服务器"><span class="nav-number">3.</span> <span class="nav-text">启动服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一个完整的程序"><span class="nav-number">4.</span> <span class="nav-text">一个完整的程序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#请求-响应循环"><span class="nav-number">5.</span> <span class="nav-text">请求-响应循环</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#程序和请求上下文"><span class="nav-number">5.1.</span> <span class="nav-text">程序和请求上下文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#请求调度"><span class="nav-number">5.2.</span> <span class="nav-text">请求调度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#请求钩子"><span class="nav-number">5.3.</span> <span class="nav-text">请求钩子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#响应"><span class="nav-number">5.4.</span> <span class="nav-text">响应</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Flask扩展"><span class="nav-number">6.</span> <span class="nav-text">Flask扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Flask-Script支持命令行选项"><span class="nav-number">6.1.</span> <span class="nav-text">使用Flask-Script支持命令行选项</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Koenli</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: 'XD8aPBomWwb9OrD5OlP3F42U-gzGzoHsz',
+        appKey: 'EHcp6RUK4G6BGD0dqfrz0IDo',
+        placeholder: '想对作者说点什么',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("XD8aPBomWwb9OrD5OlP3F42U-gzGzoHsz", "EHcp6RUK4G6BGD0dqfrz0IDo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
