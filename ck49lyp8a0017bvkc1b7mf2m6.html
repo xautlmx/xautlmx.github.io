@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="数据库," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="MariaDB作为Mysql的一个分支，在开源项目中已经广泛使用，例如大热的openstack，所以，为了保证服务的高可用性，同时提高系统的负载能力，集群部署是必不可少的。 MariaDB Galera Cluster 介绍 MariaDB集群是MariaDB同步多主机集群。它仅支持XtraDB/ InnoDB存储引擎（虽然有对MyISAM实验支持 - 看wsrep_replicate_myisa">
+<meta name="keywords" content="数据库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MariaDB Galera Cluster 部署">
+<meta property="og:url" content="http://koenli.github.io/ck49lyp8a0017bvkc1b7mf2m6.html">
+<meta property="og:site_name" content="Koenli&#39;s Blog">
+<meta property="og:description" content="MariaDB作为Mysql的一个分支，在开源项目中已经广泛使用，例如大热的openstack，所以，为了保证服务的高可用性，同时提高系统的负载能力，集群部署是必不可少的。 MariaDB Galera Cluster 介绍 MariaDB集群是MariaDB同步多主机集群。它仅支持XtraDB/ InnoDB存储引擎（虽然有对MyISAM实验支持 - 看wsrep_replicate_myisa">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://img.koenli.com/MariaDB%20Galera%20Cluster%20%E9%83%A8%E7%BD%B2_1.png">
+<meta property="og:updated_time" content="2019-01-30T15:51:03.506Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MariaDB Galera Cluster 部署">
+<meta name="twitter:description" content="MariaDB作为Mysql的一个分支，在开源项目中已经广泛使用，例如大热的openstack，所以，为了保证服务的高可用性，同时提高系统的负载能力，集群部署是必不可少的。 MariaDB Galera Cluster 介绍 MariaDB集群是MariaDB同步多主机集群。它仅支持XtraDB/ InnoDB存储引擎（虽然有对MyISAM实验支持 - 看wsrep_replicate_myisa">
+<meta name="twitter:image" content="https://img.koenli.com/MariaDB%20Galera%20Cluster%20%E9%83%A8%E7%BD%B2_1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://koenli.github.io/ck49lyp8a0017bvkc1b7mf2m6.html"/>
+
+
+
+
+
+  <title>MariaDB Galera Cluster 部署 | Koenli's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Koenli's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://koenli.github.io/ck49lyp8a0017bvkc1b7mf2m6.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Koenli">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Koenli's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MariaDB Galera Cluster 部署</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-07T18:43:40+08:00">
+                2016-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux营地/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux营地</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/ck49lyp8a0017bvkc1b7mf2m6.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/ck49lyp8a0017bvkc1b7mf2m6.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/ck49lyp8a0017bvkc1b7mf2m6.html" class="leancloud_visitors" data-flag-title="MariaDB Galera Cluster 部署">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>MariaDB作为Mysql的一个分支，在开源项目中已经广泛使用，例如大热的openstack，所以，为了保证服务的高可用性，同时提高系统的负载能力，集群部署是必不可少的。</p>
+<h1 id="MariaDB-Galera-Cluster-介绍"><a href="#MariaDB-Galera-Cluster-介绍" class="headerlink" title="MariaDB Galera Cluster 介绍"></a>MariaDB Galera Cluster 介绍</h1><hr>
+<p>MariaDB集群是MariaDB同步多主机集群。它仅支持XtraDB/ InnoDB存储引擎（虽然有对MyISAM实验支持 - 看wsrep_replicate_myisam系统变量）。</p>
+<blockquote>
+<p>主要功能</p>
+</blockquote>
+<ul>
+<li>同步复制</li>
+<li>真正的multi-master，即所有节点可以同时读写数据库</li>
+<li>自动的节点成员控制，失效节点自动被清除</li>
+<li>新节点加入数据自动复制</li>
+<li>真正的并行复制，行级</li>
+<li>用户可以直接连接集群，使用感受上与MySQL完全一致</li>
+</ul>
+<blockquote>
+<p>优势</p>
+</blockquote>
+<ul>
+<li>因为是多主，所以不存在Slavelag(延迟)</li>
+<li>不存在丢失事务的情况</li>
+<li>同时具有读和写的扩展能力</li>
+<li>更小的客户端延迟</li>
+<li>节点间数据是同步的,而Master/Slave模式是异步的,不同slave上的binlog可能是不同的</li>
+</ul>
+<blockquote>
+<p>技术</p>
+</blockquote>
+<p>Galera集群的复制功能基于Galeralibrary实现,为了让MySQL与Galera library通讯，特别针对MySQL开发了wsrep API。</p>
+<p>Galera插件保证集群同步数据，保持数据的一致性，靠的就是可认证的复制，工作原理如下图：</p>
+<p><img src="https://img.koenli.com/MariaDB%20Galera%20Cluster%20%E9%83%A8%E7%BD%B2_1.png" alt=""></p>
+<p>当客户端发出一个commit的指令，在事务被提交之前，所有对数据库的更改都会被<code>write-set</code>收集起来,并且将<code>write-set</code>纪录的内容发送给其他节点。</p>
+<p><code>write-set</code>将在每个节点进行认证测试，测试结果决定着节点是否应用<code>write-set</code>更改数据。</p>
+<p>如果认证测试失败，节点将丢弃<code>write-set</code>；如果认证测试成功，则事务提交。</p>
+<h1 id="MariaDB-Galera-Cluster-安装配置"><a href="#MariaDB-Galera-Cluster-安装配置" class="headerlink" title="MariaDB Galera Cluster 安装配置"></a>MariaDB Galera Cluster 安装配置</h1><hr>
+<h2 id="安装环境准备"><a href="#安装环境准备" class="headerlink" title="安装环境准备"></a>安装环境准备</h2><p>安装MariaDB集群至少需要3台服务器（如果只有两台的话需要特殊配置，请参照<a href="http://galeracluster.com/documentation-webpages/twonode.html" target="_blank" rel="noopener">官方文档</a>）</p>
+<p>操作系统版本：CentOS7.1（CentOS-7-x86_64-Minimal-1503-01）</p>
+<p>在三台机器上修改/etc/hosts文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;&gt; /etc/hosts &lt;&lt; EOF</span><br><span class="line">192.168.128.131		node1</span><br><span class="line">192.168.128.132		node2</span><br><span class="line">192.168.128.133		node3</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>为了保证节点间相互通信，需要禁用三台机器的防火墙设置（如果需要防火墙，则参照<a href="http://galeracluster.com/documentation-webpages/galerainstallation.html#firewall-configuration" target="_blank" rel="noopener">官方网站</a>增加防火墙信息设置）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl disable firewalld</span><br></pre></td></tr></table></figure>
+<p>然后将<code>/etc/sysconfig/selinux</code>的<code>selinux</code>设置成<code>disabled</code>并重启机器,这样初始化环境就完成了。</p>
+<h2 id="安装MariaDB-Galera-Cluster"><a href="#安装MariaDB-Galera-Cluster" class="headerlink" title="安装MariaDB Galera Cluster"></a>安装MariaDB Galera Cluster</h2><p>在<a href="https://downloads.mariadb.org/mariadb/repositories/#mirror=neusoft" target="_blank" rel="noopener">MariaDB Repository Generator</a>选择对应的系统版本和MariaDB版本，复制相应的yum源配置到/etc/yum.repos.d/MariaDB.repo</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# yum install -y MariaDB-Galera-server galera rsync MariaDB-client</span><br><span class="line">[root@node2 ~]# yum install -y MariaDB-Galera-server galera rsync MariaDB-client</span><br><span class="line">[root@node3 ~]# yum install -y MariaDB-Galera-server galera rsync MariaDB-client</span><br></pre></td></tr></table></figure>
+<h2 id="配置-MariaDB-Galera-Cluster"><a href="#配置-MariaDB-Galera-Cluster" class="headerlink" title="配置 MariaDB Galera Cluster"></a>配置 MariaDB Galera Cluster</h2><blockquote>
+<p>初始化数据库服务（只在一个节点进行，然后关闭数据库）</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# service mysql start</span><br><span class="line">[root@node1 ~]# service mysql stop</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>修改/etc/my.cnf.d/galera.cnf</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# cat /etc/my.cnf.d/galera.cnf</span><br><span class="line">[mysqld]</span><br><span class="line">wsrep_provider = /usr/lib64/galera/libgalera_smm.so</span><br><span class="line">wsrep_cluster_address = &quot;gcomm://node1,node2,node3&quot;</span><br><span class="line">wsrep_node_name = node1</span><br><span class="line">wsrep_node_address = 192.168.128.131</span><br></pre></td></tr></table></figure>
+<p>将此文件复制到<code>node2</code>、<code>node3</code>，注意要把<code>wsrep_node_name</code>和<code>wsrep_node_address</code>改成相应节点的<code>hostname</code>和<code>ip</code>。</p>
+<h2 id="启动MariaDB-Galera-Cluster服务"><a href="#启动MariaDB-Galera-Cluster服务" class="headerlink" title="启动MariaDB Galera Cluster服务"></a>启动MariaDB Galera Cluster服务</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# mysqld --wsrep-new-cluster --user=root &amp;</span><br></pre></td></tr></table></figure>
+<p>此时会出现如下报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">160907 17:05:55 [ERROR] WSREP: Only binlog_format = &apos;ROW&apos; is currently supported. Configured value: &apos;STATEMENT&apos;. Please adjust your configuration</span><br></pre></td></tr></table></figure>
+<p>解决方法：</p>
+<p>在<code>/etc/my.cnf.d/galera.cnf</code>中添加一行<code>binlog_format=ROW</code></p>
+<p>在输出信息中看到类似如下信息证明启动成功，继续启动其他节点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">160907 17:09:08 [Note] mysqld: ready for connections.</span><br><span class="line">Version: &apos;5.5.51-MariaDB-wsrep&apos;  socket: &apos;/var/lib/mysql/mysql.sock&apos;  port: 3306  MariaDB Server, wsrep_25.14.r9949137`</span><br><span class="line"></span><br><span class="line">[root@node2 ~]# service mysql start</span><br><span class="line">[root@node3 ~]# service mysql start</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong><code>--wsrep-new-cluster</code>这个参数只能在初始化集群使用，且只能在一个节点使用。</p>
+<h2 id="查看集群状态"><a href="#查看集群状态" class="headerlink" title="查看集群状态"></a>查看集群状态</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# mysql -e &apos;show status like &quot;wsrep_%&quot;&apos;</span><br><span class="line">+------------------------------+----------------------------------------------------------------+</span><br><span class="line">| Variable_name                | Value                                                          |</span><br><span class="line">+------------------------------+----------------------------------------------------------------+</span><br><span class="line">| wsrep_local_state_uuid       | bb27d68e-74da-11e6-8aa4-469f840e1e54                           |</span><br><span class="line">| wsrep_protocol_version       | 7                                                              |</span><br><span class="line">| wsrep_last_committed         | 0                                                              |</span><br><span class="line">| wsrep_replicated             | 0                                                              |</span><br><span class="line">| wsrep_replicated_bytes       | 0                                                              |</span><br><span class="line">| wsrep_repl_keys              | 0                                                              |</span><br><span class="line">| wsrep_repl_keys_bytes        | 0                                                              |</span><br><span class="line">| wsrep_repl_data_bytes        | 0                                                              |</span><br><span class="line">| wsrep_repl_other_bytes       | 0                                                              |</span><br><span class="line">| wsrep_received               | 7                                                              |</span><br><span class="line">| wsrep_received_bytes         | 699                                                            |</span><br><span class="line">| wsrep_local_commits          | 0                                                              |</span><br><span class="line">| wsrep_local_cert_failures    | 0                                                              |</span><br><span class="line">| wsrep_local_replays          | 0                                                              |</span><br><span class="line">| wsrep_local_send_queue       | 0                                                              |</span><br><span class="line">| wsrep_local_send_queue_max   | 1                                                              |</span><br><span class="line">| wsrep_local_send_queue_min   | 0                                                              |</span><br><span class="line">| wsrep_local_send_queue_avg   | 0.000000                                                       |</span><br><span class="line">| wsrep_local_recv_queue       | 0                                                              |</span><br><span class="line">| wsrep_local_recv_queue_max   | 2                                                              |</span><br><span class="line">| wsrep_local_recv_queue_min   | 0                                                              |</span><br><span class="line">| wsrep_local_recv_queue_avg   | 0.142857                                                       |</span><br><span class="line">| wsrep_local_cached_downto    | 18446744073709551615                                           |</span><br><span class="line">| wsrep_flow_control_paused_ns | 0                                                              |</span><br><span class="line">| wsrep_flow_control_paused    | 0.000000                                                       |</span><br><span class="line">| wsrep_flow_control_sent      | 0                                                              |</span><br><span class="line">| wsrep_flow_control_recv      | 0                                                              |</span><br><span class="line">| wsrep_cert_deps_distance     | 0.000000                                                       |</span><br><span class="line">| wsrep_apply_oooe             | 0.000000                                                       |</span><br><span class="line">| wsrep_apply_oool             | 0.000000                                                       |</span><br><span class="line">| wsrep_apply_window           | 0.000000                                                       |</span><br><span class="line">| wsrep_commit_oooe            | 0.000000                                                       |</span><br><span class="line">| wsrep_commit_oool            | 0.000000                                                       |</span><br><span class="line">| wsrep_commit_window          | 0.000000                                                       |</span><br><span class="line">| wsrep_local_state            | 4                                                              |</span><br><span class="line">| wsrep_local_state_comment    | Synced                                                         |</span><br><span class="line">| wsrep_cert_index_size        | 0                                                              |</span><br><span class="line">| wsrep_causal_reads           | 0                                                              |</span><br><span class="line">| wsrep_cert_interval          | 0.000000                                                       |</span><br><span class="line">| wsrep_incoming_addresses     | 192.168.128.131:3306,192.168.128.132:3306,192.168.128.133:3306 |</span><br><span class="line">| wsrep_desync_count           | 0                                                              |</span><br><span class="line">| wsrep_evs_delayed            |                                                                |</span><br><span class="line">| wsrep_evs_evict_list         |                                                                |</span><br><span class="line">| wsrep_evs_repl_latency       | 0/0/0/0/0                                                      |</span><br><span class="line">| wsrep_evs_state              | OPERATIONAL                                                    |</span><br><span class="line">| wsrep_gcomm_uuid             | bb2686c8-74da-11e6-9cde-5fd4f88f878c                           |</span><br><span class="line">| wsrep_cluster_conf_id        | 3                                                              |</span><br><span class="line">| wsrep_cluster_size           | 3                                                              |</span><br><span class="line">| wsrep_cluster_state_uuid     | bb27d68e-74da-11e6-8aa4-469f840e1e54                           |</span><br><span class="line">| wsrep_cluster_status         | Primary                                                        |</span><br><span class="line">| wsrep_connected              | ON                                                             |</span><br><span class="line">| wsrep_local_bf_aborts        | 0                                                              |</span><br><span class="line">| wsrep_local_index            | 2                                                              |</span><br><span class="line">| wsrep_provider_name          | Galera                                                         |</span><br><span class="line">| wsrep_provider_vendor        | Codership Oy &lt;info@codership.com&gt;                              |</span><br><span class="line">| wsrep_provider_version       | 25.3.17(r3619)                                                 |</span><br><span class="line">| wsrep_ready                  | ON                                                             |</span><br><span class="line">| wsrep_thread_count           | 2                                                              |</span><br><span class="line">+------------------------------+----------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>几个关键参数</p>
+</blockquote>
+<p><code>wsrep_connected = on</code> 链接已开启</p>
+<p><code>wsrep_local_index = 2</code> 在集群中的索引值</p>
+<p><code>wsrep_cluster_size =3</code> 集群中节点的数量</p>
+<p><code>wsrep_incoming_addresses = 192.168.128.131:3306,192.168.128.132:3306,192.168.128.133:3306</code> 集群中节点的访问地址</p>
+<h2 id="验证数据同步"><a href="#验证数据同步" class="headerlink" title="验证数据同步"></a>验证数据同步</h2><p>在node1上新建数据库galera_koen,然后在node2和node3上查询，如果可以查询到galera_koen这个库，说明数据同步成功，集群运行正常。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# mysql -e &quot;create database galera_koen&quot;</span><br><span class="line"></span><br><span class="line">[root@node2 ~]# mysql -e &quot;show databases;&quot;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| galera_koen        |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| test               |</span><br><span class="line">+--------------------+</span><br><span class="line"></span><br><span class="line">[root@node3 ~]# mysql -e &quot;show databases;&quot;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| galera_koen        |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| test               |</span><br><span class="line">+--------------------+</span><br></pre></td></tr></table></figure>
+<p>至此，MariaDB Galera Cluster已经成功部署。</p>
+<ul>
+<li>EOF</li>
+</ul>
+<p>本文作者：Koen</p>
+<p>参考链接：<a href="http://code.oneapm.com/database/2015/07/02/mariadb-galera-cluster/" target="_blank" rel="noopener">http://code.oneapm.com/database/2015/07/02/mariadb-galera-cluster/</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ck49lyp8f001mbvkcbgk6g4of.html" rel="next" title="Python操作MySQL数据库">
+                <i class="fa fa-chevron-left"></i> Python操作MySQL数据库
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ck49lyp8l0024bvkcwgko3h1w.html" rel="prev" title="在CentOS7.1上安装分布式存储系统Ceph">
+                在CentOS7.1上安装分布式存储系统Ceph <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/avatar.jpg"
+                alt="Koenli" />
+            
+              <p class="site-author-name" itemprop="name">Koenli</p>
+              <p class="site-description motion-element" itemprop="description">想要出类拔萃，就要做别人不想做的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MariaDB-Galera-Cluster-介绍"><span class="nav-number">1.</span> <span class="nav-text">MariaDB Galera Cluster 介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MariaDB-Galera-Cluster-安装配置"><span class="nav-number">2.</span> <span class="nav-text">MariaDB Galera Cluster 安装配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装环境准备"><span class="nav-number">2.1.</span> <span class="nav-text">安装环境准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装MariaDB-Galera-Cluster"><span class="nav-number">2.2.</span> <span class="nav-text">安装MariaDB Galera Cluster</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置-MariaDB-Galera-Cluster"><span class="nav-number">2.3.</span> <span class="nav-text">配置 MariaDB Galera Cluster</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动MariaDB-Galera-Cluster服务"><span class="nav-number">2.4.</span> <span class="nav-text">启动MariaDB Galera Cluster服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看集群状态"><span class="nav-number">2.5.</span> <span class="nav-text">查看集群状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#验证数据同步"><span class="nav-number">2.6.</span> <span class="nav-text">验证数据同步</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Koenli</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: 'XD8aPBomWwb9OrD5OlP3F42U-gzGzoHsz',
+        appKey: 'EHcp6RUK4G6BGD0dqfrz0IDo',
+        placeholder: '想对作者说点什么',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("XD8aPBomWwb9OrD5OlP3F42U-gzGzoHsz", "EHcp6RUK4G6BGD0dqfrz0IDo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
