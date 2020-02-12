@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python,语言,Flask," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="数据库按照一定规则保存程序数据，程序再发起查询取回所需的数据。Web程序最常用基于关系模型的数据库，这种数据库也称为SQL数据库，因为它们使用结构化查询语句。不过最近几年文档数据库和键值对数据库成了流行的替代选择，这两种数据库合称NoSQL数据库。 SQL数据库 关系型数据库把数据存储在表中，表模拟程序中不同的实体。例如，订单管理程序的数据库中可能有表customers、products和orde">
+<meta name="keywords" content="Python,语言,Flask">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flask——数据库">
+<meta property="og:url" content="http://www.koenli.com/ck6jdjlpv000ck6kcxykmable.html">
+<meta property="og:site_name" content="Koenli&#39;s Blog">
+<meta property="og:description" content="数据库按照一定规则保存程序数据，程序再发起查询取回所需的数据。Web程序最常用基于关系模型的数据库，这种数据库也称为SQL数据库，因为它们使用结构化查询语句。不过最近几年文档数据库和键值对数据库成了流行的替代选择，这两种数据库合称NoSQL数据库。 SQL数据库 关系型数据库把数据存储在表中，表模拟程序中不同的实体。例如，订单管理程序的数据库中可能有表customers、products和orde">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://img.koenli.com/Flask%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93_1.png">
+<meta property="og:image" content="https://img.koenli.com/Flask%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93_2.png">
+<meta property="og:updated_time" content="2019-02-16T02:46:11.623Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Flask——数据库">
+<meta name="twitter:description" content="数据库按照一定规则保存程序数据，程序再发起查询取回所需的数据。Web程序最常用基于关系模型的数据库，这种数据库也称为SQL数据库，因为它们使用结构化查询语句。不过最近几年文档数据库和键值对数据库成了流行的替代选择，这两种数据库合称NoSQL数据库。 SQL数据库 关系型数据库把数据存储在表中，表模拟程序中不同的实体。例如，订单管理程序的数据库中可能有表customers、products和orde">
+<meta name="twitter:image" content="https://img.koenli.com/Flask%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93_1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.koenli.com/ck6jdjlpv000ck6kcxykmable.html"/>
+
+
+
+
+
+  <title>Flask——数据库 | Koenli's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Koenli's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.koenli.com/ck6jdjlpv000ck6kcxykmable.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Koenli">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Koenli's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Flask——数据库</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-13T12:10:24+08:00">
+                2016-05-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Web阵地/" itemprop="url" rel="index">
+                    <span itemprop="name">Web阵地</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Web阵地/Code堡垒/" itemprop="url" rel="index">
+                    <span itemprop="name">Code堡垒</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/ck6jdjlpv000ck6kcxykmable.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/ck6jdjlpv000ck6kcxykmable.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/ck6jdjlpv000ck6kcxykmable.html" class="leancloud_visitors" data-flag-title="Flask——数据库">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>数据库</strong>按照一定规则保存程序数据，程序再发起查询取回所需的数据。Web程序最常用基于<strong>关系</strong>模型的数据库，这种数据库也称为SQL数据库，因为它们使用结构化查询语句。不过最近几年<strong>文档数据库</strong>和<strong>键值对数据库</strong>成了流行的替代选择，这两种数据库合称NoSQL数据库。</p>
+<h1 id="SQL数据库"><a href="#SQL数据库" class="headerlink" title="SQL数据库"></a>SQL数据库</h1><hr>
+<p>关系型数据库把数据存储在表中，表模拟程序中不同的实体。例如，订单管理程序的数据库中可能有表customers、products和orders。</p>
+<p>表的列数是固定的，行数是可变的。列定义表所表示的实体的数据属性。例如，customers表中可能有name、address、phone表列。表中的行定义各列对应的真实数据。</p>
+<p>表中有个特殊的列，称为<strong>主键</strong>，其值为表中各行的唯一标识符。表中还可以有称为<strong>外键</strong>的列，引用同一个表或不同表中某行的主键。行之间的这种联系称为<strong>关系</strong>，这是关系型数据库模型的基础。图1展示了一个简单数据库的关系图。这个数据库中有两个表，分别存储用户和用户角色。连接两个表的线代表两个表之间的关系。</p>
+<p><img src="https://img.koenli.com/Flask%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93_1.png" alt=""></p>
+<p>图1 关系型数据库示例</p>
+<p>在这个数据库关系图中，roles表存储所有可用的用户角色，每个角色都使用一个唯一的id值（即表的主键）进行标识。users表包含用户列表，每个用户也有唯一的id值。除了id主键之外，roles表中还有name列，users表中还有username列和password列。users表中的role_id列是外键，引用角色的id，通过这种方式为每个指定角色。</p>
+<p>从这个例子可以看出，关系型数据库存储数据很高效，而且避免了重复。将这个数据库中的用户角色重命名也很简单，因为角色名只出现在一个地方。一旦在roles表中修改完角色名，所有通过role_id引用这个角色的用户都能立即看到更新。</p>
+<p>但从另一方面来看，把数据分别存放在多个表中还是很复杂的。生成一个包含角色的用户列表会遇到一个小问题，因为在此之前要分别从两个表中读取用户和用户角色，再将其联结起来。关系型数据库引擎为联结操作提供了必要的支持。</p>
+<h1 id="NoSQL数据库"><a href="#NoSQL数据库" class="headerlink" title="NoSQL数据库"></a>NoSQL数据库</h1><hr>
+<p>所有不遵循上节所述的关系模型的数据库统称为NoSQL数据库。NoSQL数据库一般使用<strong>集合</strong>代替表，使用<strong>文档</strong>代替记录。NoSQL数据库采用的设计方式使联结变得困难，所以大多数数据库根本不支持这种操作。对于结构如图1所示的关系型数据库，若要列出各用户及其角色，就需要在程序中执行联结操作，即先读取每个用户的role_id，再在roles表中搜索对应的记录。</p>
+<p>NoSQL数据库更适合设计成如图2所示的结构。这是执行<strong>反规范化</strong>操作得到的结果，它减少了表的数量，却增加了数据重复量。</p>
+<p><img src="https://img.koenli.com/Flask%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93_2.png" alt=""></p>
+<p>图2 NoSQL数据库示例</p>
+<p>这种结构的数据库要把角色名存储在每个用户中。如此一来，将角色重命名的操作就变得很耗时，可能需要更新大量文档。</p>
+<p>使用NoSQL数据库当然也有好处。数据重复可以提升查询速度。列出用户及其角色的操作很简答，因为无需联结。</p>
+<h1 id="使用SQL还是NoSQL"><a href="#使用SQL还是NoSQL" class="headerlink" title="使用SQL还是NoSQL"></a>使用SQL还是NoSQL</h1><hr>
+<p>SQL数据库擅长于用高效且紧凑的形式存储结构化数据。这种数据库需要花费大量精力保证数据的一致性。NoSQL数据库放宽了对这种一致性的要求，从而获得性能上的优势。</p>
+<p>对中小型程序来说，SQL和NoSQL数据库都是很好的选择，而且性能相当。</p>
+<h1 id="Python数据库框架"><a href="#Python数据库框架" class="headerlink" title="Python数据库框架"></a>Python数据库框架</h1><hr>
+<p>大多数的数据库引擎都有对应的Python包，包含开源包和商业包。Flask并不限制你使用何种类型的数据库包，因为可以根据自己的喜好选择使用MySQL、Postgres、SQLite、Redis、MongoDB或者CouchDB。</p>
+<p>如果这些都无法满足需求，还有一些数据库抽象层代码包供选择，例如SQLAlchemy和MongoEngine。你可以使用这些抽象包直接处理高等级的Python对象，而不用处理如表、文档或查询语言此类的数据库实例。</p>
+<p>选择数据库框架时，你要考虑很多因素。</p>
+<blockquote>
+<p>易用性</p>
+</blockquote>
+<p>如果直接比较数据库引擎和数据库抽象层，显然后者取胜。抽象层，也称为对象关系映射（Object-Relational Mapper，ORM）或对象文档映射（Object-Document Mapper，ODM），在用户不知觉的情况下把高层的面向对象操作转换成低层的数据库指令。</p>
+<blockquote>
+<p>性能</p>
+</blockquote>
+<p><strong>ORM和ODM把对象业务转换成数据库业务会有一定的损耗。</strong>大多数情况下，这种性能的降低微不足道，但也不一定都是如此。一般情况下，ORM和ODM对生产率的提升远远超过了这一丁点儿的性能降低，所以性能降低这个理由不足以说服用户完全放弃ORM和ODM。真正的关键点在于如何选择一个能直接操作低层数据库的抽象层，以防特定的操作需要直接使用数据库原生指令优化。</p>
+<blockquote>
+<p>可移植性</p>
+</blockquote>
+<p>选择数据库时，必须考虑其是否能在你的开发平台和生产平台中使用。例如，如果你打算利用云平台托管程序，就要知道这个云服务提供了哪些数据库可供选择。</p>
+<p>可移植性还针对ORM和ODM。尽管有些框架只为一种数据库引擎提供抽象层，但其他框架可能做了更高层的抽象，它们支持不同的数据库引擎，而且都使用相同的面向对象接口。SQLAlchemy ORM就是一个很好的例子，它支持很多关系型数据库引擎，包括流行的MySQL，Postgres和SQLite。</p>
+<blockquote>
+<p>Flask集成度</p>
+</blockquote>
+<p>选择框架时，你不一定非得选择已经集成了Flask的框架，但选择这些框架可以节省你编写集成代码的时间。使用集成了Flask的框架可以简化配置和操作，所以专门为Flask开发的扩展是你的首选。</p>
+<p>基于以上因素，这里选择使用的数据库框架是Flask-SQLAlchemy（<a href="http://flask-sqlalchemy.pocoo.org/2.1/" target="_blank" rel="noopener">http://flask-sqlalchemy.pocoo.org/2.1/</a>），这个Flask扩展包装了SQLAlchemy（(<a href="http://www.sqlalchemy.org/)[http://www.sqlalchemy.org/]）框架。" target="_blank" rel="noopener">http://www.sqlalchemy.org/)[http://www.sqlalchemy.org/]）框架。</a></p>
+<h1 id="使用Flask-SQLAlchemy管理数据库"><a href="#使用Flask-SQLAlchemy管理数据库" class="headerlink" title="使用Flask-SQLAlchemy管理数据库"></a>使用Flask-SQLAlchemy管理数据库</h1><hr>
+<p>Flask-SQLAlchemy是一个扩展，简化了在Flask程序中使用SQLAlchemy的操作。SQLAlchemy是一个很强大的关系型数据库框架，支持多种数据库后台。SQLAlchemy提供了高层ORM，也提供了使用数据库原生SQL的低层功能。</p>
+<p>和其他大多数扩展一样，Flask-SQLAlchemy也使用pip安装：</p>
+<pre><code>(env) [root@server1 myproject]# pip install flask-sqlalchemy
+</code></pre><p>在Flask-SQLAlchemy中，数据库使用URL指定。最流行的数据库引擎的数据库URL格式如下表所示：</p>
+<p>Flask-SQLAlchemy数据库URL</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">数据库引擎</th>
+<th style="text-align:center">URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">MySQL</td>
+<td style="text-align:center">mysql://username:password@hostname/database</td>
+</tr>
+<tr>
+<td style="text-align:center">Postgres</td>
+<td style="text-align:center">postgresql://username:password@hostname/database</td>
+</tr>
+<tr>
+<td style="text-align:center">SQLite（Unix）</td>
+<td style="text-align:center">sqlite:////absolute/path/to/database</td>
+</tr>
+<tr>
+<td style="text-align:center">SQLite（Windows）</td>
+<td style="text-align:center">sqlite:///c:/absolute/path/to/database</td>
+</tr>
+</tbody>
+</table>
+<p>在这些URL中，hostname表示MySQL服务所在的主机，可以是本地主机（localhost），也可以是远程服务器。数据库服务器上可以托管多个数据库，因此database表示要使用的数据库名。如果数据库需要进行认证，username和password表示数据库用户密令。</p>
+<p><strong>注意：</strong>SQLite数据库不需要使用服务器，因此不用指定hostname、username和password。URL中的database是硬盘上文件的文件名。</p>
+<p>程序使用的数据库URL必须保存到Flask配置对象的SQLALCHEMY_DATABASE_URI键中。配置对象中还有一个很有用的选项，即SQLALCHEMY_COMMIT_ON_TEARDOWN键，将其设为True时，每次请求结束后都会自动提交数据库中的变动。其他配置选项的作用请参阅Flask-SQLAlchemy的文档。下面的run.py展示了如何初始化及配置一个简单的SQLite数据库。</p>
+<p>run.py：配置数据库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from flask.ext.sqlalchemy import SQLAlchemy</span><br><span class="line"></span><br><span class="line">basedir = os.path.abspath(os.path.dirname(__file__))</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line">app.config[&apos;SQLALCHEMY_DATABASE_URI&apos;] = &apos;sqlite:///&apos; + os.path.join(basedir, &apos;data.sqlite&apos;)</span><br><span class="line">app.config[&apos;SQLALCHEMY_COMMIT_ON_TEARDOWN&apos;] = True</span><br><span class="line"></span><br><span class="line">db = SQLAlchemy(app)</span><br></pre></td></tr></table></figure>
+<p>db对象是SQLAlchemy类的实例，表示程序使用的数据库，同时还获得了Flask-SQLAlchemy提供的所有功能。</p>
+<h1 id="定义模型"><a href="#定义模型" class="headerlink" title="定义模型"></a>定义模型</h1><hr>
+<p><strong>模型</strong>这个术语表示程序使用的持久化实体。在ORM中，模型一般是一个Python类，类中的属性对应数据库表中的列。</p>
+<p>Flask-SQLAlchemy创建的数据库实例为模型提供了一个基类以及一系列辅助类和辅助函数，可用于定义模型的结构。图1中的roles表和users表可定义为模型Role和User。</p>
+<p>run.py：定义Role和User模型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class Role(db.Model):</span><br><span class="line">    __tablename__ = &apos;roles&apos;</span><br><span class="line">    id = db.Column(db.Integer, primary_key=True)</span><br><span class="line">    name = db.Column(db.String(64), unique=True)</span><br><span class="line"></span><br><span class="line">    def __repr__(self):</span><br><span class="line">        return &apos;&lt;Role %r&gt;&apos; % self.name</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class User(db.Model):</span><br><span class="line">    __tablename__ = &apos;users&apos;</span><br><span class="line">    id = db.Column(db.Integer, primary_key=True)</span><br><span class="line">    username = db.Column(db.String(64), unique=True, index=True)</span><br><span class="line"></span><br><span class="line">    def __repr__(self):</span><br><span class="line">        return &apos;&lt;User %r&gt;&apos; % self.username</span><br></pre></td></tr></table></figure>
+<p>类变量<code>__tablename__</code>定义在数据库中使用的表明。如果没有定义<code>__tablename__</code>，Flask-SQLAlchemy会使用一个默认名字，但默认的表名没有遵守使用复数形式进行命名的约定，所以最好由我们自己来指定表名。其余的类变量都是该模型的属性，被定义为db.Column类的实例。</p>
+<p>db.Column类构造函数的第一个参数是数据库列和模型属性的类型。下面列出了一些可用的列类型以及在模型中使用的Python类型。</p>
+<p>最常用的SQLAlchemy列类型</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">类型名</th>
+<th style="text-align:center">Python类型</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Integer</td>
+<td style="text-align:center">int</td>
+<td style="text-align:center">普通整数，一般是32位</td>
+</tr>
+<tr>
+<td style="text-align:center">SmallInteger</td>
+<td style="text-align:center">int</td>
+<td style="text-align:center">取值范围小的整数，一般是16位</td>
+</tr>
+<tr>
+<td style="text-align:center">BigInteger</td>
+<td style="text-align:center">int或long</td>
+<td style="text-align:center">不限制精度的整数</td>
+</tr>
+<tr>
+<td style="text-align:center">Float</td>
+<td style="text-align:center">float</td>
+<td style="text-align:center">浮点数</td>
+</tr>
+<tr>
+<td style="text-align:center">Numeric</td>
+<td style="text-align:center">decimal.Decimal</td>
+<td style="text-align:center">定点数</td>
+</tr>
+<tr>
+<td style="text-align:center">String</td>
+<td style="text-align:center">str</td>
+<td style="text-align:center">变长字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">Text</td>
+<td style="text-align:center">str</td>
+<td style="text-align:center">变长字符串，对较长或不限长度的字符串做了优化</td>
+</tr>
+<tr>
+<td style="text-align:center">Unicode</td>
+<td style="text-align:center">unicode</td>
+<td style="text-align:center">变长Unicode字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">UnicodeText</td>
+<td style="text-align:center">unicode</td>
+<td style="text-align:center">变长Unicode字符串，对较长或不限长度的字符串做了优化</td>
+</tr>
+<tr>
+<td style="text-align:center">Boolean</td>
+<td style="text-align:center">bool</td>
+<td style="text-align:center">布尔值</td>
+</tr>
+<tr>
+<td style="text-align:center">Date</td>
+<td style="text-align:center">datetime.date</td>
+<td style="text-align:center">日期</td>
+</tr>
+<tr>
+<td style="text-align:center">Time</td>
+<td style="text-align:center">datetime.time</td>
+<td style="text-align:center">时间</td>
+</tr>
+<tr>
+<td style="text-align:center">DateTime</td>
+<td style="text-align:center">datetime.datetime</td>
+<td style="text-align:center">日期和时间</td>
+</tr>
+<tr>
+<td style="text-align:center">Interval</td>
+<td style="text-align:center">datetime.timedelta</td>
+<td style="text-align:center">时间间隔</td>
+</tr>
+<tr>
+<td style="text-align:center">Enum</td>
+<td style="text-align:center">str</td>
+<td style="text-align:center">一组字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">PickleType</td>
+<td style="text-align:center">任何Python对象</td>
+<td style="text-align:center">自动使用Pickle序列化</td>
+</tr>
+<tr>
+<td style="text-align:center">LargeBinary</td>
+<td style="text-align:center">str</td>
+<td style="text-align:center">二进制文件</td>
+</tr>
+</tbody>
+</table>
+<p>db.Column中其余的参数指定属性的配置选项。</p>
+<p>最常使用的SQLAlchemy列选项</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">选项名</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">primary_key</td>
+<td style="text-align:center">如果设为True，这列就是表的主键</td>
+</tr>
+<tr>
+<td style="text-align:center">unique</td>
+<td style="text-align:center">如果设为True，这列不允许出现重复的值</td>
+</tr>
+<tr>
+<td style="text-align:center">index</td>
+<td style="text-align:center">如果设为True，为这列创建索引，提升查询效率</td>
+</tr>
+<tr>
+<td style="text-align:center">nullable</td>
+<td style="text-align:center">如果设为True，这列允许使用空值；如果设为False，这列不允许使用空值</td>
+</tr>
+<tr>
+<td style="text-align:center">default</td>
+<td style="text-align:center">为这列定义默认值</td>
+</tr>
+</tbody>
+</table>
+<p>*注意：<strong>Flask-SQLAlchemy</strong>要求每个模型都要定义主键，这一列经常命名为id。</p>
+<p>虽然没有强制要求，但这两个模型都定义了<code>__repr()__</code>方法，返回一个具有可读性的字符串表示模型，可在调试和测试时使用。</p>
+<h1 id="关系"><a href="#关系" class="headerlink" title="关系"></a>关系</h1><hr>
+<p>关系型数据库使用关系把不同表中的行联结起来。图1所示的关系图表示用户和角色之间的一种简单关系。这是角色到用户的一对多关系，因为一个角色可属于多个用户，而每个用户都只能有一个角色。</p>
+<p>图1中的一对多关系在模型类中的表示方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class Role(db.Model):</span><br><span class="line">    __tablename__ = &apos;roles&apos;</span><br><span class="line">    id = db.Column(db.Integer, primary_key=True)</span><br><span class="line">    name = db.Column(db.String(64), unique=True)</span><br><span class="line">    users = db.relationship(&apos;User&apos;, backref=&apos;role&apos;)</span><br><span class="line"></span><br><span class="line">    def __repr__(self):</span><br><span class="line">        return &apos;&lt;Role %r&gt;&apos; % self.name</span><br><span class="line"></span><br><span class="line">class User(db.Model):</span><br><span class="line">    __tablename__ = &apos;users&apos;</span><br><span class="line">    id = db.Column(db.Integer, primary_key=True)</span><br><span class="line">    username = db.Column(db.String(64), unique=True, index=True)</span><br><span class="line">    role_id = db.Column(db.Integer, db.ForeignKey(&apos;roles.id&apos;))</span><br><span class="line"></span><br><span class="line">    def __repr__(self):</span><br><span class="line">        return &apos;&lt;User %r&gt;&apos; % self.username</span><br></pre></td></tr></table></figure>
+<p>如图1所示，关系使用users表中的外键连接了两行。添加到User模型中role_id列被定义为外键，就是这个外键建立起了关系。传给db.ForeignKey()的参数’roles.id’表明，这列的值是roles表中行的id值。</p>
+<p>添加到Role模型中的users属性代表这个关系的面向对象视角。对于一个Role类的实例，其users属性将返回与角色相关联的用户组成的列表。<strong>db.relationship()的第一个参数表明这个关系的另一端是哪个模型</strong>。如果模型类尚未定义，可使用字符串形式指定。</p>
+<p><strong>db.relationship()中的backref菜蔬向User模型中添加一个role属性，从而定义反向关系。这一属性可替代role_id访问Role模型，此时获取的是模型对象，而不是外键的值。</strong></p>
+<p>大多数情况下，db.relationship()都能自行找到关系中的外键，但有时却无法决定把哪一列作为外键。例如，如果User模型中有两个或以上的列定义为Role模型的外键，SQLAlchemy就不知道该使用哪列。如果无法决定外键，你就要为db.relationship()提供额外参数，从而确定所用外键。</p>
+<p>常用的SQLAlchemy关系选项</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">选项名</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">backref</td>
+<td style="text-align:center">在关系的另一个模型中添加反向引用</td>
+</tr>
+<tr>
+<td style="text-align:center">primaryjoin</td>
+<td style="text-align:center">明确指定两个模型之间使用的联结条件。只在模棱两可的关系中需要指定</td>
+</tr>
+<tr>
+<td style="text-align:center">lazy</td>
+<td style="text-align:center">指定如何加载相关记录。可选值有select（首次访问时按需加载）、immediate（源对象加载后就加载）、joined（加载记录，但使用联结）、subquery（立即加载，但使用子查询）、noload（永不加载）和dynamic（不加载记录，但提供加载记录的查询）</td>
+</tr>
+<tr>
+<td style="text-align:center">uselist</td>
+<td style="text-align:center">如果设为False，不使用列表，而使用标量值</td>
+</tr>
+<tr>
+<td style="text-align:center">order_by</td>
+<td style="text-align:center">指定关系中记录的排序方式</td>
+</tr>
+<tr>
+<td style="text-align:center">secondary</td>
+<td style="text-align:center">指定多对多关系中关系表的名字</td>
+</tr>
+<tr>
+<td style="text-align:center">secondaryjoin</td>
+<td style="text-align:center">SQLAlchemy无法自行决定时，指定多对多关系中的二级联结条件</td>
+</tr>
+</tbody>
+</table>
+<p>除了一对多之外，还有几种其他的关系类型。<strong>一对一关系可以用前面介绍的一对多关系表示，但调用db.relationship()时要把uselist设为False，把”多”变成”一”。</strong>多对一关系也可使用一对多表示，对调两个表即可，或者把外键和db.relationship()都放在”多”这一侧。最复杂的关系类型是多对多，需要用到第三张表，这个表称为<strong>关系表</strong>。</p>
+<h1 id="数据库操作"><a href="#数据库操作" class="headerlink" title="数据库操作"></a>数据库操作</h1><hr>
+<p>现在模型已经按照图1所示的数据库关系图完整配置，可以随时使用了。学习如何使用模型的最好方法是在Python shell中实际操作。接下来将介绍最常用的数据库操作</p>
+<p>run.py</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">from flask import Flask</span><br><span class="line">from flask.ext.script import Manager</span><br><span class="line">from flask.ext.sqlalchemy import SQLAlchemy</span><br><span class="line"></span><br><span class="line">basedir = os.path.abspath(os.path.dirname(__file__))</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line">app.config[&apos;SQLALCHEMY_DATABASE_URI&apos;] =\</span><br><span class="line">    &apos;sqlite:///&apos; + os.path.join(basedir, &apos;data.sqlite&apos;)</span><br><span class="line">app.config[&apos;SQLALCHEMY_COMMIT_ON_TEARDOWN&apos;] = True</span><br><span class="line"></span><br><span class="line">manager = Manager(app)</span><br><span class="line">db = SQLAlchemy(app)</span><br><span class="line"></span><br><span class="line">class Role(db.Model):</span><br><span class="line">    __tablename__ = &apos;roles&apos;</span><br><span class="line">    id = db.Column(db.Integer, primary_key=True)</span><br><span class="line">    name = db.Column(db.String(64), unique=True)</span><br><span class="line">    users = db.relationship(&apos;User&apos;, backref=&apos;role&apos;, lazy=&apos;dynamic&apos;)</span><br><span class="line"></span><br><span class="line">    def __repr__(self):</span><br><span class="line">        return &apos;&lt;Role %r&gt;&apos; % self.name</span><br><span class="line"></span><br><span class="line">class User(db.Model):</span><br><span class="line">    __tablename__ = &apos;users&apos;</span><br><span class="line">    id = db.Column(db.Integer, primary_key=True)</span><br><span class="line">    username = db.Column(db.String(64), unique=True, index=True)</span><br><span class="line">    role_id = db.Column(db.Integer, db.ForeignKey(&apos;roles.id&apos;))</span><br><span class="line"></span><br><span class="line">    def __repr__(self):</span><br><span class="line">        return &apos;&lt;User %r&gt;&apos; % self.username</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    db.create_all()</span><br><span class="line">    manager.run()</span><br></pre></td></tr></table></figure>
+<h2 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h2><p>首先，我们要让Flask-SQLAlchemy根据模型类创建数据库。方法是使用db.create_all()函数：</p>
+<pre><code>(env) [root@server1 myproject]# python run.py shell
+&gt;&gt;&gt; from run import db
+&gt;&gt;&gt; db.create_all()
+</code></pre><p>如果你查看程序目录，会发现新建了一个名为data.sqlite的文件。这个SQLite数据库文件的名字就是在配置中指定的。如果数据库表已经存在于数据库中，那么db.create_all()不会重新创建或者更新这个文件。如果修改模型后要把改动应用到现有的数据库中，这一特性会带来不便。更新现有数据库表的粗暴方式是先删除旧表再重新创建：</p>
+<pre><code>&gt;&gt;&gt; db.drop_all()
+&gt;&gt;&gt; db.create_all()
+</code></pre><p>遗憾的是，这个方法有个我们不想看到的副作用，它把数据库中原有的数据都销毁了。</p>
+<h2 id="插入行"><a href="#插入行" class="headerlink" title="插入行"></a>插入行</h2><p>下面这段代码创建了一些角色和用户：</p>
+<pre><code>&gt;&gt;&gt; from run import Role,User
+&gt;&gt;&gt; admin_role = Role(name=&apos;Admin&apos;)
+&gt;&gt;&gt; mod_role = Role(name=&apos;Moderator&apos;)
+&gt;&gt;&gt; user_role = Role(name=&apos;User&apos;)
+&gt;&gt;&gt; user_john = User(username=&apos;john&apos;,role=admin_role)
+&gt;&gt;&gt; user_susan = User(username=&apos;susan&apos;,role=user_role)
+&gt;&gt;&gt; user_david = User(username=&apos;david&apos;,role=user_role)
+</code></pre><p>模型的构造函数接受的参数是使用关键字参数指定的模型属性初始值。<strong>注意，role属性也可使用，虽然它不是真正的数据库列，但却是一对多关系的高级表示。</strong>这些新建对象的id属性并没有明确设定，因为主键是由Flask-SQLAlchemy管理的。现在这些对象只存在于Python中，还未写入数据库。因此id尚未赋值：</p>
+<pre><code>&gt;&gt;&gt; print(admin_role.id)
+None
+&gt;&gt;&gt; print(mod_role.id)
+None
+&gt;&gt;&gt; print(user_role.id)
+None
+</code></pre><p>通过数据库会话管理对数据库所做的改动，在Flask-SQLAlchemy中，会话由db.session表示。准备把对象写入数据库之前，先要将其添加到会话中：</p>
+<pre><code>&gt;&gt;&gt; db.session.add(admin_role)
+&gt;&gt;&gt; db.session.add(mod_role)
+&gt;&gt;&gt; db.session.add(user_role)
+&gt;&gt;&gt; db.session.add(user_john)
+&gt;&gt;&gt; db.session.add(user_susan)
+&gt;&gt;&gt; db.session.add(user_david)
+</code></pre><p>或者简写成：</p>
+<pre><code>&gt;&gt;&gt; db.session.add_all([admin_role,mod_role,user_role,user_john,user_susan,user_david])
+</code></pre><p>为了把对象写入数据库，我们要调用commit()方法提交会话：</p>
+<pre><code>&gt;&gt;&gt; db.session.commit()
+</code></pre><p>再次查看id属性，现在它们已经赋值了：</p>
+<pre><code>&gt;&gt;&gt; print(admin_role.id)
+1
+&gt;&gt;&gt; print(mod_role.id)
+2
+&gt;&gt;&gt; print(user_role.id)
+3
+</code></pre><p><strong>注意：</strong>数据库会话db.session和<a href="http://xautlmx.github.io/2016-05-05-Flask%E2%80%94%E2%80%94Web%E8%A1%A8%E5%8D%95.html" target="_blank" rel="noopener">Flask——Web表单</a>中介绍的Flask session对象没有关系。数据库会话也称为<strong>事务</strong></p>
+<p>数据库会话能保证数据库的一致性。提交操作使用原子方式把会话中的对象全部写入数据库。如果在写入会话的过程中发生了错误，整个会话都会失效。如果你始终把相关改动放在会话中提交，就能避免因部分更新导致的数据库不一致性。</p>
+<p><strong>注意：</strong>数据库会话也可回滚。调用db.session.rollback()后，添加到数据库会话中的所有对象都会还原到它们在数据库时的状态。</p>
+<h2 id="修改行"><a href="#修改行" class="headerlink" title="修改行"></a>修改行</h2><p>在数据库会话上调用add()方法也能更新模型。我们继续在之前的shell会话中进行操作，下面这个例如把”Admin”角色重命名为”Administrator”：</p>
+<pre><code>&gt;&gt;&gt; admin_role.name = &apos;Administrator&apos;
+&gt;&gt;&gt; db.session.add(admin_role)
+&gt;&gt;&gt; db.session.commit()
+&gt;&gt;&gt; print(admin_role.name)
+Administrator
+</code></pre><h2 id="删除行"><a href="#删除行" class="headerlink" title="删除行"></a>删除行</h2><p>数据库会话还有个delete()方法。下面这个例子把”Moderator”角色从数据库中删除：</p>
+<pre><code>&gt;&gt;&gt; db.session.delete(mod_role)
+&gt;&gt;&gt; db.session.commit()
+</code></pre><p><strong>注意：</strong>删除与插入和更新一样，提交数据库会话后才会执行。</p>
+<h2 id="查询行"><a href="#查询行" class="headerlink" title="查询行"></a>查询行</h2><p>Flask-SQLAlchemy为每个模型类都提供了query对象。最基本的模型查询是取回对应表中的所有记录：</p>
+<pre><code>&gt;&gt;&gt; Role.query.all()
+[&lt;Role u&apos;Administrator&apos;&gt;, &lt;Role u&apos;User&apos;&gt;]
+&gt;&gt;&gt; User.query.all()
+[&lt;User u&apos;john&apos;&gt;, &lt;User u&apos;susan&apos;&gt;, &lt;User u&apos;david&apos;&gt;]
+</code></pre><p>使用<strong>过滤器</strong>可以配置query对象进行更精确的数据查询。下面这个例子查找角色为”User”的所有用户：</p>
+<pre><code>&gt;&gt;&gt; User.query.filter_by(role=user_role).all()
+[&lt;User u&apos;susan&apos;&gt;, &lt;User u&apos;david&apos;&gt;]
+</code></pre><p>或者：</p>
+<pre><code>&gt;&gt;&gt; User.query.filter_by(role_id=user_role.id).all()
+[&lt;User u&apos;susan&apos;&gt;, &lt;User u&apos;david&apos;&gt;]
+</code></pre><p>若要查看SQLAlchemy为查询生成的原生SQL查询语句，只需把query对象转换成字符串：</p>
+<pre><code>&gt;&gt;&gt; str(User.query.filter_by(role=user_role))
+&apos;SELECT users.id AS users_id, users.username AS users_username, users.role_id AS users_role_id \nFROM users \nWHERE :param_1 = users.role_id&apos;
+</code></pre><p>如果你退出了shell会话，前面这些例子中创建的对象就不会以Python对象的形式存在，而是作为各自数据库表中的行。如果你打开了一个新的shell会话，就要从数据库中读取行，再重新创建Python对象。下面这个例子发起了一个查询，加载名为”User”的用户角色：</p>
+<pre><code>&gt;&gt;&gt; from run import Role,User
+&gt;&gt;&gt; user_role = Role.query.filter_by(name=&apos;User&apos;).first()
+</code></pre><p>filter_by()等过滤器在query对象上调用，返回一个更精确的query对象。多个过滤器可以一起调用，直到获得所需结果。</p>
+<p>常用的SQLAlchemy查询过滤器</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">过滤器</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">filter()</td>
+<td style="text-align:center">把过滤器添加到原查询上，返回一个新查询</td>
+</tr>
+<tr>
+<td style="text-align:center">filter_by()</td>
+<td style="text-align:center">把等值过滤器添加到原查询上，返回一个新查询</td>
+</tr>
+<tr>
+<td style="text-align:center">limit()</td>
+<td style="text-align:center">使用指定的值限制原查询返回的结果数量，返回一个新查询</td>
+</tr>
+<tr>
+<td style="text-align:center">offset()</td>
+<td style="text-align:center">偏移原查询返回的结果，返回一个新查询</td>
+</tr>
+<tr>
+<td style="text-align:center">order_by()</td>
+<td style="text-align:center">根据指定条件对原查询结果进行排序，返回一个新查询</td>
+</tr>
+<tr>
+<td style="text-align:center">group_by()</td>
+<td style="text-align:center">根据指定条件对原查询结果进行分组，返回一个新查询</td>
+</tr>
+</tbody>
+</table>
+<p>在查询上应用指定的过滤器后，通过调用all()执行查询，以列表的形式返回结果。除了all()之外，还有其他方法能触发查询执行。</p>
+<p>最常用的SQLAlchemy查询执行函数</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">方法</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">all()</td>
+<td style="text-align:center">以列表形式返回查询的所有结果</td>
+</tr>
+<tr>
+<td style="text-align:center">first()</td>
+<td style="text-align:center">返回查询的第一个结果，如果没有结果，则返回None</td>
+</tr>
+<tr>
+<td style="text-align:center">first_or_404()</td>
+<td style="text-align:center">返回查询的第一个结果，如果没有结果，则终止请求，返回404错误响应</td>
+</tr>
+<tr>
+<td style="text-align:center">get()</td>
+<td style="text-align:center">返回指定主键对应的行，如果没有对应的行，则返回None</td>
+</tr>
+<tr>
+<td style="text-align:center">get_or_404()</td>
+<td style="text-align:center">返回指定主键对应的行，如果没找到指定的主键，则终止请求，返回404错误响应</td>
+</tr>
+<tr>
+<td style="text-align:center">count()</td>
+<td style="text-align:center">返回查询结果的数量</td>
+</tr>
+<tr>
+<td style="text-align:center">paginate()</td>
+<td style="text-align:center">返回一个Paginate对象，它包含指定范围内的结果</td>
+</tr>
+</tbody>
+</table>
+<p>关系和查询的处理方式类似。下面这个例子分别从关系的两端查询角色和用户之间的一对多关系：</p>
+<pre><code>&gt;&gt;&gt; users = user_role.users
+&gt;&gt;&gt; users
+[&lt;User u&apos;suan&apos;&gt;,&lt;User u&apos;david&apos;&gt;]
+&gt;&gt;&gt; users[0].role
+&lt;Role u&apos;User&apos;&gt;
+</code></pre><p>这个例子中的user_role.users查询有个小问题。执行user_role.users表达式时，隐含的查询会调用all()返回一个用户列表。query对象是隐藏的，因此无法指定更精确的查询过滤器。就这个特定示例而言，返回一个按照字母顺序排序的用户列表可能更好。在之前的示例我们修改了关系的设置，加入了<code>lazy = &#39;dynamic&#39;</code>参数，从而禁止自动执行查询。</p>
+<p>run.py：动态关系</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">class Role(db.Model):</span><br><span class="line">    #...</span><br><span class="line">    users = db.relationship(&apos;User&apos;, backref=&apos;role&apos;, lazy=&apos;dynamic&apos;)</span><br></pre></td></tr></table></figure>
+<p>这样配置关系之后，user_role.users会返回一个尚未执行的查询，因此可以在其上添加过滤器：</p>
+<pre><code>&gt;&gt;&gt; user_role.users.order_by(User.username).all()
+[&lt;User u&apos;david&apos;&gt;, &lt;User u&apos;susan&apos;&gt;]
+&gt;&gt;&gt; user_role.users.count()
+2
+</code></pre><h1 id="在视图函数中操作数据库"><a href="#在视图函数中操作数据库" class="headerlink" title="在视图函数中操作数据库"></a>在视图函数中操作数据库</h1><hr>
+<p>上面介绍的数据库操作可以直接在视图函数中进行，下面展示了首页路由的新版本，已经把用户输入的名字写入了数据库。</p>
+<p>run.py：在视图函数中操作数据库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">from flask import Flask, render_template, session, redirect, url_for</span><br><span class="line">from flask.ext.script import Manager</span><br><span class="line">from flask.ext.bootstrap import Bootstrap</span><br><span class="line">from flask.ext.moment import Moment</span><br><span class="line">from flask.ext.wtf import Form</span><br><span class="line">from wtforms import StringField, SubmitField</span><br><span class="line">from wtforms.validators import Required</span><br><span class="line">from flask.ext.sqlalchemy import SQLAlchemy</span><br><span class="line"></span><br><span class="line">basedir = os.path.abspath(os.path.dirname(__file__))</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line">app.config[&apos;SECRET_KEY&apos;] = &apos;hard to guess string&apos;</span><br><span class="line">app.config[&apos;SQLALCHEMY_DATABASE_URI&apos;] =\</span><br><span class="line">    &apos;sqlite:///&apos; + os.path.join(basedir, &apos;data.sqlite&apos;)</span><br><span class="line">app.config[&apos;SQLALCHEMY_COMMIT_ON_TEARDOWN&apos;] = True</span><br><span class="line"></span><br><span class="line">manager = Manager(app)</span><br><span class="line">bootstrap = Bootstrap(app)</span><br><span class="line">moment = Moment(app)</span><br><span class="line">db = SQLAlchemy(app)</span><br><span class="line"></span><br><span class="line">class Role(db.Model):</span><br><span class="line">    __tablename__ = &apos;roles&apos;</span><br><span class="line">    id = db.Column(db.Integer, primary_key=True)</span><br><span class="line">    name = db.Column(db.String(64), unique=True)</span><br><span class="line">    users = db.relationship(&apos;User&apos;, backref=&apos;role&apos;, lazy=&apos;dynamic&apos;)</span><br><span class="line"></span><br><span class="line">    def __repr__(self):</span><br><span class="line">        return &apos;&lt;Role %r&gt;&apos; % self.name</span><br><span class="line"></span><br><span class="line">class User(db.Model):</span><br><span class="line">    __tablename__ = &apos;users&apos;</span><br><span class="line">    id = db.Column(db.Integer, primary_key=True)</span><br><span class="line">    username = db.Column(db.String(64), unique=True, index=True)</span><br><span class="line">    role_id = db.Column(db.Integer, db.ForeignKey(&apos;roles.id&apos;))</span><br><span class="line"></span><br><span class="line">    def __repr__(self):</span><br><span class="line">        return &apos;&lt;User %r&gt;&apos; % self.username</span><br><span class="line"></span><br><span class="line">class NameForm(Form):</span><br><span class="line">    name = StringField(&apos;What is your name?&apos;, validators=[Required()])</span><br><span class="line">    submit = SubmitField(&apos;Submit&apos;)</span><br><span class="line"></span><br><span class="line">@app.route(&apos;/&apos;, methods=[&apos;GET&apos;, &apos;POST&apos;])</span><br><span class="line">def index():</span><br><span class="line">    form = NameForm()</span><br><span class="line">    if form.validate_on_submit():</span><br><span class="line">        user = User.query.filter_by(username=form.name.data).first()</span><br><span class="line">        if user is None:</span><br><span class="line">            user = User(username=form.name.data)</span><br><span class="line">            db.session.add(user)</span><br><span class="line">            session[&apos;known&apos;] = False</span><br><span class="line">        else:</span><br><span class="line">            session[&apos;known&apos;] = True</span><br><span class="line">        session[&apos;name&apos;] = form.name.data</span><br><span class="line">        return redirect(url_for(&apos;index&apos;))</span><br><span class="line">    return render_template(&apos;index.html&apos;, form=form, name=session.get(&apos;name&apos;),</span><br><span class="line">                           known=session.get(&apos;known&apos;, False))</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    manager.run()</span><br></pre></td></tr></table></figure>
+<p>在这个修改后的版本中，提交表单后，程序会使用filter_by()查询过滤器在数据库中查找提交的名字。变量known被写入用户会话中，因此重定向之后，可以把数据传给模板，用来显示自定义的欢迎信息。**注意：要想让程序正常运行，必须按照前面介绍的方法，在Python shell中创建数据库表。</p>
+<pre><code>(env) [root@server1 myproject]# python run.py shell
+&gt;&gt;&gt; from run import db
+&gt;&gt;&gt; db.create_all()
+&gt;&gt;&gt; exit()
+</code></pre><p>对应的模板新版本如下，这个模板使用known参数在欢迎消息中加入了第二行，从而对已知用户和新用户显示不同的内容。</p>
+<p>templates/base.html</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">% extends &quot;bootstrap/base.html&quot; %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% block title %&#125;Flasky&#123;% endblock %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% block head %&#125;</span><br><span class="line">&#123;&#123; super() &#125;&#125;</span><br><span class="line">&lt;link rel=&quot;shortcut icon&quot; href=&quot;&#123;&#123; url_for(&apos;static&apos;, filename=&apos;favicon.ico&apos;) &#125;&#125;&quot; type=&quot;image/x-icon&quot;&gt;</span><br><span class="line">&lt;link rel=&quot;icon&quot; href=&quot;&#123;&#123; url_for(&apos;static&apos;, filename=&apos;favicon.ico&apos;) &#125;&#125;&quot; type=&quot;image/x-icon&quot;&gt;</span><br><span class="line">&#123;% endblock %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% block navbar %&#125;</span><br><span class="line">&lt;div class=&quot;navbar navbar-inverse&quot; role=&quot;navigation&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;container&quot;&gt;</span><br><span class="line">        &lt;div class=&quot;navbar-header&quot;&gt;</span><br><span class="line">            &lt;button type=&quot;button&quot; class=&quot;navbar-toggle&quot; data-toggle=&quot;collapse&quot; data-target=&quot;.navbar-collapse&quot;&gt;</span><br><span class="line">                &lt;span class=&quot;sr-only&quot;&gt;Toggle navigation&lt;/span&gt;</span><br><span class="line">                &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;</span><br><span class="line">                &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;</span><br><span class="line">                &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;</span><br><span class="line">            &lt;/button&gt;</span><br><span class="line">            &lt;a class=&quot;navbar-brand&quot; href=&quot;/&quot;&gt;Flasky&lt;/a&gt;</span><br><span class="line">        &lt;/div&gt;  </span><br><span class="line">        &lt;div class=&quot;navbar-collapse collapse&quot;&gt;</span><br><span class="line">            &lt;ul class=&quot;nav navbar-nav&quot;&gt;</span><br><span class="line">                &lt;li&gt;&lt;a href=&quot;/&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">            &lt;/ul&gt;   </span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&#123;% endblock %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% block content %&#125;</span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">    &#123;% for message in get_flashed_messages() %&#125;</span><br><span class="line">    &lt;div class=&quot;alert alert-warning&quot;&gt;</span><br><span class="line">        &lt;button type=&quot;button&quot; class=&quot;close&quot; data-dismiss=&quot;alert&quot;&gt;&amp;times;&lt;/button&gt;</span><br><span class="line">        &#123;&#123; message &#125;&#125;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">    &#123;% block page_content %&#125;&#123;% endblock %&#125;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&#123;% endblock %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% block scripts %&#125;</span><br><span class="line">&#123;&#123; super() &#125;&#125;</span><br><span class="line">&#123;&#123; moment.include_moment() &#125;&#125;</span><br><span class="line">&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+<p>templates/index.html</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;% extends &quot;base.html&quot; %&#125;</span><br><span class="line">&#123;% import &quot;bootstrap/wtf.html&quot; as wtf %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% block title %&#125;Flasky&#123;% endblock %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% block page_content %&#125;</span><br><span class="line">&lt;div class=&quot;page-header&quot;&gt;</span><br><span class="line">    &lt;h1&gt;Hello, &#123;% if name %&#125;&#123;&#123; name &#125;&#125;&#123;% else %&#125;Stranger&#123;% endif %&#125;!&lt;/h1&gt;</span><br><span class="line">    &#123;% if not known %&#125;</span><br><span class="line">    &lt;p&gt;Pleased to meet you!&lt;/p&gt;</span><br><span class="line">    &#123;% else %&#125;</span><br><span class="line">    &lt;p&gt;Happy to see you again!&lt;/p&gt;</span><br><span class="line">    &#123;% endif %&#125;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&#123;&#123; wtf.quick_form(form) &#125;&#125;</span><br><span class="line">&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="集成Python-shell"><a href="#集成Python-shell" class="headerlink" title="集成Python shell"></a>集成Python shell</h1><hr>
+<p>每次启动shell会话都要导入数据库实例和模型，这真是份枯燥的工作。为了避免一直重复导入，我们可以做些配置，让Flask-Script的shell命令自动导入特定的对象。</p>
+<p>若想把对象添加导入列表中，我们要为shell命令注册一个make_context()回调函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from flask.ext.script import Shell</span><br><span class="line"></span><br><span class="line">def make_shell_context():</span><br><span class="line">    return dict(app=app, db=db, User=User, Role=Role)</span><br><span class="line">manager.add_command(&quot;shell&quot;, Shell(make_context=make_shell_context))</span><br></pre></td></tr></table></figure>
+<p>make_shell_context()函数注册了程序、数据库实例以及模型，因此这些对象能直接导入shell：</p>
+<pre><code>(env) [root@server1 myproject]# python run.py shell
+&gt;&gt;&gt; app
+&lt;Flask &apos;run&apos;&gt;
+&gt;&gt;&gt; db
+&lt;SQLAlchemy engine=&apos;sqlite:////root/myproject/data.sqlite&apos;&gt;
+&gt;&gt;&gt; User
+&lt;class &apos;__main__.User&apos;&gt;
+&gt;&gt;&gt; Role
+&lt;class &apos;__main__.Role&apos;&gt;
+&gt;&gt;&gt; exit()
+</code></pre><h1 id="使用Flask-Migrate实现数据库迁移"><a href="#使用Flask-Migrate实现数据库迁移" class="headerlink" title="使用Flask-Migrate实现数据库迁移"></a>使用Flask-Migrate实现数据库迁移</h1><hr>
+<p>在开发程序的过程中，你会发现有时需要修改数据库模型，而且修改之后还需要更新数据库。</p>
+<p>仅当数据库表不存在时，Flask-SQLAlchemy才会根据模型进行创建。因此，更新表的唯一方式就是先删除旧表，不过这样做会丢失数据库中的所有数据。</p>
+<p>更新表的最好方法是使用<strong>数据库迁移</strong>框架。源码版本控制工具可以跟踪源码文件的变化，类似地，<strong>数据库迁移框架能跟踪数据库模式的变化，然后增量式的把变化应用到数据库中。</strong></p>
+<p>SQLAlchemy的主力开发人员编写了一个迁移框架，称为Alembic(<a href="http://alembic.readthedocs.io/en/latest/index.html" target="_blank" rel="noopener">http://alembic.readthedocs.io/en/latest/index.html</a>)。除了直接使用Alembic之外，Flask程序还可以使用Flask-Migrate（<a href="http://flask-migrate.readthedocs.io/en/latest/" target="_blank" rel="noopener">http://flask-migrate.readthedocs.io/en/latest/</a>）扩展。这个扩展对Alembic做了轻量级包装，并集成到Flask-Script中，所有操作都通过Flask-Script命令完成。</p>
+<h2 id="创建迁移仓库"><a href="#创建迁移仓库" class="headerlink" title="创建迁移仓库"></a>创建迁移仓库</h2><p>首先，我们要在虚拟环境中安装Flask-Migrate：</p>
+<pre><code>(env) [root@server1 myproject]# pip install flask-migrate
+</code></pre><p>这个扩展的初始化方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from flask.ext.migrate import Migrate, MigrateCommand</span><br><span class="line">#...</span><br><span class="line">migrate = Migrate(app, db)</span><br><span class="line">manager.add_command(&apos;db&apos;, MigrateCommand)</span><br></pre></td></tr></table></figure>
+<p>为了导出数据库迁移命令，Flask-Migrate提供了一个MigrateCommand类，可附加到Flask-Script的manager对象上。在这个例子中，MigrateCommand类使用db命令附加。</p>
+<p>在维护数据库迁移之前，要使用init子命令创建迁移仓库：</p>
+<pre><code>(env) [root@server1 myproject]# python run.py db init
+  Creating directory /root/myproject/migrations ... done
+  Creating directory /root/myproject/migrations/versions ... done
+  Generating /root/myproject/migrations/README ... done
+  Generating /root/myproject/migrations/script.py.mako ... done
+  Generating /root/myproject/migrations/alembic.ini ... done
+  Generating /root/myproject/migrations/env.pyc ... done
+  Generating /root/myproject/migrations/env.py ... done
+  Please edit configuration/connection/logging settings in &apos;/root/myproject/migrations/alembic.ini&apos; before
+  proceeding.
+</code></pre><p>这个命令会创建migrations文件夹，所有迁移脚本都存放其中。</p>
+<p><strong>注意：</strong>数据库迁移仓库中的文件要和程序的其他文件一起纳入版本控制。</p>
+<h2 id="创建迁移脚本"><a href="#创建迁移脚本" class="headerlink" title="创建迁移脚本"></a>创建迁移脚本</h2><p>在Alembic中，数据库迁移用迁移脚本表示。脚本中有两个函数，分别是upgrade()和downgrade()。upgrade()函数把迁移中的改动应用到数据库中，downgrade()函数则将改动删除。Alembic具有添加和删除改动的能力，因此数据库可重设到修改历史的任意一点。</p>
+<p>我们可以使用revision命令手动创建Alembic迁移，也可使用migrate命令自动创建。手动创建的迁移只是一个骨架，upgrade()和downgrade()函数都是空的，开发者要使用Alembic提供的Operations对象指令实现具体操作。自动创建的迁移会根据模型定义和数据库当前状态之间的差异生成upgrade()和downgrade()函数的内容。</p>
+<p><strong>注意：</strong>自动创建的迁移不一定总是正确的，有可能会漏掉一些细节。自动生成迁移脚本后一定要进行检查。</p>
+<p>migrate子命令用来自动创建迁移脚本：</p>
+<pre><code>(env) [root@server1 myproject]# python run.py db migrate -m &quot;initial migration&quot;
+INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.autogenerate.compare] Detected added table &apos;roles&apos;
+INFO  [alembic.autogenerate.compare] Detected added table &apos;users&apos;
+INFO  [alembic.autogenerate.compare] Detected added index &apos;ix_users_username&apos; on &apos;[&apos;username&apos;]&apos;
+  Generating /root/myproject/migrations/versions/a2489d001cec_initial_migration.py ... done
+</code></pre><h2 id="更新数据库"><a href="#更新数据库" class="headerlink" title="更新数据库"></a>更新数据库</h2><p>检查并修正好迁移脚本之后，我们可以使用db upgrade命令把迁移应用到数据库中：</p>
+<p><strong>注意：</strong>迁移时先删除数据库文件data.splite，然后执行Flask-Migrate提供的upgrade命令，使用这个迁移框架重新生成数据库。</p>
+<pre><code>(env) [root@server1 myproject]# python run.py db upgrade
+INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -&gt; a2489d001cec, initial migration
+</code></pre><p>对第一个迁移来说，其作用和调用db.create_all()方法一样。但在后续的迁移中，upgrade命令能把改动应用到数据库中，且不影响其中保存的数据。</p>
+<ul>
+<li>EOF</li>
+</ul>
+<p>本文作者：Koen</p>
+<p>参考书籍：《Flask Web开发——基于Python的Web应用开发实战》</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/语言/" rel="tag"># 语言</a>
+          
+            <a href="/tags/Flask/" rel="tag"># Flask</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ck6jdjlqp002gk6kcv13he7sp.html" rel="next" title="如何使用Python生成一个日期列表">
+                <i class="fa fa-chevron-left"></i> 如何使用Python生成一个日期列表
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ck6jdjlpz000hk6kc2am8hn8r.html" rel="prev" title="Flask——电子邮件">
+                Flask——电子邮件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/avatar.jpg"
+                alt="Koenli" />
+            
+              <p class="site-author-name" itemprop="name">Koenli</p>
+              <p class="site-description motion-element" itemprop="description">想要出类拔萃，就要做别人不想做的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL数据库"><span class="nav-number">1.</span> <span class="nav-text">SQL数据库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NoSQL数据库"><span class="nav-number">2.</span> <span class="nav-text">NoSQL数据库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用SQL还是NoSQL"><span class="nav-number">3.</span> <span class="nav-text">使用SQL还是NoSQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Python数据库框架"><span class="nav-number">4.</span> <span class="nav-text">Python数据库框架</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用Flask-SQLAlchemy管理数据库"><span class="nav-number">5.</span> <span class="nav-text">使用Flask-SQLAlchemy管理数据库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#定义模型"><span class="nav-number">6.</span> <span class="nav-text">定义模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关系"><span class="nav-number">7.</span> <span class="nav-text">关系</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库操作"><span class="nav-number">8.</span> <span class="nav-text">数据库操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建表"><span class="nav-number">8.1.</span> <span class="nav-text">创建表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入行"><span class="nav-number">8.2.</span> <span class="nav-text">插入行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改行"><span class="nav-number">8.3.</span> <span class="nav-text">修改行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除行"><span class="nav-number">8.4.</span> <span class="nav-text">删除行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询行"><span class="nav-number">8.5.</span> <span class="nav-text">查询行</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在视图函数中操作数据库"><span class="nav-number">9.</span> <span class="nav-text">在视图函数中操作数据库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集成Python-shell"><span class="nav-number">10.</span> <span class="nav-text">集成Python shell</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用Flask-Migrate实现数据库迁移"><span class="nav-number">11.</span> <span class="nav-text">使用Flask-Migrate实现数据库迁移</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建迁移仓库"><span class="nav-number">11.1.</span> <span class="nav-text">创建迁移仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建迁移脚本"><span class="nav-number">11.2.</span> <span class="nav-text">创建迁移脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更新数据库"><span class="nav-number">11.3.</span> <span class="nav-text">更新数据库</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Koenli</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+<a href="http://www.beian.miit.gov.cn">粤ICP备18126773号</a>
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: 'XD8aPBomWwb9OrD5OlP3F42U-gzGzoHsz',
+        appKey: 'EHcp6RUK4G6BGD0dqfrz0IDo',
+        placeholder: '想对作者说点什么',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("XD8aPBomWwb9OrD5OlP3F42U-gzGzoHsz", "EHcp6RUK4G6BGD0dqfrz0IDo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
