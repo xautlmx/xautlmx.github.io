@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python,语言," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Python DB API https://www.python.org/dev/peps/pep-0249/ Python DB API是Python官方提供的一套访问数据库的统一接口规范  在没有Python DB API之前，Python访问数据库的接口程序混乱，当要对业务使用的数据库进行切换时，需要对Python应用程序进行大量的更改，迁移成本相当的高，因此Python官方提供了一套访问数">
+<meta name="keywords" content="Python,语言">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python操作MySQL数据库">
+<meta property="og:url" content="http://www.koenli.com/ck6iqmrtc001lmtkc5f5zft40.html">
+<meta property="og:site_name" content="Koenli&#39;s Blog">
+<meta property="og:description" content="Python DB API https://www.python.org/dev/peps/pep-0249/ Python DB API是Python官方提供的一套访问数据库的统一接口规范  在没有Python DB API之前，Python访问数据库的接口程序混乱，当要对业务使用的数据库进行切换时，需要对Python应用程序进行大量的更改，迁移成本相当的高，因此Python官方提供了一套访问数">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://img.koenli.com/Python%E6%93%8D%E4%BD%9CMySQL%E6%95%B0%E6%8D%AE%E5%BA%93_1.png">
+<meta property="og:image" content="https://img.koenli.com/Python%E6%93%8D%E4%BD%9CMySQL%E6%95%B0%E6%8D%AE%E5%BA%93_2.png">
+<meta property="og:image" content="https://img.koenli.com/Python%E6%93%8D%E4%BD%9CMySQL%E6%95%B0%E6%8D%AE%E5%BA%93_3.png">
+<meta property="og:image" content="https://img.koenli.com/Python%E6%93%8D%E4%BD%9CMySQL%E6%95%B0%E6%8D%AE%E5%BA%93_4.png">
+<meta property="og:image" content="https://img.koenli.com/Python%E6%93%8D%E4%BD%9CMySQL%E6%95%B0%E6%8D%AE%E5%BA%93_5.png">
+<meta property="og:image" content="https://img.koenli.com/Python%E6%93%8D%E4%BD%9CMySQL%E6%95%B0%E6%8D%AE%E5%BA%93_6.png">
+<meta property="og:image" content="https://img.koenli.com/Python%E6%93%8D%E4%BD%9CMySQL%E6%95%B0%E6%8D%AE%E5%BA%93_7.png">
+<meta property="og:updated_time" content="2019-01-30T16:00:47.440Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python操作MySQL数据库">
+<meta name="twitter:description" content="Python DB API https://www.python.org/dev/peps/pep-0249/ Python DB API是Python官方提供的一套访问数据库的统一接口规范  在没有Python DB API之前，Python访问数据库的接口程序混乱，当要对业务使用的数据库进行切换时，需要对Python应用程序进行大量的更改，迁移成本相当的高，因此Python官方提供了一套访问数">
+<meta name="twitter:image" content="https://img.koenli.com/Python%E6%93%8D%E4%BD%9CMySQL%E6%95%B0%E6%8D%AE%E5%BA%93_1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.koenli.com/ck6iqmrtc001lmtkc5f5zft40.html"/>
+
+
+
+
+
+  <title>Python操作MySQL数据库 | Koenli's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Koenli's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.koenli.com/ck6iqmrtc001lmtkc5f5zft40.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Koenli">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Koenli's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python操作MySQL数据库</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-14T16:18:30+08:00">
+                2016-05-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Code堡垒/" itemprop="url" rel="index">
+                    <span itemprop="name">Code堡垒</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/ck6iqmrtc001lmtkc5f5zft40.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/ck6iqmrtc001lmtkc5f5zft40.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/ck6iqmrtc001lmtkc5f5zft40.html" class="leancloud_visitors" data-flag-title="Python操作MySQL数据库">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Python-DB-API"><a href="#Python-DB-API" class="headerlink" title="Python DB API"></a>Python DB API</h1><hr>
+<p><a href="https://www.python.org/dev/peps/pep-0249/" target="_blank" rel="noopener">https://www.python.org/dev/peps/pep-0249/</a></p>
+<p><strong>Python DB API是Python官方提供的一套访问数据库的统一接口规范</strong></p>
+<p><img src="https://img.koenli.com/Python%E6%93%8D%E4%BD%9CMySQL%E6%95%B0%E6%8D%AE%E5%BA%93_1.png" alt=""></p>
+<p>在没有Python DB API之前，Python访问数据库的接口程序混乱，当要对业务使用的数据库进行切换时，需要对Python应用程序进行大量的更改，迁移成本相当的高，因此Python官方提供了一套访问数据库的统一接口规范，实现了Python应用程序对多种数据库访问方式的统一。</p>
+<p><img src="https://img.koenli.com/Python%E6%93%8D%E4%BD%9CMySQL%E6%95%B0%E6%8D%AE%E5%BA%93_2.png" alt=""></p>
+<p><strong>Python DB API包含的内容</strong></p>
+<p><img src="https://img.koenli.com/Python%E6%93%8D%E4%BD%9CMySQL%E6%95%B0%E6%8D%AE%E5%BA%93_3.png" alt=""></p>
+<p><strong>使用Python DB API访问数据库的流程</strong></p>
+<p><img src="https://img.koenli.com/Python%E6%93%8D%E4%BD%9CMySQL%E6%95%B0%E6%8D%AE%E5%BA%93_4.png" alt=""></p>
+<h1 id="Python开发MySQL环境的配置"><a href="#Python开发MySQL环境的配置" class="headerlink" title="Python开发MySQL环境的配置"></a>Python开发MySQL环境的配置</h1><blockquote>
+<p>Python2</p>
+</blockquote>
+<p>下载MySQL-Python并安装，安装程序会自动检测Python客户端的位置：</p>
+<p><a href="https://sourceforge.net/projects/mysql-python/#" target="_blank" rel="noopener">https://sourceforge.net/projects/mysql-python/#</a></p>
+<blockquote>
+<p>Python3</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install PyMySQL</span><br><span class="line">pip isntall PyMySQL3</span><br></pre></td></tr></table></figure>
+<h1 id="数据库连接对象Connection"><a href="#数据库连接对象Connection" class="headerlink" title="数据库连接对象Connection"></a>数据库连接对象Connection</h1><hr>
+<ul>
+<li><strong>连接对象：</strong>建立Python客户端与数据库的网络连接</li>
+<li><strong>创建方法：</strong>MySQLdb.Connect(参数)/pymysql.connect(参数)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">参数名</th>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">host</td>
+<td style="text-align:center">字符串</td>
+<td style="text-align:center">MySQL服务器地址</td>
+</tr>
+<tr>
+<td style="text-align:center">port</td>
+<td style="text-align:center">数字</td>
+<td style="text-align:center">MySQL服务器端口号</td>
+</tr>
+<tr>
+<td style="text-align:center">user</td>
+<td style="text-align:center">字符串</td>
+<td style="text-align:center">用户名</td>
+</tr>
+<tr>
+<td style="text-align:center">passwd</td>
+<td style="text-align:center">字符串</td>
+<td style="text-align:center">密码</td>
+</tr>
+<tr>
+<td style="text-align:center">db</td>
+<td style="text-align:center">字符串</td>
+<td style="text-align:center">数据库名称</td>
+</tr>
+<tr>
+<td style="text-align:center">charset</td>
+<td style="text-align:center">字符串</td>
+<td style="text-align:center">连接编码</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>connection对象支持的方法</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">方法名</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">cursor()</td>
+<td style="text-align:center">使用该连接创建并返回游标</td>
+</tr>
+<tr>
+<td style="text-align:center">commit()</td>
+<td style="text-align:center">提交当前事务</td>
+</tr>
+<tr>
+<td style="text-align:center">rollback()</td>
+<td style="text-align:center">回滚当前事务</td>
+</tr>
+<tr>
+<td style="text-align:center">close()</td>
+<td style="text-align:center">关闭连接</td>
+</tr>
+</tbody>
+</table>
+<p><strong>示例代码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create database test</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import pymysql</span><br><span class="line"></span><br><span class="line">conn = pymysql.connect(</span><br><span class="line">    host=&apos;127.0.0.1&apos;,</span><br><span class="line">    port = 3306,</span><br><span class="line">    user=&apos;root&apos;,</span><br><span class="line">    passwd=&apos;westos&apos;,</span><br><span class="line">    charset=&apos;utf8&apos;,</span><br><span class="line">    db=&apos;test&apos;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">print(conn)</span><br></pre></td></tr></table></figure>
+<h1 id="游标对象Cursor"><a href="#游标对象Cursor" class="headerlink" title="游标对象Cursor"></a>游标对象Cursor</h1><hr>
+<ul>
+<li><strong>游标对象：</strong>用于执行查询和获取结果</li>
+<li>Cursor对象支持的方法：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">参数名</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">execute(op[,args])</td>
+<td style="text-align:center">执行一个数据库查询或命令</td>
+</tr>
+<tr>
+<td style="text-align:center">fetchone()</td>
+<td style="text-align:center">取的结果集的下一行</td>
+</tr>
+<tr>
+<td style="text-align:center">fetchmany(size)</td>
+<td style="text-align:center">获取结果集的下几行</td>
+</tr>
+<tr>
+<td style="text-align:center">fetchall()</td>
+<td style="text-align:center">获取结果集中剩下的所有行</td>
+</tr>
+<tr>
+<td style="text-align:center">rowcount</td>
+<td style="text-align:center">最近一次execute返回数据的行数或影响行数</td>
+</tr>
+<tr>
+<td style="text-align:center">close()</td>
+<td style="text-align:center">关闭游标对象</td>
+</tr>
+</tbody>
+</table>
+<h1 id="演示select数据"><a href="#演示select数据" class="headerlink" title="演示select数据"></a>演示select数据</h1><hr>
+<p><strong>流程</strong></p>
+<p><img src="https://img.koenli.com/Python%E6%93%8D%E4%BD%9CMySQL%E6%95%B0%E6%8D%AE%E5%BA%93_5.png" alt=""></p>
+<p><strong>示例代码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">use test</span><br><span class="line">create table user (</span><br><span class="line">	userid int not null auto_increment,</span><br><span class="line">	username varchar(100),</span><br><span class="line">	primary key(userid)</span><br><span class="line">)engine=innodb auto_increment=1 default charset=&apos;utf8&apos;;</span><br><span class="line">insert into user(userid,username) values(1,&apos;NAME1&apos;);</span><br><span class="line">insert into user(userid,username) values(2,&apos;NAME2&apos;);</span><br><span class="line">insert into user(userid,username) values(3,&apos;NAME3&apos;);</span><br><span class="line">insert into user(userid,username) values(4,&apos;NAME4&apos;);</span><br><span class="line">insert into user(userid,username) values(5,&apos;NAME5&apos;);</span><br><span class="line">insert into user(userid,username) values(6,&apos;NAME6&apos;);</span><br><span class="line">insert into user(userid,username) values(7,&apos;NAME7&apos;);</span><br><span class="line">insert into user(userid,username) values(8,&apos;NAME8&apos;);</span><br><span class="line">insert into user(userid,username) values(9,&apos;NAME9&apos;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import pymysql</span><br><span class="line"></span><br><span class="line">conn = pymysql.connect(</span><br><span class="line">    host=&apos;127.0.0.1&apos;,</span><br><span class="line">    port = 3306,</span><br><span class="line">    user=&apos;root&apos;,</span><br><span class="line">    passwd=&apos;westos&apos;,</span><br><span class="line">    charset=&apos;utf8&apos;,</span><br><span class="line">    db=&apos;test&apos;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">cur = conn.cursor()</span><br><span class="line"></span><br><span class="line">sql = &quot;select * from user&quot;</span><br><span class="line">cur.execute(sql)</span><br><span class="line"></span><br><span class="line">rs = cur.fetchall()</span><br><span class="line">for row in rs:</span><br><span class="line">    print(&quot;userid=%s,username=%s&quot; %row)</span><br><span class="line"></span><br><span class="line">cur.close()</span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure>
+<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><hr>
+<p><strong>事务:</strong>访问和更新数据库的一个程序执行单元</p>
+<ul>
+<li>原子性：事务中包括的诸操作要么都做，要么都不做</li>
+<li>一致性：事务必须使数据库从一致性状态变到另一个一致性状态</li>
+<li>隔离性：一个事务的执行不能被其他事务干扰</li>
+<li>持久性：事务一旦提交，它对数据库的改变就是永久的</li>
+</ul>
+<p><strong>注意：</strong>开发过程中一般关闭自动提交事务功能，设置conn.autocommit(False)</p>
+<h1 id="演示insert-update-delete数据"><a href="#演示insert-update-delete数据" class="headerlink" title="演示insert/update/delete数据"></a>演示insert/update/delete数据</h1><hr>
+<p><strong>流程</strong></p>
+<p><img src="https://img.koenli.com/Python%E6%93%8D%E4%BD%9CMySQL%E6%95%B0%E6%8D%AE%E5%BA%93_6.png" alt=""></p>
+<p><strong>示例代码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">use test</span><br><span class="line">create table user (</span><br><span class="line">	userid int not null auto_increment,</span><br><span class="line">	username varchar(100),</span><br><span class="line">	primary key(userid)</span><br><span class="line">)engine=innodb auto_increment=1 default charset=&apos;utf8&apos;;</span><br><span class="line">insert into user(userid,username) values(1,&apos;NAME1&apos;);</span><br><span class="line">insert into user(userid,username) values(2,&apos;NAME2&apos;);</span><br><span class="line">insert into user(userid,username) values(3,&apos;NAME3&apos;);</span><br><span class="line">insert into user(userid,username) values(4,&apos;NAME4&apos;);</span><br><span class="line">insert into user(userid,username) values(5,&apos;NAME5&apos;);</span><br><span class="line">insert into user(userid,username) values(6,&apos;NAME6&apos;);</span><br><span class="line">insert into user(userid,username) values(7,&apos;NAME7&apos;);</span><br><span class="line">insert into user(userid,username) values(8,&apos;NAME8&apos;);</span><br><span class="line">insert into user(userid,username) values(9,&apos;NAME9&apos;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">import pymysql</span><br><span class="line"></span><br><span class="line">conn = pymysql.connect(</span><br><span class="line">    host=&apos;127.0.0.1&apos;,</span><br><span class="line">    port = 3306,</span><br><span class="line">    user=&apos;root&apos;,</span><br><span class="line">    passwd=&apos;westos&apos;,</span><br><span class="line">    charset=&apos;utf8&apos;,</span><br><span class="line">    db=&apos;test&apos;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">cur = conn.cursor()</span><br><span class="line"></span><br><span class="line">sql_insert = &quot;insert into user(userid,username) values(10,&apos;name10&apos;)&quot;</span><br><span class="line">sql_update = &quot;update user set username=&apos;name91&apos; where userid=9&quot;</span><br><span class="line">sql_delete = &quot;delete from user where userid&lt;3&quot;</span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">    cur.execute(sql_insert)</span><br><span class="line">    print(cur.rowcount)</span><br><span class="line">    cur.execute(sql_update)</span><br><span class="line">    print(cur.rowcount)</span><br><span class="line">    cur.execute(sql_delete)</span><br><span class="line">    print(cur.rowcount)</span><br><span class="line">    conn.commit()</span><br><span class="line">except Exception as e:</span><br><span class="line">    print(e)</span><br><span class="line">    conn.rollback()</span><br><span class="line"></span><br><span class="line">cur.close()</span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure>
+<h1 id="银行转账实例——账户A给账户B转账100元"><a href="#银行转账实例——账户A给账户B转账100元" class="headerlink" title="银行转账实例——账户A给账户B转账100元"></a>银行转账实例——账户A给账户B转账100元</h1><hr>
+<p><strong>流程</strong></p>
+<p><img src="https://img.koenli.com/Python%E6%93%8D%E4%BD%9CMySQL%E6%95%B0%E6%8D%AE%E5%BA%93_7.png" alt=""></p>
+<p><strong>示例代码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create table account (</span><br><span class="line">	accountid int,</span><br><span class="line">	money int,</span><br><span class="line">	primary key(accountid)</span><br><span class="line">)engine=innodb default charset=&apos;utf8&apos;;</span><br><span class="line">insert into account(accountid,money) values(11,110);</span><br><span class="line">insert into account(accountid,money) values(12,10);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding:UTF8 -*-</span><br><span class="line">import pymysql</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">class TransferMoney(object):</span><br><span class="line">    def __init__(self,conn):</span><br><span class="line">        self.conn = conn</span><br><span class="line"></span><br><span class="line">    def check_acct_available(self,accountid):</span><br><span class="line">        cur = self.conn.cursor()</span><br><span class="line">        try:</span><br><span class="line">            sql = &quot;select * from account where accountid=%s&quot; %accountid</span><br><span class="line">            cur.execute(sql)</span><br><span class="line">            print(&quot;check_acct_available:&quot;+sql)</span><br><span class="line">            rs = cur.fetchall()</span><br><span class="line">            if len(rs) != 1:</span><br><span class="line">                raise Exception(&quot;账号%s不存在&quot; %accountid)</span><br><span class="line">        finally:</span><br><span class="line">            cur.close()</span><br><span class="line"></span><br><span class="line">    def has_enough_money(self,source_accountid,money):</span><br><span class="line">        cur = self.conn.cursor()</span><br><span class="line">        try:</span><br><span class="line">            sql = &quot;select * from account where accountid=%s and money&gt;=%s&quot; % (source_accountid,money)</span><br><span class="line">            cur.execute(sql)</span><br><span class="line">            print(&quot;have_enought_money:&quot;+sql)</span><br><span class="line">            rs = cur.fetchall()</span><br><span class="line">            if len(rs) != 1:</span><br><span class="line">                raise Exception(&quot;账号%s没有足够的钱&quot; % source_accountid)</span><br><span class="line">        finally:</span><br><span class="line">            cur.close()</span><br><span class="line"></span><br><span class="line">    def reduce_money(self,source_accountid,money):</span><br><span class="line">        cur = self.conn.cursor()</span><br><span class="line">        try:</span><br><span class="line">            sql = &quot;update account set money=money-%s where accountid=%s&quot; % (money,source_accountid)</span><br><span class="line">            cur.execute(sql)</span><br><span class="line">            print(&quot;reduce_money:&quot;+sql)</span><br><span class="line">            if cur.rowcount != 1:</span><br><span class="line">                raise Exception(&quot;账号%s减款失败&quot; % source_accountid)</span><br><span class="line">        finally:</span><br><span class="line">            cur.close()</span><br><span class="line"></span><br><span class="line">    def add_money(self,target_account,money):</span><br><span class="line">        cur = self.conn.cursor()</span><br><span class="line">        try:</span><br><span class="line">            sql = &quot;update account set money=money+%s where accountid=%s&quot; % (money, target_account)</span><br><span class="line">            cur.execute(sql)</span><br><span class="line">            print(&quot;add_money:&quot; + sql)</span><br><span class="line">            if cur.rowcount != 1:</span><br><span class="line">                raise Exception(&quot;账号%s加法失败&quot; % target_account)</span><br><span class="line">        finally:</span><br><span class="line">            cur.close()</span><br><span class="line"></span><br><span class="line">    def transfer(self,source_accountid,target_account,money):</span><br><span class="line">        try:</span><br><span class="line">            self.check_acct_available(source_accountid)</span><br><span class="line">            #self.check_acct_available(target_account)</span><br><span class="line">            self.has_enough_money(source_accountid,money)</span><br><span class="line">            self.reduce_money(source_accountid,money)</span><br><span class="line">            self.add_money(target_account,money)</span><br><span class="line">            self.conn.commit()</span><br><span class="line">        except Exception as e:</span><br><span class="line">            self.conn.rollback()</span><br><span class="line">            raise e</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    source_accountid = sys.argv[1]</span><br><span class="line">    target_accountid = sys.argv[2]</span><br><span class="line">    money = sys.argv[3]</span><br><span class="line"></span><br><span class="line">    conn = pymysql.connect(</span><br><span class="line">        host=&apos;127.0.0.1&apos;,</span><br><span class="line">        port = 3306,</span><br><span class="line">        user=&apos;root&apos;,</span><br><span class="line">        passwd=&apos;westos&apos;,</span><br><span class="line">        charset=&apos;utf8&apos;,</span><br><span class="line">        database=&apos;test&apos;</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    tr_money = TransferMoney(conn)</span><br><span class="line"></span><br><span class="line">    try:</span><br><span class="line">        tr_money.transfer(source_accountid,target_accountid,money)</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(&quot;出现问题：&quot;+str(e))</span><br><span class="line">    finally:</span><br><span class="line">        conn.close()</span><br></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<pre><code>G:\PythonProject\python-mysql&gt;python connmysql.py 11 12 100
+check_acct_available:select * from account where accountid=11
+have_enought_money:select * from account where accountid=11 and money&gt;=100
+reduce_money:update account set money=money-100 where accountid=11
+add_money:update account set money=money+100 where accountid=12
+</code></pre><ul>
+<li>EOF</li>
+</ul>
+<p>本文作者：Koen</p>
+<p>参考链接：<a href="http://www.imooc.com/learn/475" target="_blank" rel="noopener">http://www.imooc.com/learn/475</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/语言/" rel="tag"># 语言</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ck6iqmrsy000gmtkc8m339xna.html" rel="next" title="Flask——电子邮件">
+                <i class="fa fa-chevron-left"></i> Flask——电子邮件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ck6iqmrt6000zmtkcac1erenx.html" rel="prev" title="MariaDB Galera Cluster 部署">
+                MariaDB Galera Cluster 部署 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/avatar.jpg"
+                alt="Koenli" />
+            
+              <p class="site-author-name" itemprop="name">Koenli</p>
+              <p class="site-description motion-element" itemprop="description">想要出类拔萃，就要做别人不想做的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python-DB-API"><span class="nav-number">1.</span> <span class="nav-text">Python DB API</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Python开发MySQL环境的配置"><span class="nav-number">2.</span> <span class="nav-text">Python开发MySQL环境的配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库连接对象Connection"><span class="nav-number">3.</span> <span class="nav-text">数据库连接对象Connection</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#游标对象Cursor"><span class="nav-number">4.</span> <span class="nav-text">游标对象Cursor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#演示select数据"><span class="nav-number">5.</span> <span class="nav-text">演示select数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务"><span class="nav-number">6.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#演示insert-update-delete数据"><span class="nav-number">7.</span> <span class="nav-text">演示insert/update/delete数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#银行转账实例——账户A给账户B转账100元"><span class="nav-number">8.</span> <span class="nav-text">银行转账实例——账户A给账户B转账100元</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Koenli</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+<a href="http://www.beian.miit.gov.cn">粤ICP备18126773号</a>
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: 'XD8aPBomWwb9OrD5OlP3F42U-gzGzoHsz',
+        appKey: 'EHcp6RUK4G6BGD0dqfrz0IDo',
+        placeholder: '想对作者说点什么',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("XD8aPBomWwb9OrD5OlP3F42U-gzGzoHsz", "EHcp6RUK4G6BGD0dqfrz0IDo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
