@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="系统,Linux," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="简介 什么是PXEPXE(Pre-boot Execution Environment，预启动执行环境)是由Intel公司开发的最新技术，工作于Client/Server的网络模式，支持工作站通过网络从远端服务器下载映像，并由此支持通过网络启动操作系统，在启动过程中，终端要求服务器分配IP地址，再用TFTP（trivial file transfer protocol）或MTFTP(multica">
+<meta name="keywords" content="系统,Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PXE+Kickstart无人值守安装RedHat">
+<meta property="og:url" content="http://www.koenli.com/ck74yvgol001jdhkcgyf29rcq.html">
+<meta property="og:site_name" content="Koenli&#39;s Blog">
+<meta property="og:description" content="简介 什么是PXEPXE(Pre-boot Execution Environment，预启动执行环境)是由Intel公司开发的最新技术，工作于Client/Server的网络模式，支持工作站通过网络从远端服务器下载映像，并由此支持通过网络启动操作系统，在启动过程中，终端要求服务器分配IP地址，再用TFTP（trivial file transfer protocol）或MTFTP(multica">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_1.jpg">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_2.jpg">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_3.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_4.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_5.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_6.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_7.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_8.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_9.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_10.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_11.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_12.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_13.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_14.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_15.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_16.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_17.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_18.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_19.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_20.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_21.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_22.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_23.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_24.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_25.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_26.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_27.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_28.png">
+<meta property="og:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_29.png">
+<meta property="og:updated_time" content="2019-02-16T03:31:30.260Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PXE+Kickstart无人值守安装RedHat">
+<meta name="twitter:description" content="简介 什么是PXEPXE(Pre-boot Execution Environment，预启动执行环境)是由Intel公司开发的最新技术，工作于Client/Server的网络模式，支持工作站通过网络从远端服务器下载映像，并由此支持通过网络启动操作系统，在启动过程中，终端要求服务器分配IP地址，再用TFTP（trivial file transfer protocol）或MTFTP(multica">
+<meta name="twitter:image" content="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.koenli.com/ck74yvgol001jdhkcgyf29rcq.html"/>
+
+
+
+
+
+  <title>PXE+Kickstart无人值守安装RedHat | Koenli's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Koenli's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.koenli.com/ck74yvgol001jdhkcgyf29rcq.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Koenli">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Koenli's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">PXE+Kickstart无人值守安装RedHat</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-05T18:04:04+08:00">
+                2015-11-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux营地/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux营地</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/ck74yvgol001jdhkcgyf29rcq.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/ck74yvgol001jdhkcgyf29rcq.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/ck74yvgol001jdhkcgyf29rcq.html" class="leancloud_visitors" data-flag-title="PXE+Kickstart无人值守安装RedHat">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><hr>
+<h2 id="什么是PXE"><a href="#什么是PXE" class="headerlink" title="什么是PXE"></a>什么是PXE</h2><p>PXE(Pre-boot Execution Environment，预启动执行环境)是由Intel公司开发的最新技术，工作于Client/Server的网络模式，支持工作站通过网络从远端服务器下载映像，并由此支持通过网络启动操作系统，在启动过程中，终端要求服务器分配IP地址，再用TFTP（trivial file transfer protocol）或MTFTP(multicast trivial file transfer protocol)协议下载一个启动软件包到本机内存中执行，由这个启动软件包完成终端基本软件设置，从而引导预先安装在服务器中的终端操作系统。</p>
+<p>严格来说，PXE 并不是一种安装方式，而是一种引导方式。进行 PXE 安装的必要条件是在要安装的计算机中必须包含一个 PXE 支持的网卡（NIC），即网卡中必须要有 PXE Client。PXE 协议可以使计算机通过网络启动。此协议分为 Client端和 Server 端，而PXE Client则在网卡的 ROM 中。当计算机引导时，BIOS 把 PXE Client 调入内存中执行，然后由 PXE Client 将放置在远端的文件通过网络下载到本地运行。运行 PXE 协议需要设置 DHCP 服务器和 TFTP 服务器。DHCP 服务器会给 PXE Client（将要安装系统的主机）分配一个 IP 地址，由于是给 PXE Client 分配 IP 地址，所以在配置 DHCP 服务器时需要增加相应的 PXE 设置。</p>
+<p>此外，在 PXE Client 的 ROM 中，已经存在了 TFTP Client，那么它就可以通过 TFTP 协议到 TFTP Server 上下载所需的文件了。</p>
+<p><strong>PXE的工作过程</strong></p>
+<ol>
+<li>PXE Client 从自己的PXE网卡启动，向本网络中的DHCP服务器索取IP；</li>
+<li>DHCP 服务器返回分配给客户机的IP 以及PXE文件的放置位置(该文件一般是放在一台TFTP服务器上) ；</li>
+<li>PXE Client 向本网络中的TFTP服务器索取pxelinux.0 文件；</li>
+<li>PXE Client 取得pxelinux.0 文件后之执行该文件；</li>
+<li>根据pxelinux.0 的执行结果，通过TFTP服务器加载内核和文件系统 ；</li>
+<li>进入安装画面, 此时可以通过选择HTTP、FTP、NFS 方式之一进行安装；</li>
+</ol>
+<p>详细工作流程，请参考下面这幅图：</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_1.jpg" alt=""></p>
+<h2 id="什么是Kickstart"><a href="#什么是Kickstart" class="headerlink" title="什么是Kickstart"></a>什么是Kickstart</h2><p>Kickstart是一种无人值守的安装方式。它的工作原理是在安装过程中记录典型的需要人工干预填写的各种参数，并生成一个名为ks.cfg的文件。如果在安装过程中（不只局限于生成Kickstart安装文件的机器）出现要填写参数的情况，安装程序首先会去查找Kickstart生成的文件，如果找到合适的参数，就采用所找到的参数；如果没有找到合适的参数，便需要安装者手工干预了。所以，如果Kickstart文件涵盖了安装过程中可能出现的所有需要填写的参数，那么安装者完全可以只告诉安装程序从何处取ks.cfg文件，然后就去忙自己的事情。等安装完毕，安装程序会根据ks.cfg中的设置重启系统，并结束安装。</p>
+<p>PXE+Kickstart 无人值守安装操作系统完整过程如下：</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_2.jpg" alt=""></p>
+<h1 id="系统环境"><a href="#系统环境" class="headerlink" title="系统环境"></a>系统环境</h1><hr>
+<p>实验环境：VMware Workstation Pro 12<br>系统平台：RedHat Enterprise Linux 6.5 (最小化安装)<br>网络模式：NAT模式（共享主机的IP地址）<br>DHCP / TFTP IP：192.168.220.139<br>HTTP / FTP / NFS IP：192.168.220.139<br>防火墙已关闭/iptables: Firewall is not running.<br>SELINUX=disabled</p>
+<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><hr>
+<p>生成ks.cfg 文件需要system-config-kickstart 工具，而此工具依赖于X Windows，所以我们需要安装X Windows 和Desktop 并重启系统，操作如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum groupinstall &quot;X Window System&quot; &quot;Desktop&quot; &quot;Desktop Platform&quot; &quot;chinese-support&quot; &quot;fonts&quot; -y</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<h1 id="配置HTTP安装方式"><a href="#配置HTTP安装方式" class="headerlink" title="配置HTTP安装方式"></a>配置HTTP安装方式</h1><hr>
+<p><strong>系统的安装方式可以选择HTTP、FTP、 NFS，我们这里介绍HTTP方式的安装。</strong></p>
+<h2 id="安装并配置HTTP"><a href="#安装并配置HTTP" class="headerlink" title="安装并配置HTTP"></a>安装并配置HTTP</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install httpd –y</span><br></pre></td></tr></table></figure>
+<p>开启服务并设置开机启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/httpd start</span><br><span class="line">chkconfig httpd on</span><br></pre></td></tr></table></figure>
+<h2 id="加载ISO镜像"><a href="#加载ISO镜像" class="headerlink" title="加载ISO镜像"></a>加载ISO镜像</h2><p>在虚拟机中设置加载ISO镜像</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_3.png" alt=""></p>
+<p>将iso文件挂载至/mnt/cdrom</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir /mnt/cdrom</span><br><span class="line">mount /dev/cdrom /mnt/cdrom</span><br></pre></td></tr></table></figure>
+<h2 id="复制光盘全部内容至HTTP的根目录-var-www-html下"><a href="#复制光盘全部内容至HTTP的根目录-var-www-html下" class="headerlink" title="复制光盘全部内容至HTTP的根目录/var/www/html下"></a>复制光盘全部内容至HTTP的根目录/var/www/html下</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cp -r /mnt/cdrom /var/www/html/</span><br><span class="line">umount /mnt/cdrom</span><br><span class="line">rm -rf /mnt/cdrom</span><br></pre></td></tr></table></figure>
+<p>至此HTTP部分设置完毕。</p>
+<h1 id="配置TFTP"><a href="#配置TFTP" class="headerlink" title="配置TFTP"></a>配置TFTP</h1><hr>
+<h2 id="安装tftp-server"><a href="#安装tftp-server" class="headerlink" title="安装tftp-server"></a>安装tftp-server</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install xinetd tftp-server -y</span><br></pre></td></tr></table></figure>
+<h2 id="启用tftp服务"><a href="#启用tftp服务" class="headerlink" title="启用tftp服务"></a>启用tftp服务</h2><p><strong>将/etc/xinetd.d/tftp中的disable选项设为no</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">cp -a /etc/xinetd.d/tftp /etc/xinetd.d/tftp.bak</span><br><span class="line">cat &gt; /etc/xinetd.d/tftp &lt;&lt; EOF</span><br><span class="line"># default: off</span><br><span class="line"># description: The tftp server serves files using the trivial file transfer \</span><br><span class="line">#       protocol.  The tftp protocol is often used to boot diskless \</span><br><span class="line">#       workstations, download configuration files to network-aware printers, \</span><br><span class="line">#       and to start the installation process for some operating systems.</span><br><span class="line">service tftp</span><br><span class="line">&#123;</span><br><span class="line">        socket_type             = dgram</span><br><span class="line">        protocol                = udp</span><br><span class="line">        wait                    = yes</span><br><span class="line">        user                    = root</span><br><span class="line">        server                  = /usr/sbin/in.tftpd</span><br><span class="line">        server_args             = -s /var/lib/tftpboot</span><br><span class="line">        disable                 = no</span><br><span class="line">        per_source              = 11</span><br><span class="line">        cps                     = 100 2</span><br><span class="line">        flags                   = IPv4</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h2 id="启动tftp服务"><a href="#启动tftp服务" class="headerlink" title="启动tftp服务"></a>启动tftp服务</h2><p>因为tftp服务是挂载在超级进程xinetd 下的，所以通过启动xinetd 来启动tftp服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/xinetd restart</span><br></pre></td></tr></table></figure>
+<p>设置开机启动xinetd</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chkconfig xinetd on</span><br></pre></td></tr></table></figure>
+<h1 id="配置支持PXE的启动程序"><a href="#配置支持PXE的启动程序" class="headerlink" title="配置支持PXE的启动程序"></a>配置支持PXE的启动程序</h1><hr>
+<h2 id="安装syslinux"><a href="#安装syslinux" class="headerlink" title="安装syslinux"></a>安装syslinux</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install syslinux -y</span><br></pre></td></tr></table></figure>
+<p><strong>说明：syslinux是一个功能强大的引导加载程序，而且兼容各种介质。更加确切地说：SYSLINUX是一个小型的Linux操作系统，它的目的是简化首次安装Linux的时间，并建立修护或其它特殊用途的启动盘。</strong></p>
+<h2 id="复制pxelinux-0文件至-var-lib-tftpboot-文件夹中"><a href="#复制pxelinux-0文件至-var-lib-tftpboot-文件夹中" class="headerlink" title="复制pxelinux.0文件至/var/lib/tftpboot/文件夹中"></a>复制pxelinux.0文件至/var/lib/tftpboot/文件夹中</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /usr/share/syslinux/pxelinux.0 /var/lib/tftpboot/</span><br></pre></td></tr></table></figure>
+<h2 id="复制iso镜像中的-image-pxeboot-initrd-img和vmlinux至-var-lib-tftpboot-文件夹中"><a href="#复制iso镜像中的-image-pxeboot-initrd-img和vmlinux至-var-lib-tftpboot-文件夹中" class="headerlink" title="复制iso镜像中的/image/pxeboot/initrd.img和vmlinux至/var/lib/tftpboot/文件夹中"></a>复制iso镜像中的/image/pxeboot/initrd.img和vmlinux至/var/lib/tftpboot/文件夹中</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /var/www/html/cdrom/images/pxeboot/&#123;initrd.img,vmlinuz&#125; /var/lib/tftpboot/</span><br></pre></td></tr></table></figure>
+<h2 id="复制iso镜像中的-isolinux-msg至-var-lib-tftpboot-文件夹中"><a href="#复制iso镜像中的-isolinux-msg至-var-lib-tftpboot-文件夹中" class="headerlink" title="复制iso镜像中的/isolinux/*.msg至/var/lib/tftpboot/文件夹中"></a>复制iso镜像中的/isolinux/*.msg至/var/lib/tftpboot/文件夹中</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /var/www/html/cdrom/isolinux/*.msg /var/lib/tftpboot/</span><br></pre></td></tr></table></figure>
+<h2 id="在-var-lib-tftpboot-中新建一个pxelinux-cfg目录"><a href="#在-var-lib-tftpboot-中新建一个pxelinux-cfg目录" class="headerlink" title="在/var/lib/tftpboot/中新建一个pxelinux.cfg目录"></a>在/var/lib/tftpboot/中新建一个pxelinux.cfg目录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /var/lib/tftpboot/pxelinux.cfg</span><br></pre></td></tr></table></figure>
+<h2 id="将iso镜像中的-isolinux目录中的isolinux-cfg复制到pxelinux-cfg目录中，同时更改文件名称为default"><a href="#将iso镜像中的-isolinux目录中的isolinux-cfg复制到pxelinux-cfg目录中，同时更改文件名称为default" class="headerlink" title="将iso镜像中的/isolinux目录中的isolinux.cfg复制到pxelinux.cfg目录中，同时更改文件名称为default"></a>将iso镜像中的/isolinux目录中的isolinux.cfg复制到pxelinux.cfg目录中，同时更改文件名称为default</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /var/www/html/cdrom/isolinux/isolinux.cfg /var/lib/tftpboot/pxelinux.cfg/default</span><br></pre></td></tr></table></figure>
+<h2 id="修改default文件"><a href="#修改default文件" class="headerlink" title="修改default文件"></a>修改default文件</h2><pre><code># vim /var/lib/tftpboot/pxelinux.cfg/default
+default autoinstall     #默认启动的是&apos;label autoinstall&apos;中标记的启动内核
+#prompt 1
+timeout 600
+
+display boot.msg        #显示某个文件的内容，注意文件的路径。默认是在/var/lib/tftpboot/目录下。也可以指定位类似&apos;/install/boot.msg&apos;这样的，路径+文件名。
+
+menu background splash.jpg
+menu title Welcome to Red Hat Enterprise Linux 6.5!
+menu color border 0 #ffffffff #00000000
+menu color sel 7 #ffffffff #ff000000
+menu color title 0 #ffffffff #00000000
+menu color tabmsg 0 #ffffffff #00000000
+menu color unsel 0 #ffffffff #00000000
+menu color hotsel 0 #ff000000 #ffffffff
+menu color hotkey 7 #ffffffff #ff000000
+menu color scrollbar 0 #ffffffff #00000000
+
+label autoinstall       #&apos;label&apos;指定你在&apos;boot:&apos;提示符下输入的关键字，比如boot:linux[ENTER]，这个会启动&apos;label linux&apos;下标记的kernel和initrd.img文件。
+  menu label ^AutoInstall RedHat System
+  menu default
+  kernel vmlinuz
+  append initrd=initrd.img ks=http://192.168.220.139/ks.cfg     #告诉系统，从哪里获取ks.cfg文件 
+label linux
+  menu label ^Install or upgrade an existing system
+  menu default
+  kernel vmlinuz        #kernel参数指定要启动的内核
+  append initrd=initrd.img      #append指定追加给内核的参数，能够在grub里使用的追加给内核的参数，在这里也都可以使用。
+label vesa
+  menu label Install system with ^basic video driver
+  kernel vmlinuz
+  append initrd=initrd.img xdriver=vesa nomodeset
+label rescue
+  menu label ^Rescue installed system
+  kernel vmlinuz
+  append initrd=initrd.img rescue
+label local
+  menu label Boot from ^local drive
+  localboot 0xffff
+label memtest86
+  menu label ^Memory test
+  kernel memtest
+  append -
+</code></pre><h1 id="配置DHCP"><a href="#配置DHCP" class="headerlink" title="配置DHCP"></a>配置DHCP</h1><hr>
+<h2 id="安装DHCP服务器"><a href="#安装DHCP服务器" class="headerlink" title="安装DHCP服务器"></a>安装DHCP服务器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install dhcp -y</span><br></pre></td></tr></table></figure>
+<h2 id="复制配置模板文件到DHCP的配置目录中"><a href="#复制配置模板文件到DHCP的配置目录中" class="headerlink" title="复制配置模板文件到DHCP的配置目录中"></a>复制配置模板文件到DHCP的配置目录中</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -f /usr/share/doc/dhcp-4.1.1/dhcpd.conf.sample /etc/dhcp/dhcpd.conf</span><br></pre></td></tr></table></figure>
+<h2 id="修改-etc-dhcp-dhcpd-conf-配置文件"><a href="#修改-etc-dhcp-dhcpd-conf-配置文件" class="headerlink" title="修改/etc/dhcp/dhcpd.conf 配置文件"></a>修改/etc/dhcp/dhcpd.conf 配置文件</h2><pre><code># vim /etc/dhcp/dhcpd.conf
+option domain-name &quot;example.com&quot;;
+option domain-name-servers 192.168.220.139;
+default-lease-time 600;
+max-lease-time 7200;
+subnet 192.168.220.0 netmask 255.255.255.0 {
+  range 192.168.220.40  192.168.220.60;     #用于分配的IP地址池
+  option routers 192.168.220.2;     #设置分配的网关
+  filename      &quot;pxelinux.0&quot;;       #pxelinux启动文件位置
+  next-server   192.168.220.139;    #TFTP Server的IP地址
+}
+</code></pre><h2 id="启动DHCP服务"><a href="#启动DHCP服务" class="headerlink" title="启动DHCP服务"></a>启动DHCP服务</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/dhcpd restart</span><br></pre></td></tr></table></figure>
+<p>设置开机自启</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chkconfig dhcpd on</span><br></pre></td></tr></table></figure>
+<h1 id="生成ks-cfg文件"><a href="#生成ks-cfg文件" class="headerlink" title="生成ks.cfg文件"></a>生成ks.cfg文件</h1><hr>
+<h2 id="安装Kickstart"><a href="#安装Kickstart" class="headerlink" title="安装Kickstart"></a>安装Kickstart</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install system-config-kickstart -y</span><br></pre></td></tr></table></figure>
+<h2 id="在桌面环境下配置Kickstart"><a href="#在桌面环境下配置Kickstart" class="headerlink" title="在桌面环境下配置Kickstart"></a>在桌面环境下配置Kickstart</h2><p>启动X Windows环境</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">startx</span><br></pre></td></tr></table></figure>
+<p>配置Kickstart</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">system-config-kickstart</span><br></pre></td></tr></table></figure>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_4.png" alt=""></p>
+<p>A. 设置语言，键盘，时区，Root密码，安装完毕后重启等。</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_5.png" alt=""></p>
+<p>B. 设置安装方式，这篇文章介绍的是HTTP方式的安装，故选择HTTP</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_6.png" alt=""></p>
+<p>C. 安装MBR</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_7.png" alt=""></p>
+<p>D. 设置分区</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_8.png" alt=""></p>
+<p>E. 配置网络</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_9.png" alt=""></p>
+<p>F. SELinux 和防火墙配置</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_10.png" alt=""></p>
+<p>G. 图形环境配置</p>
+<p>H. 软件包安装选择</p>
+<p>I. 生成ks.cfg 文件，保存在/var/www/html/文件夹下</p>
+<p>我们可以打开/var/www/html/ks.cfg文件进行查看并做修改</p>
+<pre><code># vim /var/www/html/ks.cfg
+#platform=x86, AMD64, or Intel EM64T
+#version=DEVEL
+# Firewall configuration
+firewall --disabled
+# Install OS instead of upgrade
+install
+# Use network installation
+url --url=&quot;http://192.168.220.139/cdrom&quot;    #这个选项告诉安装程序：到服务器192.168.220.139的HTTP根目录下的cdrom文件夹下寻找安装介质
+# Root password
+rootpw --iscrypted $1$Zhouns4l$z7kRWkkryGTWPElCS.SUm.
+# System authorization information
+auth  --useshadow  --passalgo=sha512
+# Use text mode install
+text
+# System keyboard
+keyboard us
+# System language
+lang en_US
+# SELinux configuration
+selinux --disabled
+# Do not configure the X Window System
+skipx
+# Installation logging level
+logging --level=info
+# Reboot after installation
+reboot
+# System timezone
+timezone  Asia/Shanghai
+# Network information
+network  --bootproto=dhcp --device=eth0 --onboot=on
+# System bootloader configuration
+key --skip
+bootloader --location=mbr
+# Clear the Master Boot Record
+zerombr
+# Partition clearing information
+clearpart --all --initlabel 
+# Disk partitioning information
+part /boot --fstype=&quot;ext4&quot; --size=200
+part swap --fstype=&quot;swap&quot; --size=1024
+part / --fstype=&quot;ext4&quot; --grow --size=1
+
+%packages
+@base
+@chinese-support
+
+%end
+</code></pre><p><strong>说明：</strong></p>
+<p>key –skip 如果是红帽系统，此选项可以跳过输入序列号过程；如果是CentOS 系列，则可以不保留此项内容</p>
+<h1 id="测试安装"><a href="#测试安装" class="headerlink" title="测试安装"></a>测试安装</h1><hr>
+<p>自动化安装系统配置完毕，下面创建一台新的机器进行测试</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_11.png" alt=""></p>
+<p>新建虚拟机，选择自定义（高级）</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_12.png" alt=""></p>
+<p>选择“下一步”</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_13.png" alt=""></p>
+<p>选择“稍后安装操作系统”</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_14.png" alt=""></p>
+<p>选择客户机操作系统类型</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_15.png" alt=""></p>
+<p>命名虚拟机</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_16.png" alt=""></p>
+<p>设置处理器数量</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_17.png" alt=""></p>
+<p>设置此虚拟机的内存</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_18.png" alt=""></p>
+<p>设置网络类型，网络连接模式选择NAT模式</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_19.png" alt=""></p>
+<p>选择I/O控制器类型</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_20.png" alt=""></p>
+<p>选择磁盘类型</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_21.png" alt=""></p>
+<p>选择磁盘</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_22.png" alt=""></p>
+<p>指定磁盘大小</p>
+<p><strong>注：一定要勾选上“立即分配所有磁盘空间”，不然在后来安装的时候将提示没有磁盘空间。</strong></p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_23.png" alt=""></p>
+<p>指定磁盘文件</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_24.png" alt=""></p>
+<p>虚拟机总览</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_25.png" alt=""></p>
+<p>正在创建磁盘，过程会很慢，虚拟机需要产生一个20GB的文件。</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_26.png" alt=""></p>
+<p>启动虚拟机，选择从网卡启动，DHCP 服务器正在给客户机分配IP地址。</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_27.png" alt=""></p>
+<p>开始下载vmlinuz 和initrd.img</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_28.png" alt=""></p>
+<p>安装过程…</p>
+<p><img src="https://img.koenli.com/PXE+Kickstart%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85RedHat_29.png" alt=""></p>
+<p>安装完毕，重启后，显示登录界面</p>
+<p>至此PXE+Kickstart无人值守安装RedHat操作系统环境搭建完毕。</p>
+<ul>
+<li>EOF</li>
+</ul>
+<p>本文作者：Koen</p>
+<p>参考链接：<a href="http://mp.weixin.qq.com/s?__biz=MzA3MzYwNjQ3NA==&amp;mid=400315209&amp;idx=2&amp;sn=44efa1be2b0f4f0280fa2e7f5ff1c171&amp;scene=2&amp;srcid=1103zVibNj0UTaW0KhUEBsoH#wechat_redirect" target="_blank" rel="noopener">http://mp.weixin.qq.com/s?__biz=MzA3MzYwNjQ3NA==&amp;mid=400315209&amp;idx=2&amp;sn=44efa1be2b0f4f0280fa2e7f5ff1c171&amp;scene=2&amp;srcid=1103zVibNj0UTaW0KhUEBsoH#wechat_redirect</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/系统/" rel="tag"># 系统</a>
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ck74yvgoq001xdhkclbtals4z.html" rel="next" title="RedHat6.X系统管理">
+                <i class="fa fa-chevron-left"></i> RedHat6.X系统管理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ck74yvgoh0013dhkclc4fxt9v.html" rel="prev" title="Ntopng--网络流量监控与分析工具">
+                Ntopng--网络流量监控与分析工具 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/avatar.jpg"
+                alt="Koenli" />
+            
+              <p class="site-author-name" itemprop="name">Koenli</p>
+              <p class="site-description motion-element" itemprop="description">想要出类拔萃，就要做别人不想做的事</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是PXE"><span class="nav-number">1.1.</span> <span class="nav-text">什么是PXE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Kickstart"><span class="nav-number">1.2.</span> <span class="nav-text">什么是Kickstart</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#系统环境"><span class="nav-number">2.</span> <span class="nav-text">系统环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#准备工作"><span class="nav-number">3.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置HTTP安装方式"><span class="nav-number">4.</span> <span class="nav-text">配置HTTP安装方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装并配置HTTP"><span class="nav-number">4.1.</span> <span class="nav-text">安装并配置HTTP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加载ISO镜像"><span class="nav-number">4.2.</span> <span class="nav-text">加载ISO镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复制光盘全部内容至HTTP的根目录-var-www-html下"><span class="nav-number">4.3.</span> <span class="nav-text">复制光盘全部内容至HTTP的根目录/var/www/html下</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置TFTP"><span class="nav-number">5.</span> <span class="nav-text">配置TFTP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装tftp-server"><span class="nav-number">5.1.</span> <span class="nav-text">安装tftp-server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启用tftp服务"><span class="nav-number">5.2.</span> <span class="nav-text">启用tftp服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动tftp服务"><span class="nav-number">5.3.</span> <span class="nav-text">启动tftp服务</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置支持PXE的启动程序"><span class="nav-number">6.</span> <span class="nav-text">配置支持PXE的启动程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装syslinux"><span class="nav-number">6.1.</span> <span class="nav-text">安装syslinux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复制pxelinux-0文件至-var-lib-tftpboot-文件夹中"><span class="nav-number">6.2.</span> <span class="nav-text">复制pxelinux.0文件至/var/lib/tftpboot/文件夹中</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复制iso镜像中的-image-pxeboot-initrd-img和vmlinux至-var-lib-tftpboot-文件夹中"><span class="nav-number">6.3.</span> <span class="nav-text">复制iso镜像中的/image/pxeboot/initrd.img和vmlinux至/var/lib/tftpboot/文件夹中</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复制iso镜像中的-isolinux-msg至-var-lib-tftpboot-文件夹中"><span class="nav-number">6.4.</span> <span class="nav-text">复制iso镜像中的/isolinux/*.msg至/var/lib/tftpboot/文件夹中</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在-var-lib-tftpboot-中新建一个pxelinux-cfg目录"><span class="nav-number">6.5.</span> <span class="nav-text">在/var/lib/tftpboot/中新建一个pxelinux.cfg目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将iso镜像中的-isolinux目录中的isolinux-cfg复制到pxelinux-cfg目录中，同时更改文件名称为default"><span class="nav-number">6.6.</span> <span class="nav-text">将iso镜像中的/isolinux目录中的isolinux.cfg复制到pxelinux.cfg目录中，同时更改文件名称为default</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改default文件"><span class="nav-number">6.7.</span> <span class="nav-text">修改default文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置DHCP"><span class="nav-number">7.</span> <span class="nav-text">配置DHCP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装DHCP服务器"><span class="nav-number">7.1.</span> <span class="nav-text">安装DHCP服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复制配置模板文件到DHCP的配置目录中"><span class="nav-number">7.2.</span> <span class="nav-text">复制配置模板文件到DHCP的配置目录中</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改-etc-dhcp-dhcpd-conf-配置文件"><span class="nav-number">7.3.</span> <span class="nav-text">修改/etc/dhcp/dhcpd.conf 配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动DHCP服务"><span class="nav-number">7.4.</span> <span class="nav-text">启动DHCP服务</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#生成ks-cfg文件"><span class="nav-number">8.</span> <span class="nav-text">生成ks.cfg文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Kickstart"><span class="nav-number">8.1.</span> <span class="nav-text">安装Kickstart</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在桌面环境下配置Kickstart"><span class="nav-number">8.2.</span> <span class="nav-text">在桌面环境下配置Kickstart</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#测试安装"><span class="nav-number">9.</span> <span class="nav-text">测试安装</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Koenli</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+<a href="http://www.beian.miit.gov.cn">粤ICP备18126773号</a>
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: 'XD8aPBomWwb9OrD5OlP3F42U-gzGzoHsz',
+        appKey: 'EHcp6RUK4G6BGD0dqfrz0IDo',
+        placeholder: '想对作者说点什么',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("XD8aPBomWwb9OrD5OlP3F42U-gzGzoHsz", "EHcp6RUK4G6BGD0dqfrz0IDo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
