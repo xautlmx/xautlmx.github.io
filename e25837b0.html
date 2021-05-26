@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://img.koenli.com/NFS%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA%E5%B9%B6%E5%9C%A8K8S%E4%B8%AD%E5%88%9B%E5%BB%BANFS%20StorageClass_2.png">
 <meta property="og:image" content="https://img.koenli.com/NFS%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA%E5%B9%B6%E5%9C%A8K8S%E4%B8%AD%E5%88%9B%E5%BB%BANFS%20StorageClass_3.png">
 <meta property="og:image" content="https://img.koenli.com/NFS%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA%E5%B9%B6%E5%9C%A8K8S%E4%B8%AD%E5%88%9B%E5%BB%BANFS%20StorageClass_4.png">
-<meta property="og:updated_time" content="2021-04-28T10:55:29.751Z">
+<meta property="og:updated_time" content="2021-05-26T15:09:10.132Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NFS服务器搭建并在K8S中创建NFS StorageClass">
 <meta name="twitter:description" content="NFS服务器搭建 服务端安装步骤安装NFS和rpcbind 1yum install rpcbind nfs-utils -y 启动服务并设置开机自启 注：先启动rpcbind服务，再启动nfs服务">
@@ -207,10 +207,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-04-28 11:08:20 / 修改时间：18:55:29" itemprop="dateCreated datePublished" datetime="2021-04-28T11:08:20+08:00">2021-04-28</time>
+              <time title="创建时间：2021-04-28 11:08:20" itemprop="dateCreated datePublished" datetime="2021-04-28T11:08:20+08:00">2021-04-28</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-26 23:09:10" itemprop="dateModified" datetime="2021-05-26T23:09:10+08:00">2021-05-26</time>
+              </span>
 
           
             <span id="/e25837b0.html" class="post-meta-item leancloud_visitors" data-flag-title="NFS服务器搭建并在K8S中创建NFS StorageClass" title="阅读次数">
@@ -311,6 +317,10 @@
 <h2 id="手动创建pv和pvc测试验证NFS是否可用"><a href="#手动创建pv和pvc测试验证NFS是否可用" class="headerlink" title="手动创建pv和pvc测试验证NFS是否可用"></a>手动创建pv和pvc测试验证NFS是否可用</h2><p>在所有k8s node节点安装NFS客户端，并通过showmount -e查看NFS服务器共享信息</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install nfs-utils -y</span><br><span class="line">showmount -e 10.211.55.13</span><br></pre></td></tr></table></figure>
 <p>手动创建pv和pvc</p>
+<ul>
+<li>PersistentVolume中的path参数修改为NFS共享目录的路径，本文中为/data</li>
+<li>PersistentVolume中的server参数修改为NFS服务器IP地址，本文中为10.211.55.13</li>
+</ul>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 创建yaml文件</span><br><span class="line">cat &gt; /root/pv-pvc-test.yaml &lt;&lt; EOF</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolume</span><br><span class="line">metadata:</span><br><span class="line">  name: pv-test</span><br><span class="line">spec:</span><br><span class="line">  capacity:</span><br><span class="line">    storage: 1Gi</span><br><span class="line">  accessModes:</span><br><span class="line">    - ReadWriteOnce</span><br><span class="line">  persistentVolumeReclaimPolicy: Recycle</span><br><span class="line">  nfs:</span><br><span class="line">    path: /data</span><br><span class="line">    server: 10.211.55.13</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">kind: PersistentVolumeClaim</span><br><span class="line">apiVersion: v1</span><br><span class="line">metadata:</span><br><span class="line">  name: pvc-test</span><br><span class="line">spec:</span><br><span class="line">  accessModes:</span><br><span class="line">    - ReadWriteOnce</span><br><span class="line">  resources:</span><br><span class="line">    requests:</span><br><span class="line">      storage: 1Gi</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: pvc-test-pod</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - name: pvc-test-pod</span><br><span class="line">    image: nginx</span><br><span class="line">    imagePullPolicy: IfNotPresent</span><br><span class="line">    command: ["sleep", "60000"]</span><br><span class="line">    volumeMounts:</span><br><span class="line">    - name: nfs-vol</span><br><span class="line">      mountPath: /usr/share/nfsvol</span><br><span class="line">      readOnly: false</span><br><span class="line">  volumes:</span><br><span class="line">  - name: nfs-vol</span><br><span class="line">    persistentVolumeClaim:</span><br><span class="line">      claimName: pvc-test</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 应用yaml文件</span><br><span class="line">kubectl apply -f /root/pv-pvc-test.yaml</span><br></pre></td></tr></table></figure>
 <p><img src="https://img.koenli.com/NFS%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA%E5%B9%B6%E5%9C%A8K8S%E4%B8%AD%E5%88%9B%E5%BB%BANFS%20StorageClass_1.png" alt=""></p>
 <p>创建之后查看绑定信息，可以看到已经成功绑定了，pod也正常运行，说明k8s中可以使用这个NFS，执行kubectl delete -f /root/pv-pvc-test.yaml删除测试pv和pvc然后继续下一步开始创建StorageClass。</p>
